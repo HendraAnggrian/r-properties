@@ -10,6 +10,10 @@
       <module name="r-properties_main~1" target="1.8" />
       <module name="r-properties_test" target="1.8" />
       <module name="r-properties_test~1" target="1.8" />
+      <module name="r-sync-example_main" target="1.8" />
+      <module name="r-sync-example_test" target="1.8" />
+      <module name="r-sync-r-sync_main" target="1.8" />
+      <module name="r-sync-r-sync_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

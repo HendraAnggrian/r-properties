@@ -1,2 +1,2 @@
-include ':r-properties'
-include ':r-properties-example'
+include ':r-sync'
+include ':r-sync-example'
