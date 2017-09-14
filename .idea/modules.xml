@@ -10,11 +10,18 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_main.iml" group="r-properties" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_test.iml" group="r-properties" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-sync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-sync-example.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_main.iml" group="r-sync-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_main.iml" group="r-sync-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_test.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_test.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync.iml" group="r-sync" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync.iml" group="r-sync" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_main.iml" group="r-sync" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_main.iml" group="r-sync" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_test.iml" group="r-sync" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_test.iml" group="r-sync" />
     </modules>
   </component>
