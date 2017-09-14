@@ -2,6 +2,7 @@ package com.hendraanggrian.rsync
 
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -63,7 +64,8 @@ class RSyncPlugin : Plugin<Project> {
         private const val TASK_RSYNC = "rsync"
 
         private fun generateClass(names: Set<String>, keys: Set<String>, outputDir: File, packageName: String, className: String) {
-            val commentBuilder = StringBuilder("rsync generated this class at ${LocalDateTime.now()} from:").appendln()
+            val commentBuilder = StringBuilder("rsync generated this class at ${LocalDateTime.now()} from:")
+                    .appendln()
             names.forEachIndexed { i, s ->
                 commentBuilder.append(s)
                 if (i != names.size - 1) {
@@ -71,7 +73,9 @@ class RSyncPlugin : Plugin<Project> {
                 }
             }
 
-            val classBuilder = TypeSpec.classBuilder(className).addModifiers(PUBLIC, FINAL)
+            val classBuilder = TypeSpec.classBuilder(className)
+                    .addModifiers(PUBLIC, FINAL)
+                    .addMethod(MethodSpec.constructorBuilder().addModifiers(PRIVATE).build())
             keys.forEach { classBuilder.addField(FieldSpec.builder(String::class.java, it, PUBLIC, STATIC, FINAL).initializer("\$S", it).build()) }
 
             JavaFile.builder(packageName, classBuilder.build())

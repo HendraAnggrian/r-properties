@@ -4,6 +4,22 @@ Common Java application uses properties files and ResourcesBundle to handle inte
 Unfortunately as properties gets bigger, it's easy to misspell or even lost some of their entries.
 Inspired by Android's R class, this gradle plugin generates similar class to keep track of those properties' keys.
 
+```java
+// properties like
+im=I am
+a=a
+little=Little
+piggy=Piggy
+
+// will result in
+public final class R {
+    public static final String im = "im";
+    public static final String a = "a";
+    public static final String little = "little";
+    public static final String piggy = "piggy";
+}
+```
+
 Usage
 -----
 Apply `rsync` plugin on the project. (not the root project)

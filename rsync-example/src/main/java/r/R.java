@@ -1,4 +1,4 @@
-// rsync generated this class at 2017-09-15T03:52:07.657 from:
+// rsync generated this class at 2017-09-15T04:50:59.585 from:
 // test.properties
 package r;
 
@@ -12,4 +12,7 @@ public final class R {
   public static final String little = "little";
 
   public static final String piggy = "piggy";
+
+  private R() {
+  }
 }
