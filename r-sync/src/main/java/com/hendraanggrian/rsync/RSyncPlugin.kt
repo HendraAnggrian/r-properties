@@ -13,8 +13,6 @@ import javax.lang.model.element.Modifier
  */
 class RSyncPlugin : Plugin<Project> {
 
-    private val loader = javaClass.classLoader
-
     override fun apply(project: Project) {
         val extension = project.extensions.create("rsync", RSyncExtension::class.java)
         project.afterEvaluate {
@@ -23,11 +21,9 @@ class RSyncPlugin : Plugin<Project> {
             require(extension.properties.isNotEmpty(), { "Properties must be supplied!" })
 
             // read properties
-            val properties = Properties()
-            val location = loader.getResource(extension.properties[0])
-            checkNotNull(location, { "${extension.properties[0]} not found!" })
-            val stream = location.openStream()
-            properties.load(stream)
+            val stream = project.buildscript.classLoader.getResourceAsStream(extension.properties[0])
+            checkNotNull(stream, { "${extension.properties[0]} not found!" })
+            val properties = Properties().apply { load(stream) }
             stream.close()
 
             val outputDir = project.buildDir.resolve("generated/source/r")
@@ -36,7 +32,7 @@ class RSyncPlugin : Plugin<Project> {
             val file = File("${project.buildDir}/test.java")
             task.apply {
                 doLast {
-                    generateClass(properties.keys, outputDir, extension.className!!)
+                    generateClass(properties.keys, outputDir, extension.className)
                 }
             }
             /*project.tasks.create("test123", Copy::class.java, { copy ->
