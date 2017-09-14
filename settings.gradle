@@ -1,2 +1,2 @@
-include ':r-sync'
-include ':r-sync-example'
+include ':rsync'
+include ':rsync-example'

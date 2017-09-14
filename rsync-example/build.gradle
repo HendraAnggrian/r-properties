@@ -3,18 +3,18 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-sync/build/libs/r-sync.jar')
+        classpath files(String.format("../rsync/build/libs/rsync-%s.jar", versions.release))
         classpath "com.squareup:javapoet:$versions.javapoet"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
-/*apply plugin: com.hendraanggrian.rsync.RSyncPlugin
+apply plugin: com.hendraanggrian.rsync.RSyncPlugin
+
 rsync {
-    className = "R"
-    properties = ["test.properties"]
-}*/
+    ignore = ["ignore.properties"]
+}
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
