@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example.iml" group="r-properties-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example_main.iml" group="r-properties-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example_test.iml" group="r-properties-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties.iml" group="r-properties" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_main.iml" group="r-properties" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties/r-properties-r-properties_test.iml" group="r-properties" />
+    </modules>
+  </component>
+</project>
