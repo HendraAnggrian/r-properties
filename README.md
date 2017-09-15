@@ -5,18 +5,34 @@ Unfortunately as properties gets bigger, it's easy to misspell or even lost some
 Inspired by Android's R class, this gradle plugin generates similar class to keep track of those properties' keys.
 
 ```java
-// properties like
-im=I am
-a=a
-little=Little
-piggy=Piggy
+// say there are these properties
+src/main/resources
+    \__some.xml
+    \__other.xml
+    \__integer.properties
+        \__one=1
+        \__two=2
+    \_strings_en.properties
+        \__hello=Hello
+        \__world=Hello
+    \_strings_in.properties
+        \__hello=Halo
+        \__world=Dunia
 
 // will result in
 public final class R {
-    public static final String im = "im";
-    public static final String a = "a";
-    public static final String little = "little";
-    public static final String piggy = "piggy";
+    public static final class xml {
+        public static final String some = "some";
+        public static final String other = "other";    
+    }
+    public static final class integer {
+        public static final String one = "one";
+        public static final String two = "two";    
+    }
+    public static final class string {
+        public static final String hello = "hello";
+        public static final String world = "world";    
+    }
 }
 ```
 
@@ -41,8 +57,7 @@ it will automatically read properties files from your resources folder and gener
 ```
 
 #### Customization
-Declare and modify extension rsync.
-Note all of this is optional.
+Declare and modify extension rsync, note that all of this is optional.
 
 ```gradle
 apply plugin: 'java'
@@ -73,7 +88,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:rsync:0.1'
+        classpath 'com.hendraanggrian:rsync:0.2'
     }
 }
 ```

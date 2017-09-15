@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath files(String.format("../rsync/build/libs/rsync-%s.jar", versions.release))
+        classpath "com.google.guava:guava:$versions.guava"
         classpath "com.squareup:javapoet:$versions.javapoet"
     }
 }

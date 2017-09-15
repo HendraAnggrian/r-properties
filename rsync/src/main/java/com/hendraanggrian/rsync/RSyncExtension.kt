@@ -1,12 +1,14 @@
 package com.hendraanggrian.rsync
 
 /**
+ * Extension to customize rsync generation, note that all of this is optional.
+ *
  * @author Hendra Anggrian (hendraanggrian@gmail.com)
  */
 open class RSyncExtension {
 
     /** Package name of generated class, optional. */
-    var packageName: String = "r"
+    var packageName: String = "rsync"
 
     /** Name of which class will be generated with, optional. */
     var className: String = "R"
