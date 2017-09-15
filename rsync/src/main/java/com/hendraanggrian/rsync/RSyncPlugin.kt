@@ -65,11 +65,14 @@ class RSyncPlugin : Plugin<Project> {
                 fileValuesMap.putAll(key, temp)
             }
 
-            // write class
+            // class generation
             val outputDir = project.projectDir.resolve(extension.pathToJava)
             project.tasks.create("rsync").apply {
                 outputs.dir(outputDir)
-                doLast { generateClass(fileNames, fileValuesMap, outputDir, extension.packageName, extension.className) }
+                doLast {
+                    Files.deleteIfExists(Paths.get(outputDir.absolutePath, *extension.packageName.split('.').toTypedArray(), extension.className))
+                    generateClass(fileNames, fileValuesMap, outputDir, extension.packageName, extension.className)
+                }
             }
         }
     }
