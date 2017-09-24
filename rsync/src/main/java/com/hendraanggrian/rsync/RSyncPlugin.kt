@@ -21,19 +21,19 @@ import javax.lang.model.element.Modifier.*
 class RSyncPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
-        val extension = project.extensions.create("rsync", RSyncExtension::class.java)
+        val ext = project.extensions.create("rsync", RSyncExtension::class.java)
         project.afterEvaluate {
             // requirement checks
-            require(extension.packageName.isNotBlank(), { "Package name must not be blank!" })
-            require(extension.className.isNotBlank(), { "Class name must not be blank!" })
+            require(ext.packageName.isNotBlank(), { "Package name must not be blank!" })
+            require(ext.className.isNotBlank(), { "Class name must not be blank!" })
 
             // read resources
             val fileNames = mutableSetOf<String>()
             val fileValuesMap = LinkedHashMultimap.create<String, String>()
-            Files.walk(Paths.get(project.projectDir.resolve(extension.pathToResources).absolutePath))
+            Files.walk(Paths.get(project.projectDir.resolve(ext.pathToResources).absolutePath))
                     .filter { Files.isRegularFile(it) }
                     .map { it.toFile() }
-                    .filter { !extension.ignore.contains(it.name) }
+                    .filter { !ext.ignore.contains(it.name) }
                     .forEach {
                         fileNames.add(it.name)
                         when {
@@ -66,21 +66,26 @@ class RSyncPlugin : Plugin<Project> {
             }
 
             // class generation
-            val outputDir = project.projectDir.resolve(extension.pathToJava)
+            val outputDir = project.projectDir.resolve(ext.pathToJava)
             project.tasks.create("rsync").apply {
                 outputs.dir(outputDir)
                 doLast {
-                    Files.deleteIfExists(Paths.get(outputDir.absolutePath, *extension.packageName.split('.').toTypedArray(), extension.className))
-                    generateClass(fileNames, fileValuesMap, outputDir, extension.packageName, extension.className)
+                    Files.deleteIfExists(Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), ext.className))
+                    generateClass(fileNames, fileValuesMap, outputDir, ext.packageName, ext.className, ext.leadingSlash)
                 }
             }
         }
     }
 
     companion object {
-        private fun generateClass(fileNames: Set<String>, map: Multimap<String, String>, outputDir: File, packageName: String, className: String) {
+        private fun generateClass(fileNames: Set<String>, map: Multimap<String, String>, outputDir: File, packageName: String, className: String, leadingSlash: Boolean) {
             val commentBuilder = StringBuilder("rsync generated this class at ${LocalDateTime.now()} from:").appendln()
-            fileNames.forEach { commentBuilder.appendln(it) }
+            fileNames.forEachIndexed { i, s ->
+                when (i) {
+                    fileNames.size - 1 -> commentBuilder.append(s)
+                    else -> commentBuilder.appendln(s)
+                }
+            }
 
             val classBuilder = TypeSpec.classBuilder(className)
                     .addModifiers(PUBLIC, FINAL)
@@ -94,9 +99,12 @@ class RSyncPlugin : Plugin<Project> {
                                 .addModifiers(PRIVATE)
                                 .build())
                 map.get(innerClassName).forEach { value ->
-                    innerClassBuilder.addField(FieldSpec.builder(String::class.java, value.substringBefore('.'), PUBLIC, STATIC, FINAL)
-                            .initializer("\$S", value)
-                            .build())
+                    val fieldBuilder = FieldSpec.builder(String::class.java, value.substringBefore('.'), PUBLIC, STATIC, FINAL)
+                    when (value.contains('.') && leadingSlash) {
+                        true -> fieldBuilder.initializer("\"/\$L\"", value)
+                        else -> fieldBuilder.initializer("\$S", value)
+                    }
+                    innerClassBuilder.addField(fieldBuilder.build())
                 }
                 classBuilder.addType(innerClassBuilder.build())
             }

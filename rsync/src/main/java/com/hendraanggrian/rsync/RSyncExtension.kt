@@ -21,4 +21,7 @@ open class RSyncExtension {
 
     /** Skips these properties files, optional. */
     var ignore: Array<String> = emptyArray()
+
+    /** Will add '/' prefix to non-properties resources. */
+    var leadingSlash: Boolean = false
 }

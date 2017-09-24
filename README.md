@@ -66,9 +66,7 @@ apply plugin: 'rsync'
 rsync {
     packageName = 'com.example'
     className = 'R'
-    pathToResources = 'src/java'
     pathToResources = 'src/resources'
-    pathToJava = ''
     ignore = [
         'ignore.properties',
         'another.properties'
@@ -88,7 +86,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:rsync:0.2'
+        classpath 'com.hendraanggrian:rsync:0.3'
     }
 }
 ```
