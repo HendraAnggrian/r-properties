@@ -36,15 +36,13 @@ class RSyncPlugin : Plugin<Project> {
                     .filter { !ext.ignore.contains(it.name) }
                     .forEach {
                         fileNames.add(it.name)
-                        when {
-                            it.isProperties -> {
-                                val stream = it.inputStream()
-                                val properties = Properties().apply { load(stream) }
-                                stream.close()
-                                fileValuesMap.putAll(it.nameWithoutExtension, properties.keys.map { it as? String ?: it.toString() })
-                            }
-                            else -> fileValuesMap.put(it.extension, it.name)
+                        if (it.isProperties) {
+                            val stream = it.inputStream()
+                            val properties = Properties().apply { load(stream) }
+                            stream.close()
+                            fileValuesMap.putAll(it.nameWithoutExtension, properties.keys.map { it as? String ?: it.toString() })
                         }
+                        fileValuesMap.put(it.extension, it.name)
                     }
 
             // handle internationalization

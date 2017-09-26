@@ -1,4 +1,4 @@
-// rsync generated this class at 2017-09-24T10:45:25.340 from:
+// rsync generated this class at 2017-09-26T11:29:11.170 from:
 // integer.properties
 // layout_one.fxml
 // layout_three.fxml
@@ -21,6 +21,17 @@ public final class R {
     public static final String three = "three";
 
     private integer() {
+    }
+  }
+
+  public static final class properties {
+    public static final String integer = "/integer.properties";
+
+    public static final String string_en = "/string_en.properties";
+
+    public static final String string_id = "/string_id.properties";
+
+    private properties() {
     }
   }
 

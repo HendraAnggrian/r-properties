@@ -1,6 +1,6 @@
 buildscript {
     ext.versions = [
-            release : '0.3',
+            release : '0.4',
             // main
             kotlin  : '1.1.50',
             guava   : '23.0',
