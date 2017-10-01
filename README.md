@@ -7,17 +7,17 @@ Inspired by Android's R class, this gradle plugin generates similar class to kee
 ```java
 // say there are these properties
 src/main/resources
-    \__some.xml
-    \__other.xml
-    \__integer.properties
-        \__one=1
-        \__two=2
-    \_strings_en.properties
-        \__hello=Hello
-        \__world=Hello
-    \_strings_in.properties
-        \__hello=Halo
-        \__world=Dunia
+|_some.xml
+|_other.xml
+|_integer.properties
+| |_one=1
+| |_two=2
+|_strings_en.properties
+| |_hello=Hello
+| |_world=Hello
+|_strings_in.properties
+  |_hello=Halo
+  |_world=Dunia
 
 // will result in
 public final class R {

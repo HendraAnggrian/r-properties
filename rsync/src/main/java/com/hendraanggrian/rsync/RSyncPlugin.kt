@@ -28,39 +28,54 @@ class RSyncPlugin : Plugin<Project> {
             require(ext.className.isNotBlank(), { "Class name must not be blank!" })
 
             // read resources
+            ext.println("(1/2) Reading resources...")
             val fileNames = mutableSetOf<String>()
             val fileValuesMap = LinkedHashMultimap.create<String, String>()
             Files.walk(Paths.get(project.projectDir.resolve(ext.pathToResources).absolutePath))
                     .filter { Files.isRegularFile(it) }
                     .map { it.toFile() }
                     .filter { !ext.ignore.contains(it.name) }
-                    .forEach {
-                        fileNames.add(it.name)
-                        if (it.isProperties) {
-                            val stream = it.inputStream()
+                    .forEach { file ->
+                        ext.println(0, file.name)
+                        fileNames.add(file.name)
+
+                        ext.println(1, "${file.extension} -> ${file.name} ")
+                        fileValuesMap.put(file.extension, file.name)
+
+                        if (file.isProperties) {
+                            val stream = file.inputStream()
                             val properties = Properties().apply { load(stream) }
                             stream.close()
-                            fileValuesMap.putAll(it.nameWithoutExtension, properties.keys.map { it as? String ?: it.toString() })
+                            properties.keys.map { it as? String ?: it.toString() }.forEach {
+                                ext.println(2, "${file.nameWithoutExtension} -> $it")
+                                fileValuesMap.put(file.nameWithoutExtension, it)
+                            }
                         }
-                        fileValuesMap.put(it.extension, it.name)
                     }
 
             // handle internationalization
+            ext.println()
+            ext.println("(2/3) Handling internationalization...")
             val resourceBundles = fileValuesMap.keySet().filterInternationalizedProperties()
             val internationalizedMap = LinkedHashMultimap.create<String, String>()
             resourceBundles.distinctInternationalizedPropertiesIdentifier().forEach { key ->
                 internationalizedMap.putAll(key, resourceBundles.filter { it.startsWith(key) })
             }
             internationalizedMap.keySet().forEach { key ->
-                val temp = mutableListOf<String>()
+                ext.println(0, key)
+                val temp = mutableSetOf<String>()
                 internationalizedMap.get(key).forEach { value ->
                     val toBeRemoveds = fileValuesMap.keySet().filter { it == value }
                     toBeRemoveds.forEach { file ->
+                        ext.println(1, "removing $file")
                         temp.addAll(fileValuesMap.get(file))
                         fileValuesMap.removeAll(file)
                     }
                 }
-                fileValuesMap.putAll(key, temp)
+                temp.forEach {
+                    ext.println(1, "$key -> $it")
+                    fileValuesMap.put(key, it)
+                }
             }
 
             // class generation
@@ -69,14 +84,17 @@ class RSyncPlugin : Plugin<Project> {
                 outputs.dir(outputDir)
                 doLast {
                     Files.deleteIfExists(Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), ext.className))
-                    generateClass(fileNames, fileValuesMap, outputDir, ext.packageName, ext.className, ext.leadingSlash)
+                    generateClass(ext, fileNames, fileValuesMap, outputDir)
                 }
             }
         }
     }
 
     companion object {
-        private fun generateClass(fileNames: Set<String>, map: Multimap<String, String>, outputDir: File, packageName: String, className: String, leadingSlash: Boolean) {
+        private fun generateClass(ext: RSyncExtension, fileNames: Set<String>, map: Multimap<String, String>, outputDir: File) {
+            ext.println()
+            ext.println("(3/3) Writing ${ext.className}...")
+
             val commentBuilder = StringBuilder("rsync generated this class at ${LocalDateTime.now()} from:").appendln()
             fileNames.forEachIndexed { i, s ->
                 when (i) {
@@ -85,32 +103,49 @@ class RSyncPlugin : Plugin<Project> {
                 }
             }
 
-            val classBuilder = TypeSpec.classBuilder(className)
+            JavaFile.builder(ext.packageName, TypeSpec.classBuilder(ext.className)
                     .addModifiers(PUBLIC, FINAL)
                     .addMethod(MethodSpec.constructorBuilder()
                             .addModifiers(PRIVATE)
                             .build())
-            map.keySet().forEach { innerClassName ->
-                val innerClassBuilder = TypeSpec.classBuilder(innerClassName)
-                        .addModifiers(PUBLIC, STATIC, FINAL)
-                        .addMethod(MethodSpec.constructorBuilder()
-                                .addModifiers(PRIVATE)
-                                .build())
-                map.get(innerClassName).forEach { value ->
-                    val fieldBuilder = FieldSpec.builder(String::class.java, value.substringBefore('.'), PUBLIC, STATIC, FINAL)
-                    when (value.contains('.') && leadingSlash) {
-                        true -> fieldBuilder.initializer("\"/\$L\"", value)
-                        else -> fieldBuilder.initializer("\$S", value)
+                    .apply {
+                        map.keySet().forEach { innerClassName ->
+                            ext.println(0, innerClassName)
+                            addType(TypeSpec.classBuilder(innerClassName)
+                                    .addModifiers(PUBLIC, STATIC, FINAL)
+                                    .addMethod(MethodSpec.constructorBuilder()
+                                            .addModifiers(PRIVATE)
+                                            .build())
+                                    .apply {
+                                        map.get(innerClassName).forEach { value ->
+                                            ext.println(1, value)
+                                            val fieldBuilder = FieldSpec.builder(String::class.java, value.substringBefore('.'), PUBLIC, STATIC, FINAL)
+                                            when (value.contains('.') && ext.leadingSlash) {
+                                                true -> fieldBuilder.initializer("\"/\$L\"", value)
+                                                else -> fieldBuilder.initializer("\$S", value)
+                                            }
+                                            addField(fieldBuilder.build())
+                                        }
+                                    }
+                                    .build())
+                        }
                     }
-                    innerClassBuilder.addField(fieldBuilder.build())
-                }
-                classBuilder.addType(innerClassBuilder.build())
-            }
-
-            JavaFile.builder(packageName, classBuilder.build())
+                    .build())
                     .addFileComment(commentBuilder.toString())
                     .build()
                     .writeTo(outputDir)
+        }
+
+        private fun RSyncExtension.println(tabs: Int, message: Any?) {
+            if (debug) kotlin.io.println("${StringBuilder().apply { for (i in 0 until tabs) append("  ") }}|_$message")
+        }
+
+        private fun RSyncExtension.println(message: Any?) {
+            if (debug) kotlin.io.println(message)
+        }
+
+        private fun RSyncExtension.println() {
+            if (debug) kotlin.io.println()
         }
     }
 }

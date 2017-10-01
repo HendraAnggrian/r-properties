@@ -24,4 +24,7 @@ open class RSyncExtension {
 
     /** Will add '/' prefix to non-properties resources. */
     var leadingSlash: Boolean = false
+
+    /** Will print output of rsync process. */
+    var debug: Boolean = false
 }

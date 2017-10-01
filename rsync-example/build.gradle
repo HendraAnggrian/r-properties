@@ -16,6 +16,7 @@ apply plugin: com.hendraanggrian.rsync.RSyncPlugin
 rsync {
     ignore = ["ignore.properties"]
     leadingSlash = true
+    debug = true
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_8
