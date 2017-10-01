@@ -32,7 +32,7 @@ class RSyncPlugin : Plugin<Project> {
             val fileNames = mutableSetOf<String>()
             val fileValuesMap = LinkedHashMultimap.create<String, String>()
             Files.walk(Paths.get(project.projectDir.resolve(ext.pathToResources).absolutePath))
-                    .filter { Files.isRegularFile(it) }
+                    .filter { Files.isRegularFile(it) && it.toFile().name != ".DS_Store" }
                     .map { it.toFile() }
                     .filter { !ext.ignore.contains(it.name) }
                     .forEach { file ->
@@ -42,7 +42,7 @@ class RSyncPlugin : Plugin<Project> {
                         ext.println(1, "${file.extension} -> ${file.name} ")
                         fileValuesMap.put(file.extension, file.name)
 
-                        if (file.isProperties) {
+                        if (file.extension == "properties") {
                             val stream = file.inputStream()
                             val properties = Properties().apply { load(stream) }
                             stream.close()
