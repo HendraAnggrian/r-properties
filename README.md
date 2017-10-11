@@ -74,10 +74,6 @@ rsync {
 }
 ```
 
-#### Limitation
-Class file overwriting is currently not supported.
-Therefore, current class must be deleted before running the task `rsync` again to apply any changes made in properties files.
-
 Download
 --------
 ```gradle
