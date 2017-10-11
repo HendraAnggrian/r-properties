@@ -1,8 +1,8 @@
-// rsync generated this class at 2017-10-01T19:10:33.941 from:
+// rsync generated this class at 2017-10-12T03:50:37.946 from:
 // integer.properties
-// layout_one.fxml
-// layout_three.fxml
-// layout_two.fxml
+// layout_a.fxml
+// layout_b.fxml
+// layout_c.fxml
 // string_en.properties
 // string_id.properties
 package rsync;
@@ -36,11 +36,11 @@ public final class R {
   }
 
   public static final class fxml {
-    public static final String layout_one = "/layout_one.fxml";
+    public static final String layout_a = "/layout_a.fxml";
 
-    public static final String layout_three = "/layout_three.fxml";
+    public static final String layout_b = "/layout_b.fxml";
 
-    public static final String layout_two = "/layout_two.fxml";
+    public static final String layout_c = "/layout_c.fxml";
 
     private fxml() {
     }

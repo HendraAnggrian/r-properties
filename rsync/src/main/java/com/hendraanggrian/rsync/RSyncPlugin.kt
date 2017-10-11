@@ -79,22 +79,19 @@ class RSyncPlugin : Plugin<Project> {
             }
 
             // class generation
+            ext.println()
+            ext.println("(3/3) Writing '${ext.className}.java'...")
             val outputDir = project.projectDir.resolve(ext.pathToJava)
             project.tasks.create("rsync").apply {
                 outputs.dir(outputDir)
-                doLast {
-                    Files.deleteIfExists(Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), ext.className))
-                    generateClass(ext, fileNames, fileValuesMap, outputDir)
-                }
+                doFirst { Files.deleteIfExists(Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), ext.className)) }
+                doLast { generateClass(ext, fileNames, fileValuesMap, outputDir) }
             }
         }
     }
 
     companion object {
         private fun generateClass(ext: RSyncExtension, fileNames: Set<String>, map: Multimap<String, String>, outputDir: File) {
-            ext.println()
-            ext.println("(3/3) Writing ${ext.className}...")
-
             val commentBuilder = StringBuilder("rsync generated this class at ${LocalDateTime.now()} from:").appendln()
             fileNames.forEachIndexed { i, s ->
                 when (i) {
@@ -110,7 +107,6 @@ class RSyncPlugin : Plugin<Project> {
                             .build())
                     .apply {
                         map.keySet().forEach { innerClassName ->
-                            ext.println(0, innerClassName)
                             addType(TypeSpec.classBuilder(innerClassName)
                                     .addModifiers(PUBLIC, STATIC, FINAL)
                                     .addMethod(MethodSpec.constructorBuilder()
@@ -118,7 +114,6 @@ class RSyncPlugin : Plugin<Project> {
                                             .build())
                                     .apply {
                                         map.get(innerClassName).forEach { value ->
-                                            ext.println(1, value)
                                             val fieldBuilder = FieldSpec.builder(String::class.java, value.substringBefore('.'), PUBLIC, STATIC, FINAL)
                                             when (value.contains('.') && ext.leadingSlash) {
                                                 true -> fieldBuilder.initializer("\"/\$L\"", value)

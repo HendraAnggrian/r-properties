@@ -1,6 +1,6 @@
 buildscript {
     ext.versions = [
-            release : '0.5',
+            release : '0.6',
             // main
             kotlin  : '1.1.51',
             guava   : '23.0',
@@ -24,6 +24,6 @@ allprojects {
 }
 
 /** QUICK LINT CHECK BEFORE UPLOAD
- ./gradlew rsync:clean rsync:build
- ./gradlew rsync:bintrayUpload -PdryRun=false -PbintrayUser=hendraanggrian -PbintrayKey=
+ ./gradlew :rsync:clean :rsync:build
+ ./gradlew :rsync:bintrayUpload -PdryRun=false -PbintrayUser=hendraanggrian -PbintrayKey=
  */
