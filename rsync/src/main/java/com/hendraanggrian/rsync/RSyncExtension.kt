@@ -13,18 +13,25 @@ open class RSyncExtension {
     /** Name of which class will be generated with, optional. */
     var className: String = "R"
 
-    /** Automatic detection not yet supported, relies for absolute path for now. */
-    var pathToResources: String = "src/main/resources"
-
-    /** Automatic detection not yet supported, relies for absolute path for now. */
-    var pathToJava: String = "src/main/java"
-
-    /** Skips these properties files, optional. */
-    var ignore: Array<String> = emptyArray()
-
     /** Will add '/' prefix to non-properties resources. */
     var leadingSlash: Boolean = false
 
+    /** Path of resources that will be read. */
+    var resDir: String = "src/main/resources"
+
+    /** Path of which R class is generated to. */
+    var srcDir: String = "src/main/java"
+
+    /** Skips these properties files, optional. */
+    var ignoreFile: String? = null
+    var ignoreFiles: Array<String>? = null
+
     /** Will print output of rsync process. */
     var debug: Boolean = false
+
+    internal val ignoreList: List<String>
+        get() = mutableListOf<String>().apply {
+            ignoreFile?.let { add(it) }
+            ignoreFiles?.let { addAll(it) }
+        }
 }

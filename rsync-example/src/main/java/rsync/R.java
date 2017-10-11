@@ -1,4 +1,4 @@
-// rsync generated this class at 2017-10-12T03:50:37.946 from:
+// rsync generated this class at 2017-10-12T04:56:25.768 from:
 // integer.properties
 // layout_a.fxml
 // layout_b.fxml

@@ -31,10 +31,10 @@ class RSyncPlugin : Plugin<Project> {
             ext.println("(1/2) Reading resources...")
             val fileNames = mutableSetOf<String>()
             val fileValuesMap = LinkedHashMultimap.create<String, String>()
-            Files.walk(Paths.get(project.projectDir.resolve(ext.pathToResources).absolutePath))
-                    .filter { Files.isRegularFile(it) && it.toFile().name != ".DS_Store" }
+            Files.walk(Paths.get(project.projectDir.resolve(ext.resDir).absolutePath))
+                    .filter { Files.isRegularFile(it) }
                     .map { it.toFile() }
-                    .filter { !ext.ignore.contains(it.name) }
+                    .filter { it.name != ".DS_Store" && !ext.ignoreList.contains(it.name) }
                     .forEach { file ->
                         ext.println(0, file.name)
                         fileNames.add(file.name)
@@ -81,10 +81,12 @@ class RSyncPlugin : Plugin<Project> {
             // class generation
             ext.println()
             ext.println("(3/3) Writing '${ext.className}.java'...")
-            val outputDir = project.projectDir.resolve(ext.pathToJava)
+            val outputDir = project.projectDir.resolve(ext.srcDir)
             project.tasks.create("rsync").apply {
+                val oldPath = Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), "${ext.className}.java")
+                inputs.file(oldPath.toFile())
+                doFirst { Files.deleteIfExists(oldPath) }
                 outputs.dir(outputDir)
-                doFirst { Files.deleteIfExists(Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), ext.className)) }
                 doLast { generateClass(ext, fileNames, fileValuesMap, outputDir) }
             }
         }

@@ -14,7 +14,7 @@ apply plugin: 'kotlin'
 apply plugin: com.hendraanggrian.rsync.RSyncPlugin
 
 rsync {
-    ignore = ["ignore.properties"]
+    ignoreFile = 'ignore.properties'
     leadingSlash = true
     debug = true
 }

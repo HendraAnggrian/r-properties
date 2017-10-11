@@ -66,9 +66,9 @@ apply plugin: 'rsync'
 rsync {
     packageName = 'com.example'
     className = 'R'
-    pathToResources = 'src/resources'
-    ignore = [
-        'ignore.properties',
+    resDir = 'src/resources'
+    ignoreFiles = [
+        'ignoreFiles.properties',
         'another.properties'
     ]
 }
