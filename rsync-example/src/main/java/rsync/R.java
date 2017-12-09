@@ -1,10 +1,10 @@
-// rsync generated this class at 2017-10-12T04:56:25.768 from:
-// integer.properties
-// layout_a.fxml
-// layout_b.fxml
-// layout_c.fxml
+// rsync generated this class at 2017-12-09T07:47:35.636 from:
 // string_en.properties
 // string_id.properties
+// layout_a.fxml
+// integer.properties
+// layout_b.fxml
+// layout_c.fxml
 package rsync;
 
 import java.lang.String;
@@ -14,24 +14,13 @@ public final class R {
   }
 
   public static final class properties {
-    public static final String integer = "/integer.properties";
-
     public static final String string_en = "/string_en.properties";
 
     public static final String string_id = "/string_id.properties";
 
+    public static final String integer = "/integer.properties";
+
     private properties() {
-    }
-  }
-
-  public static final class integer {
-    public static final String two = "two";
-
-    public static final String one = "one";
-
-    public static final String three = "three";
-
-    private integer() {
     }
   }
 
@@ -43,6 +32,17 @@ public final class R {
     public static final String layout_c = "/layout_c.fxml";
 
     private fxml() {
+    }
+  }
+
+  public static final class integer {
+    public static final String two = "two";
+
+    public static final String one = "one";
+
+    public static final String three = "three";
+
+    private integer() {
     }
   }
 

@@ -82,7 +82,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:rsync:0.6'
+        classpath 'com.hendraanggrian:rsync:0.7'
     }
 }
 ```

@@ -1,37 +1,48 @@
 package com.hendraanggrian.rsync
 
-/**
- * Extension to customize rsync generation, note that all of this is optional.
- *
- * @author Hendra Anggrian (hendraanggrian@gmail.com)
- */
+/** Extension to customize rsync generation, note that all of this is optional. */
 open class RSyncExtension {
 
+    internal var mPackageName: String = "rsync"
+    internal var mClassName: String = "R"
+    internal var mLeadingSlash: Boolean = false
+    internal var mDebug: Boolean = false
+    internal var mResDir: String = "src/main/resources"
+    internal var mSrcDir: String = "src/main/java"
+    internal var mIgnore: Array<out String> = emptyArray()
+
     /** Package name of generated class, optional. */
-    var packageName: String = "rsync"
+    fun packageName(name: String) {
+        mPackageName = name
+    }
 
     /** Name of which class will be generated with, optional. */
-    var className: String = "R"
+    fun className(name: String) {
+        mClassName = name
+    }
 
     /** Will add '/' prefix to non-properties resources. */
-    var leadingSlash: Boolean = false
-
-    /** Path of resources that will be read. */
-    var resDir: String = "src/main/resources"
-
-    /** Path of which R class is generated to. */
-    var srcDir: String = "src/main/java"
-
-    /** Skips these properties files, optional. */
-    var ignoreFile: String? = null
-    var ignoreFiles: Array<String>? = null
+    fun leadingSlash(enabled: Boolean) {
+        mLeadingSlash = enabled
+    }
 
     /** Will print output of rsync process. */
-    var debug: Boolean = false
+    fun debug(enabled: Boolean) {
+        mDebug = enabled
+    }
 
-    internal val ignoreList: List<String>
-        get() = mutableListOf<String>().apply {
-            ignoreFile?.let { add(it) }
-            ignoreFiles?.let { addAll(it) }
-        }
+    /** Path of resources that will be read. */
+    fun resDir(dir: String) {
+        mResDir = dir
+    }
+
+    /** Path of which R class is generated to. */
+    fun srcDir(dir: String) {
+        mSrcDir = dir
+    }
+
+    /** Skips these properties files, optional. */
+    fun ignoreFiles(vararg files: String) {
+        mIgnore = files
+    }
 }

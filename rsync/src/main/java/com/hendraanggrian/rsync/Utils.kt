@@ -1,4 +1,3 @@
-@file:JvmName("UtilsKt")
 @file:Suppress("NOTHING_TO_INLINE")
 
 package com.hendraanggrian.rsync

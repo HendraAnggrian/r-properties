@@ -15,26 +15,23 @@ import java.time.LocalDateTime
 import java.util.*
 import javax.lang.model.element.Modifier.*
 
-/**
- * @author Hendra Anggrian (hendraanggrian@gmail.com)
- */
 class RSyncPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val ext = project.extensions.create("rsync", RSyncExtension::class.java)
         project.afterEvaluate {
             // requirement checks
-            require(ext.packageName.isNotBlank(), { "Package name must not be blank!" })
-            require(ext.className.isNotBlank(), { "Class name must not be blank!" })
+            require(ext.mPackageName.isNotBlank(), { "Package name must not be blank!" })
+            require(ext.mClassName.isNotBlank(), { "Class name must not be blank!" })
 
             // read resources
             ext.println("(1/2) Reading resources...")
             val fileNames = mutableSetOf<String>()
             val fileValuesMap = LinkedHashMultimap.create<String, String>()
-            Files.walk(Paths.get(project.projectDir.resolve(ext.resDir).absolutePath))
+            Files.walk(Paths.get(project.projectDir.resolve(ext.mResDir).absolutePath))
                     .filter { Files.isRegularFile(it) }
                     .map { it.toFile() }
-                    .filter { it.name != ".DS_Store" && !ext.ignoreList.contains(it.name) }
+                    .filter { it.name != ".DS_Store" && !ext.mIgnore.contains(it.name) }
                     .forEach { file ->
                         ext.println(0, file.name)
                         fileNames.add(file.name)
@@ -80,10 +77,10 @@ class RSyncPlugin : Plugin<Project> {
 
             // class generation
             ext.println()
-            ext.println("(3/3) Writing '${ext.className}.java'...")
-            val outputDir = project.projectDir.resolve(ext.srcDir)
+            ext.println("(3/3) Writing '${ext.mClassName}.java'...")
+            val outputDir = project.projectDir.resolve(ext.mSrcDir)
             project.tasks.create("rsync").apply {
-                val oldPath = Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), "${ext.className}.java")
+                val oldPath = Paths.get(outputDir.absolutePath, *ext.mPackageName.split('.').toTypedArray(), "${ext.mClassName}.java")
                 inputs.file(oldPath.toFile())
                 doFirst { Files.deleteIfExists(oldPath) }
                 outputs.dir(outputDir)
@@ -102,7 +99,7 @@ class RSyncPlugin : Plugin<Project> {
                 }
             }
 
-            JavaFile.builder(ext.packageName, TypeSpec.classBuilder(ext.className)
+            JavaFile.builder(ext.mPackageName, TypeSpec.classBuilder(ext.mClassName)
                     .addModifiers(PUBLIC, FINAL)
                     .addMethod(MethodSpec.constructorBuilder()
                             .addModifiers(PRIVATE)
@@ -117,7 +114,7 @@ class RSyncPlugin : Plugin<Project> {
                                     .apply {
                                         map.get(innerClassName).forEach { value ->
                                             val fieldBuilder = FieldSpec.builder(String::class.java, value.substringBefore('.'), PUBLIC, STATIC, FINAL)
-                                            when (value.contains('.') && ext.leadingSlash) {
+                                            when (value.contains('.') && ext.mLeadingSlash) {
                                                 true -> fieldBuilder.initializer("\"/\$L\"", value)
                                                 else -> fieldBuilder.initializer("\$S", value)
                                             }
@@ -134,15 +131,15 @@ class RSyncPlugin : Plugin<Project> {
         }
 
         private fun RSyncExtension.println(tabs: Int, message: Any?) {
-            if (debug) kotlin.io.println("${StringBuilder().apply { for (i in 0 until tabs) append("  ") }}|_$message")
+            if (mDebug) kotlin.io.println("${StringBuilder().apply { for (i in 0 until tabs) append("  ") }}|_$message")
         }
 
         private fun RSyncExtension.println(message: Any?) {
-            if (debug) kotlin.io.println(message)
+            if (mDebug) kotlin.io.println(message)
         }
 
         private fun RSyncExtension.println() {
-            if (debug) kotlin.io.println()
+            if (mDebug) kotlin.io.println()
         }
     }
 }
