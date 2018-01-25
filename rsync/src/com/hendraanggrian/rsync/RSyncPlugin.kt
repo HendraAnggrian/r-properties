@@ -20,33 +20,22 @@ class RSyncPlugin : Plugin<Project> {
     private val fileNames = mutableSetOf<String>()
     private val fileValuesMap = LinkedHashMultimap.create<String, String>()
 
-    override fun apply(project: Project) {
-        val ext = project.extensions.create("rsync", RSyncExtension::class.java)
+    override fun apply(project: Project) = project.extensions.create("rsync", RSyncExtension::class.java).let { ext ->
         project.afterEvaluate {
             project.task("rsync").apply {
                 val outputDir = project.projectDir.resolve(ext.srcDir)
                 val oldPath = Paths.get(outputDir.absolutePath, *ext.packageName.split('.').toTypedArray(), "${ext.className}.java")
-                val oldFile = oldPath.toFile()
 
-                inputs.file(oldFile)
                 doFirst {
                     // requirement checks
                     require(ext.packageName.isNotBlank(), { "Package name must not be blank!" })
                     require(ext.className.isNotBlank(), { "Class name must not be blank!" })
-
-                    ext.println("(1/4) Finding old rsync class")
-                    if (oldFile.exists()) {
-                        Files.deleteIfExists(oldPath)
-                        ext.println(0, "Successfully deleted '${ext.className}.java'")
-                    } else {
-                        ext.println(0, "Doesn't exist yet")
-                    }
+                    Files.deleteIfExists(oldPath)
                 }
 
-                outputs.dir(outputDir)
                 doLast {
                     // read resources
-                    ext.println("(2/4) Scanning resources")
+                    ext.println("(1/3) Scanning resources")
                     fileNames.clear()
                     fileValuesMap.clear()
                     Files.walk(Paths.get(project.projectDir.resolve(ext.resDir).absolutePath))
@@ -72,7 +61,7 @@ class RSyncPlugin : Plugin<Project> {
                             }
 
                     // handle internationalization
-                    ext.println("(3/4) Handling internationalization")
+                    ext.println("(2/3) Handling internationalization")
                     val resourceBundles = fileValuesMap.keySet().filterInternationalizedProperties()
                     val internationalizedMap = LinkedHashMultimap.create<String, String>()
                     resourceBundles.distinctInternationalizedPropertiesIdentifier().forEach { key ->
@@ -96,7 +85,7 @@ class RSyncPlugin : Plugin<Project> {
                     }
 
                     // class generation
-                    ext.println("(4/4) Generating new rsync class")
+                    ext.println("(3/3) Generating new rsync class")
                     generateClass(ext, fileNames, fileValuesMap, outputDir)
                     ext.println(0, "'${ext.className}.java' successfully created")
                 }

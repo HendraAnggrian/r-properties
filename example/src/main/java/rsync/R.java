@@ -1,7 +1,8 @@
-// rsync generated this class at 2018-01-26T00:16:37.399 from:
+// rsync generated this class at 2018-01-26T00:44:47.634 from:
 // string_en.properties
 // string_id.properties
 // hoho.txt
+// hihi.txt
 // layout_a.fxml
 // integer.properties
 // layout_b.fxml
@@ -27,6 +28,8 @@ public final class R {
 
   public static final class txt {
     public static final String hoho = "/hoho.txt";
+
+    public static final String hihi = "/hihi.txt";
 
     private txt() {
     }

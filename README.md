@@ -64,9 +64,9 @@ apply plugin: 'java'
 apply plugin: 'rsync'
 
 rsync {
-    packageName('com.example')
-    className('R')
-    resDir('src/resources')
+    packageName 'com.example'
+    className 'R'
+    resDir 'src/resources'
     ignoreFiles('ignoreFiles.properties', 'another.properties')
 }
 ```
