@@ -3,8 +3,14 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" group="buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" group="buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" group="buildSrc" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" group="buildSrc" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/example.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/example.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/example_main.iml" group="example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/example_test.iml" group="example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example.iml" group="r-properties-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-properties-example_main.iml" group="r-properties-example" />
@@ -22,12 +28,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync_test.iml" group="r-sync" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/rsync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/rsync-example.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_main.iml" group="rsync-example" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_main.iml" group="rsync-example" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_test.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_test.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync/rsync-rsync.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync/rsync-rsync.iml" group="rsync" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync/rsync-rsync.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync/rsync-rsync.iml" group="rsync" />
