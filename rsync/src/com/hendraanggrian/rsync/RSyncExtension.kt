@@ -6,10 +6,8 @@ open class RSyncExtension {
     internal var packageName: String = "rsync"
     internal var className: String = "R"
     internal var leadingSlash: Boolean = false
-    internal var debug: Boolean = false
     internal var resDir: String = "src/main/resources"
     internal var srcDir: String = "src/main/java"
-    internal var ignore: Array<out String> = emptyArray()
 
     /** Package name of generated class, optional. */
     fun packageName(name: String) {
@@ -26,11 +24,6 @@ open class RSyncExtension {
         leadingSlash = enabled
     }
 
-    /** Will print output of rsync process. */
-    fun debug(enabled: Boolean) {
-        debug = enabled
-    }
-
     /** Path of resources that will be read. */
     fun resDir(dir: String) {
         resDir = dir
@@ -39,10 +32,5 @@ open class RSyncExtension {
     /** Path of which R class is generated to. */
     fun srcDir(dir: String) {
         srcDir = dir
-    }
-
-    /** Skips these properties files, optional. */
-    fun ignoreFiles(vararg files: String) {
-        ignore = files
     }
 }
