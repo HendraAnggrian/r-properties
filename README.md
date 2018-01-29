@@ -2,45 +2,70 @@ rsync
 =====
 Android-like R class for any JVM-based projects.
 
-Common Java application uses properties files and ResourcesBundle to handle internationalization.
-Unfortunately as properties gets bigger, it's easy to misspell or even lost some of their entries.
-Inspired by Android's R class, this gradle plugin generates similar class to keep track of those properties' keys.
+```
+src/main/resources
+|_font
+| |_MyriadPro.ttf
+| |_SegoeUI.ttf
+|_layout
+| |_main.fxml
+| |_about.fxml
+|_style
+  |_table.css
+  |_skin.css
+```
 
 ```java
-// say there are these properties
-src/main/resources
-|_some.xml
-|_other.xml
-|_integer.properties
-| |_one=1
-| |_two=2
-|_strings_en.properties
-| |_hello=Hello
-| |_world=Hello
-|_strings_in.properties
-  |_hello=Halo
-  |_world=Dunia
-
-// will result in
 public final class R {
-    public static final class xml {
-        public static final String some = "some";
-        public static final String other = "other";    
+    public static final class font {
+        public static final String MyriadPro = "/font/MyriadPro.ttf";
+        public static final String SegoeUI = "/font/SegoeUI.ttf";
     }
-    public static final class integer {
-        public static final String one = "one";
-        public static final String two = "two";    
+    public static final class layout {
+        public static final String main = "/layout/main.fxml";
+        public static final String about = "/layout/about.fxml";
     }
-    public static final class string {
-        public static final String hello = "hello";
-        public static final String world = "world";    
+    public static final class style {
+        public static final String table = "/style/table.css";
+        public static final String skin = "/style/skin.css";
     }
 }
 ```
 
+Download
+--------
+```gradle
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.hendraanggrian:rsync:0.8'
+    }
+}
+```
+
+Resource bundles
+----------------
+If you are using `ResourceBundle` to handle internationalization, put those properties files on root of resources directory.
+
+```
+src/main/resources
+|_font
+| |_...
+|_layout
+| |_...
+|_style
+| |_...
+|_string_en.properties
+|_string_in.properties
+```
+
+Instead 
+
 Usage
 -----
-Apply `rsync` plugin on the project. (not the root project)
+Apply `rsync` plugin on project module. (not the root project)
 
 ```gradle
 apply plugin: 'java'
@@ -69,20 +94,6 @@ rsync {
     packageName 'com.example'
     className 'R'
     resDir 'src/resources'
-    ignoreFiles('ignoreFiles.properties', 'another.properties')
-}
-```
-
-Download
---------
-```gradle
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.hendraanggrian:rsync:0.8'
-    }
 }
 ```
 
