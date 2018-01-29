@@ -1,5 +1,7 @@
 rsync
 =====
+Android-like R class for any JVM-based projects.
+
 Common Java application uses properties files and ResourcesBundle to handle internationalization.
 Unfortunately as properties gets bigger, it's easy to misspell or even lost some of their entries.
 Inspired by Android's R class, this gradle plugin generates similar class to keep track of those properties' keys.

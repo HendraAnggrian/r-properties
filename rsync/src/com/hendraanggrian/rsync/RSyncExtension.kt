@@ -3,11 +3,11 @@ package com.hendraanggrian.rsync
 /** Extension to customize rsync generation, note that all of properties are optional. */
 open class RSyncExtension {
 
-    internal var packageName: String = "rsync"
-    internal var className: String = "R"
-    internal var leadingSlash: Boolean = false
-    internal var resDir: String = "src/main/resources"
-    internal var srcDir: String = "src/main/java"
+    internal var packageName = "rsync"
+    internal var className = "R"
+    internal var leadingSlash = false
+    internal var resDir = "src/main/resources"
+    internal var srcDir = "src/main/java"
 
     /** Package name of generated class, optional. */
     fun packageName(name: String) {
