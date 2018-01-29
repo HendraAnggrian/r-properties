@@ -1,7 +1,7 @@
 const val bintrayUser = "hendraanggrian"
 const val bintrayGroup = "com.hendraanggrian"
 const val bintrayArtifact = "rsync"
-const val bintrayPublish = "0.8"
+const val bintrayPublish = "0.9"
 const val bintrayDesc = "Type safe resources for Java"
 const val bintrayWeb = "https://github.com/hendraanggrian/rsync"
 

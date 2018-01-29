@@ -40,7 +40,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:rsync:0.8'
+        classpath 'com.hendraanggrian:rsync:0.9'
     }
 }
 ```
@@ -61,10 +61,23 @@ src/main/resources
 |_string_in.properties
 ```
 
-Instead 
+Rsync will generate keys of those properties files instead of file paths.
 
-Usage
------
+```java
+public final class R {
+    ...
+    
+    public static final class String {
+        public static final String im = "im";
+        public static final String a = "a";
+        public static final String little = "little";
+        public static final String piggy = "piggy";
+    }
+}
+```
+
+Generate
+--------
 Apply `rsync` plugin on project module. (not the root project)
 
 ```gradle
@@ -83,8 +96,9 @@ it will automatically read properties files from your resources folder and gener
 ./gradlew rsync
 ```
 
-#### Customization
-Declare and modify extension rsync, note that all of this is optional.
+Customization
+-------------
+Declare and modify `rsync` extension, note that all of properties are optional.
 
 ```gradle
 apply plugin: 'java'
@@ -92,7 +106,7 @@ apply plugin: 'rsync'
 
 rsync {
     packageName 'com.example'
-    className 'R'
+    className 'MyClass'
     resDir 'src/resources'
 }
 ```

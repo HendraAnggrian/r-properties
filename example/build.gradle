@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        //classpath files("../rsync/build/libs/rsync-0.8.jar")
+        //classpath files("../rsync/build/libs/rsync-0.9.jar")
         classpath 'com.google.guava:guava:23.6-jre'
         classpath 'com.squareup:javapoet:1.9.0'
     }
