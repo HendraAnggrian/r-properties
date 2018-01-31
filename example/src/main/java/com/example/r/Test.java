@@ -1,4 +1,4 @@
-package com.example.rsync;
+package com.example.r;
 
 public class Test {
 

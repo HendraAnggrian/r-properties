@@ -1,2 +1,2 @@
-include ':rsync'
+include ':r'
 include ':example'

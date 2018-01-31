@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.hendraanggrian.rsync
+package com.hendraanggrian.r
 
 import java.io.File
 import java.lang.Character.isLetter

@@ -1,5 +1,5 @@
-rsync
-=====
+R
+=
 Android-like R class for any JVM-based projects.
 
 ```
@@ -40,7 +40,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:rsync:0.9'
+        classpath 'com.hendraanggrian:r:0.1'
     }
 }
 ```
@@ -61,7 +61,7 @@ src/main/resources
 |_string_in.properties
 ```
 
-Rsync will generate keys of those properties files instead of file paths.
+R will generate keys of those properties files instead of file paths.
 
 ```java
 public final class R {
@@ -78,35 +78,37 @@ public final class R {
 
 Generate
 --------
-Apply `rsync` plugin on project module. (not the root project)
+Apply `r` plugin on project module. (not the root project)
 
 ```gradle
 apply plugin: 'java'
-apply plugin: 'rsync'
+apply plugin: 'r'
+
+r {
+    ...
+}
 
 dependencies {
     ...
 }
 ```
 
-Then simply run gradle task `rsync`,
-it will automatically read properties files from your resources folder and generate class accordingly.
+Then run gradle task `r`, it will automatically read properties files from your resources folder and generate class accordingly.
 
 ```
-./gradlew rsync
+./gradlew r
 ```
 
 Customization
 -------------
-Declare and modify `rsync` extension, note that all of properties are optional.
+Declare and modify `r` extension, note that all of properties are optional.
 
 ```gradle
 apply plugin: 'java'
-apply plugin: 'rsync'
+apply plugin: 'r'
 
-rsync {
+r {
     packageName 'com.example'
-    className 'MyClass'
     resDir 'src/resources'
 }
 ```

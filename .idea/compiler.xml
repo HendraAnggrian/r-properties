@@ -14,6 +14,8 @@
       <module name="r-properties_main~1" target="1.8" />
       <module name="r-properties_test" target="1.8" />
       <module name="r-properties_test~1" target="1.8" />
+      <module name="r-r_main" target="1.8" />
+      <module name="r-r_test" target="1.8" />
       <module name="r-sync-example_main" target="1.8" />
       <module name="r-sync-example_test" target="1.8" />
       <module name="r-sync-r-sync_main" target="1.8" />
@@ -24,6 +26,8 @@
       <module name="rsync-example_test" target="1.8" />
       <module name="rsync-rsync_main" target="1.8" />
       <module name="rsync-rsync_test" target="1.8" />
+      <module name="rsync_main" target="1.8" />
+      <module name="rsync_test" target="1.8" />
       <module name="testbed_main" target="1.8" />
       <module name="testbed_test" target="1.8" />
     </bytecodeTargetLevel>

@@ -1,5 +1,5 @@
-// rsync generated this class at 2018-01-30T00:02:44.978
-package rsync;
+// r generated this class at 01-31-2018 at 9.32.47 PM
+package r;
 
 import java.lang.String;
 

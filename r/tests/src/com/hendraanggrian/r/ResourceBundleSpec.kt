@@ -1,4 +1,4 @@
-package com.hendraanggrian.rsync
+package com.hendraanggrian.r
 
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
