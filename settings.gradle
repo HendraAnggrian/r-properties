@@ -1,2 +1,5 @@
 include ':r'
-include ':example'
+
+include ':example:simple'
+include ':example:custom-source-sets'
+include ':example:resource-bundles'

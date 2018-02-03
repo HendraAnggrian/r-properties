@@ -1,7 +1,7 @@
 const val bintrayUser = "hendraanggrian"
 const val bintrayGroup = "com.hendraanggrian"
 const val bintrayArtifact = "r"
-const val bintrayPublish = "0.1"
+const val bintrayPublish = "0.2"
 const val bintrayDesc = "Type safe resources for Java"
 const val bintrayWeb = "https://github.com/$bintrayUser/$bintrayArtifact"
 
@@ -13,8 +13,8 @@ val Plugin.dokka get() = id("org.jetbrains.dokka")
 val Dependency.`bintray-release` get() = "com.novoda:bintray-release:0.8.0"
 val Plugin.`bintray-release` get() = id("com.novoda.bintray-release")
 
-val Dependency.guava get() = "com.google.guava:guava:23.6-jre"
-val Dependency.javapoet get() = "com.squareup:javapoet:1.10.0"
+fun Dependency.guava() = "com.google.guava:guava:23.6-jre"
+fun Dependency.javapoet() = "com.squareup:javapoet:1.10.0"
 
 fun Dependency.junitPlatform(module: String, version: String) = "org.junit.platform:junit-platform-$module:$version"
 val Plugin.`junit-platform` get() = id("org.junit.platform.gradle.plugin")

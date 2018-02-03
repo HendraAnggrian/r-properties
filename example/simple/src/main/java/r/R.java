@@ -1,23 +1,10 @@
-// r generated this class at 01-31-2018 at 9.32.47 PM
+// r generated this class at 02-03-2018 at 7.31.44 PM
 package r;
 
 import java.lang.String;
 
 public final class R {
   private R() {
-  }
-
-  public static final class string {
-    public static final String a = "a";
-
-    public static final String im = "im";
-
-    public static final String little = "little";
-
-    public static final String piggy = "piggy";
-
-    private string() {
-    }
   }
 
   public static final class note {

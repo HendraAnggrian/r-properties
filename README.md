@@ -1,5 +1,5 @@
-R
-=
+R.class
+=======
 Android-like R class for any JVM-based projects.
 
 ```
@@ -40,7 +40,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.1'
+        classpath 'com.hendraanggrian:r:0.2'
     }
 }
 ```

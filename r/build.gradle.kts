@@ -35,8 +35,8 @@ configure<JUnitPlatformExtension> {
 
 dependencies {
     implementation(kotlin("stdlib", kotlinVersion))
-    implementation(guava)
-    implementation(javapoet)
+    implementation(guava())
+    implementation(javapoet())
 
     testCompile(kotlin("test", kotlinVersion))
     testCompile(kotlin("reflect", kotlinVersion))

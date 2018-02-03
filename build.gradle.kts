@@ -23,6 +23,6 @@ task<Delete>("clean") {
     delete(rootProject.buildDir)
 }
 
-/** QUICK LINT CHECK BEFORE UPLOAD
+/** Bintray upload snippet
 ./gradlew bintrayUpload -PdryRun=false -PbintrayUser=hendraanggrian -PbintrayKey=
  */

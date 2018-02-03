@@ -1,0 +1,26 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath files("../r-0.2.jar")
+        classpath 'com.google.guava:guava:23.6-jre'
+        classpath 'com.squareup:javapoet:1.10.0'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'r'
+
+sourceSets {
+    main {
+        java.srcDir 'src'
+        resources.srcDir 'res'
+    }
+}
+
+r {
+    srcDir 'src'
+    resDir 'res'
+    packageName 'com.example'
+}
