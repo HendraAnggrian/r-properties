@@ -1,6 +1,6 @@
 R.class
 =======
-Android-like R class for any JVM-based projects.
+Android-like R.class for any JVM-based projects. Intended for type-safe resources in Java.
 
 ```
 src/main/resources
