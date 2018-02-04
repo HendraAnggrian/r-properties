@@ -4,11 +4,6 @@ package com.hendraanggrian.r
 
 import java.io.File
 import java.lang.Character.isLetter
-import java.nio.file.Files.walk
-import java.nio.file.Path
-import java.util.stream.Stream
-
-internal inline fun Path.list(): Stream<Path> = walk(this).skip(1)
 
 internal inline val File.isValid: Boolean
     get() = !isHidden && isLetter(name[0])

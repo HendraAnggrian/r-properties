@@ -6,6 +6,8 @@
       <module name="buildSrc_test" target="1.8" />
       <module name="custom-directory_main" target="1.8" />
       <module name="custom-directory_test" target="1.8" />
+      <module name="custom-package_main" target="1.8" />
+      <module name="custom-package_test" target="1.8" />
       <module name="custom-source-sets_main" target="1.8" />
       <module name="custom-source-sets_test" target="1.8" />
       <module name="example_main" target="1.8" />

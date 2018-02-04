@@ -1,86 +1,68 @@
 package com.hendraanggrian.r
 
-import com.google.common.collect.LinkedHashMultimap
-import com.google.common.collect.Multimap
-import com.squareup.javapoet.FieldSpec.builder
-import com.squareup.javapoet.MethodSpec.constructorBuilder
-import com.squareup.javapoet.TypeSpec.classBuilder
+import groovy.lang.Closure
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import java.io.File
-import java.io.File.separator
-import java.nio.file.Files.*
-import java.nio.file.Paths.get
-import java.util.*
-import javax.lang.model.SourceVersion.isName
-import javax.lang.model.element.Modifier.*
+import org.gradle.api.plugins.JavaPluginConvention
+import org.gradle.api.tasks.compile.JavaCompile
+import org.gradle.kotlin.dsl.closureOf
+import org.gradle.plugins.ide.idea.model.IdeaModel
 
 /** Generate Android-like R class with this plugin. */
 class RPlugin : Plugin<Project> {
 
-    override fun apply(project: Project) {
-        val ext = project.extensions.create("r", RExtension::class.java)
+    private lateinit var project: Project
+
+    override fun apply(p: Project) {
+        project = p
+        val ext = project.extensions.create(EXTENSION_NAME, RExtension::class.java)
         project.afterEvaluate {
-            project.task("r").apply {
-                val outputDir = project.projectDir.resolve(ext.srcFile)
-                doFirst {
-                    deleteIfExists(get(outputDir.absolutePath, *ext.packagePaths, "R.java"))
-                }
-                doLast {
-                    val multimap = LinkedHashMultimap.create<String, Pair<String, String>>()
-                    get(project.projectDir.resolve(ext.resFile).absolutePath)
-                            .list()
-                            .forEach { path ->
-                                val file = path.toFile()
-                                when {
-                                    isRegularFile(path) && file.isValid && file.isResourceBundle -> file.inputStream().use { stream ->
-                                        Properties().apply { load(stream) }.keys.forEach { key ->
-                                            val s = key as? String ?: key.toString()
-                                            check(isName(file.resourceBundleName)) { "Field name is not a valid java variable name!" }
-                                            multimap.put(file.resourceBundleName, s to s)
-                                        }
-                                    }
-                                    isDirectory(path) -> path
-                                            .list()
-                                            .map { it.toFile() }
-                                            .filter { it.isValid }
-                                            .forEach { innerFile ->
-                                                val s = "${file.name}$separator${innerFile.name}"
-                                                check(isName(file.resourceBundleName)) { "Field name is not a valid java variable name!" }
-                                                multimap.put(file.name, innerFile.nameWithoutExtension to ext.getPath(s))
-                                            }
-                                }
-                            }
-                    ext.generateClass(multimap, outputDir)
-                }
-            }
+            if (ext.pkgName == null) ext.pkgName = project.group.findInClosure()
+
+            val generateTask = ext.generateTask
+            generateTask.outputDir = project.buildDir.toPath().resolve(GENERATED_SOURCE_OUTPUT).toFile()
+
+            val compileTask = generateTask.compileTask
+            val compiledClasses = project.files(compileTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
+            compiledClasses.builtBy(compileTask)
+
+            val sourceSet = project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets.getByName("main")
+            sourceSet.compileClasspath += compiledClasses
+            compiledClasses.forEach { sourceSet.output.dir(it) }
+
+            require(project.plugins.hasPlugin("org.gradle.idea")) { "plugin 'idea' must be applied" }
+            val providedConfig = project.configurations.create("provided$CLASS_NAME")
+            providedConfig.dependencies.add(project.dependencies.create(compiledClasses))
+            (project.extensions.getByName("idea") as IdeaModel).module.scopes["PROVIDED"]!!["plus"]!! += providedConfig
         }
     }
 
+    private inline val RExtension.generateTask: GenerateRTask
+        get() = project.task(mapOf("type" to GenerateRTask::class.java), "generate$CLASS_NAME", closureOf<GenerateRTask> {
+            packageName = pkgName!!
+            resourcesDir = resDir
+        }) as GenerateRTask
+
+    private inline val GenerateRTask.compileTask: JavaCompile
+        get() = project.task(mapOf("type" to JavaCompile::class.java, "dependsOn" to this), "compile$CLASS_NAME", closureOf<JavaCompile> {
+            classpath = project.files()
+            destinationDir = project.buildDir.toPath().resolve(GENERATED_SOURCE_CLASSES).toFile()
+            source(this@compileTask.outputDir)
+        }) as JavaCompile
+
     companion object {
-        private fun RExtension.generateClass(multimap: Multimap<String, Pair<String, String>>, outputDir: File) = toJavaFile(classBuilder("R")
-                .addModifiers(PUBLIC, FINAL)
-                .addMethod(constructorBuilder()
-                        .addModifiers(PRIVATE)
-                        .build())
-                .apply {
-                    multimap.keySet().forEach { innerClass ->
-                        addType(classBuilder(innerClass)
-                                .addModifiers(PUBLIC, STATIC, FINAL)
-                                .addMethod(constructorBuilder()
-                                        .addModifiers(PRIVATE)
-                                        .build())
-                                .apply {
-                                    multimap.get(innerClass).forEach { (field, value) ->
-                                        addField(builder(String::class.java, field, PUBLIC, STATIC, FINAL)
-                                                .initializer("\$S", value)
-                                                .build())
-                                    }
-                                }
-                                .build())
-                    }
-                }
-                .build())
-                .writeTo(outputDir)
+        internal const val EXTENSION_NAME = "r"
+        internal const val CLASS_NAME = "R"
+        private const val GENERATED_SOURCE_OUTPUT = "generated/$EXTENSION_NAME/src/main"
+        private const val GENERATED_SOURCE_CLASSES = "generated/$EXTENSION_NAME/classes/main"
+
+        private fun Any.findInClosure(): String {
+            var s = this
+            while (s is Closure<*>) s = s.call()
+            return when (s) {
+                is String -> s
+                else -> s.toString()
+            }
+        }
     }
 }

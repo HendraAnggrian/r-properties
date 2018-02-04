@@ -10,4 +10,9 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'r'
+
+dependencies {
+    testImplementation 'junit:junit:4.12'
+}

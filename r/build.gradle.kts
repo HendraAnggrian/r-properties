@@ -8,7 +8,7 @@ import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 
 plugins {
     `java-gradle-plugin`
-    kotlin("jvm")
+    `kotlin-dsl`
     dokka
     `bintray-release`
     `junit-platform`
@@ -18,17 +18,15 @@ group = bintrayGroup
 version = bintrayPublish
 
 java.sourceSets {
-    getByName("main") {
-        java.srcDir("src")
-        resources.srcDirs("res")
-    }
+    getByName("main").java.srcDir("src")
     getByName("test").java.srcDir("tests/src")
 }
 
-configure<JUnitPlatformExtension> {
-    filters {
-        engines {
-            include("spek")
+gradlePlugin {
+    (plugins) {
+        "r" {
+            id = "r"
+            implementationClass = "com.hendraanggrian.r.RPlugin"
         }
     }
 }
@@ -57,6 +55,14 @@ publish {
     publishVersion = bintrayPublish
     desc = bintrayDesc
     website = bintrayWeb
+}
+
+configure<JUnitPlatformExtension> {
+    filters {
+        engines {
+            include("spek")
+        }
+    }
 }
 
 fun JUnitPlatformExtension.filters(setup: FiltersExtension.() -> Unit) {

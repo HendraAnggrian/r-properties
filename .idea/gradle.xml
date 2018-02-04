@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/example" />
+            <option value="$PROJECT_DIR$/example/custom-package" />
             <option value="$PROJECT_DIR$/example/custom-source-sets" />
             <option value="$PROJECT_DIR$/example/resource-bundles" />
             <option value="$PROJECT_DIR$/example/simple" />

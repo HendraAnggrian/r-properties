@@ -1,21 +1,21 @@
 R.class
 =======
-Android-like R.class for any JVM-based projects. Intended for type-safe resources in Java.
-
-```
-src/main/resources
-|_font
-| |_MyriadPro.ttf
-| |_SegoeUI.ttf
-|_layout
-| |_main.fxml
-| |_about.fxml
-|_style
-  |_table.css
-  |_skin.css
-```
+Generate Android-like `R` class on any JVM projects.
+Currently only supported with <b>IntelliJ IDEA</b>.
 
 ```java
+/**
+ * Resource tree:
+ * |_font
+ * | |_MyriadPro.ttf
+ * | |_SegoeUI.ttf
+ * |_layout
+ * | |_main.fxml
+ * | |_about.fxml
+ * |_style
+ *   |_table.css
+ *   |_skin.css
+ */
 public final class R {
     public static final class font {
         public static final String MyriadPro = "/font/MyriadPro.ttf";
@@ -32,8 +32,12 @@ public final class R {
 }
 ```
 
+Similarly, check out [buildconfig plugin][buildconfig] to generate `BuildConfig` class.
+
 Download
 --------
+Add plugin to buildscript:
+
 ```gradle
 buildscript {
     repositories {
@@ -42,6 +46,31 @@ buildscript {
     dependencies {
         classpath 'com.hendraanggrian:r:0.2'
     }
+}
+```
+
+then apply it in your module, along with idea plugin:
+
+```gradle
+apply plugin: 'idea'
+apply plugin: 'r'
+```
+
+that's it, `R` are now automatically generated after compilation with default behavior.
+
+Usage
+-----
+Modify `R` fields generation with `r` closure.
+
+```gradle
+group = 'com.example' // project group
+
+buildconfig {
+    // package name of which R.class will be generated to, default is project group
+    packageName 'my.app'
+    
+    // resources directory that will be scanned, default is "src/main/resources"
+    resDir 'my/path/resources'
 }
 ```
 
@@ -76,43 +105,6 @@ public final class R {
 }
 ```
 
-Generate
---------
-Apply `r` plugin on project module. (not the root project)
-
-```gradle
-apply plugin: 'java'
-apply plugin: 'r'
-
-r {
-    ...
-}
-
-dependencies {
-    ...
-}
-```
-
-Then run gradle task `r`, it will automatically read properties files from your resources folder and generate class accordingly.
-
-```
-./gradlew r
-```
-
-Customization
--------------
-Declare and modify `r` extension, note that all of properties are optional.
-
-```gradle
-apply plugin: 'java'
-apply plugin: 'r'
-
-r {
-    packageName 'com.example'
-    resDir 'src/resources'
-}
-```
-
 License
 -------
     Copyright 2017 Hendra Anggrian
@@ -128,3 +120,5 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[buildconfig]: https://github.com/hendraanggrian/buildconfig

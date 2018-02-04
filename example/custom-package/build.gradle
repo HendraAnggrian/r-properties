@@ -1,6 +1,7 @@
 buildscript {
     repositories {
         mavenCentral()
+
     }
     dependencies {
         classpath files("../r-0.2.jar")
@@ -13,17 +14,11 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'r'
 
-sourceSets {
-    main {
-        resources.srcDir 'res'
-    }
-    test{
-        java.srcDir 'tests/src'
-    }
-}
+group = 'com.example'
+version = '1.0'
 
 r {
-    resourcesDir 'res'
+    packageName 'my.app'
 }
 
 dependencies {
