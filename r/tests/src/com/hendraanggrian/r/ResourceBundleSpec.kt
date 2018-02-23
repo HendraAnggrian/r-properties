@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
 @RunWith(JUnitPlatform::class)
 object ResourceBundleSpec : Spek({
 
-    given("some resource bundle naemes") {
+    given("some resource bundle names") {
         val names = listOf("string_en", "string_zh", "string_in").map { File("$it.properties") }
         it("is resources bundle") {
             names.forEach { assertTrue(it.isResourceBundle) }

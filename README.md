@@ -44,7 +44,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.2'
+        classpath 'com.hendraanggrian:r:0.3'
     }
 }
 ```
@@ -76,7 +76,7 @@ buildconfig {
 
 Resource bundles
 ----------------
-If you are using `ResourceBundle` to handle internationalization, put those properties files on root of resources directory.
+If you are using `ResourceBundle` to handle internationalization, put those values files on root of resources directory.
 
 ```
 src/main/resources
@@ -86,11 +86,11 @@ src/main/resources
 | |_...
 |_style
 | |_...
-|_string_en.properties
-|_string_in.properties
+|_string_en.values
+|_string_in.values
 ```
 
-R will generate keys of those properties files instead of file paths.
+R will generate keys of those values files instead of file paths.
 
 ```java
 public final class R {
