@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files("../r-0.3.jar")
+        classpath files("../r-0.4.jar")
         classpath 'com.google.guava:guava:24.0-jre'
         classpath 'com.squareup:javapoet:1.10.0'
     }
@@ -23,7 +23,7 @@ sourceSets {
 }
 
 r {
-    resourcesDir 'res'
+    resourcesDirectory 'res'
 }
 
 dependencies {

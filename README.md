@@ -102,6 +102,10 @@ public final class R {
 }
 ```
 
+Values
+------
+Following `strings.xml` or `integers.xml` in `values` folder in Android, `r` supports these behavior with properties file.
+
 License
 -------
     Copyright 2017 Hendra Anggrian
