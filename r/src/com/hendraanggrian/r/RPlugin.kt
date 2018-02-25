@@ -18,8 +18,6 @@ class RPlugin : Plugin<Project> {
         val extension = project.extensions.create(EXTENSION_NAME, RExtension::class.java)
         project.afterEvaluate {
             val generateTask = extension.createGenerateTask()
-            generateTask.outputDir = buildDir.resolve(GENERATED_SOURCE_OUTPUT)
-
             val compileTask = generateTask.createCompileTask()
             val compiledClasses = project.files(compileTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
             compiledClasses.builtBy(compileTask)
@@ -41,6 +39,7 @@ class RPlugin : Plugin<Project> {
         closureOf<GenerateRTask> {
             packageName = _packageName ?: project.group.findInClosure()
             resourcesDir = _resourcesDir ?: "src/main/resources"
+            outputDir = project.buildDir.resolve(GENERATED_SOURCE_OUTPUT)
         }) as GenerateRTask
 
     private fun GenerateRTask.createCompileTask(): JavaCompile = project.task(

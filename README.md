@@ -66,11 +66,8 @@ Modify `R` fields generation with `r` closure.
 group = 'com.example' // project group
 
 buildconfig {
-    // package name of which R.class will be generated to, default is project group
-    packageName 'my.app'
-    
-    // resources directory that will be scanned, default is "src/main/resources"
-    resDir 'my/path/resources'
+    packageName 'my.app'        // package name of which R.class will be generated to, default is project group
+    resDir 'my/path/resources'  // resources directory that will be scanned, default is "src/main/resources"
 }
 ```
 
