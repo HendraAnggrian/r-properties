@@ -19,10 +19,10 @@ import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.Modifier.STATIC
 
-class ClassConfig internal constructor(
-    resources: Array<File>,
+class RClassWriter internal constructor(
     private val packageName: String,
-    private val className: String
+    private val className: String,
+    resources: Array<File>
 ) : Serializable {
 
     private val multimap: Multimap<String, Pair<String, String>> = create()
@@ -51,9 +51,7 @@ class ClassConfig internal constructor(
 
     internal fun write(outputDirectory: File) = builder(packageName, classBuilder(className)
         .addModifiers(PUBLIC, FINAL)
-        .addMethod(constructorBuilder()
-            .addModifiers(PRIVATE)
-            .build())
+        .addMethod(constructorBuilder().addModifiers(PRIVATE).build())
         .apply {
             multimap.keySet().forEach { innerClass ->
                 addType(classBuilder(innerClass)

@@ -28,6 +28,8 @@
       <module name="r-sync-r-sync_test" target="1.8" />
       <module name="r-sync_main" target="1.8" />
       <module name="r-sync_test" target="1.8" />
+      <module name="r_main" target="1.8" />
+      <module name="r_test" target="1.8" />
       <module name="resource-bundles_main" target="1.8" />
       <module name="resource-bundles_test" target="1.8" />
       <module name="rsync-example_main" target="1.8" />

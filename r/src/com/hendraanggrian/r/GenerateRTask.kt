@@ -9,13 +9,13 @@ import java.io.IOException
 
 open class GenerateRTask : DefaultTask() {
 
-    @Input lateinit var config: ClassConfig
+    @Input lateinit var writer: RClassWriter
     @OutputDirectory lateinit var outputDirectory: File
 
     @TaskAction
     @Throws(IOException::class)
     fun generate() {
         outputDirectory.deleteRecursively()
-        config.write(outputDirectory)
+        writer.write(outputDirectory)
     }
 }

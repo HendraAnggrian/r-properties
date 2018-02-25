@@ -13,6 +13,9 @@ apply plugin: 'java'
 apply plugin: 'idea'
 apply plugin: 'r'
 
+group 'com.example'
+version '1.0'
+
 dependencies {
     testImplementation 'junit:junit:4.12'
 }

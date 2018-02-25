@@ -44,7 +44,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.3'
+        classpath 'com.hendraanggrian:r:0.4'
     }
 }
 ```
@@ -63,10 +63,11 @@ Usage
 Modify `R` fields generation with `r` closure.
 
 ```gradle
-group = 'com.example' // project group
+group 'com.example' // project group
 
 buildconfig {
     packageName 'my.app'        // package name of which R.class will be generated to, default is project group
+    className 'Res'             // generated class name, default is R
     resDir 'my/path/resources'  // resources directory that will be scanned, default is "src/main/resources"
 }
 ```

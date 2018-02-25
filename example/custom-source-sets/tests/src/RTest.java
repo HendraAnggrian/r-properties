@@ -1,5 +1,5 @@
+import com.example.R;
 import org.junit.Test;
-import r.example.R;
 
 import static org.junit.Assert.assertEquals;
 
