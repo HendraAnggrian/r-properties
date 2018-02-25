@@ -6,10 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" group="buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" group="buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package.iml" group="example/custom-package" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package.iml" group="example/custom-package" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_main.iml" group="example/custom-package" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_main.iml" group="example/custom-package" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_test.iml" group="example/custom-package" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-package/custom-package_test.iml" group="example/custom-package" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-source-sets/custom-source-sets.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-source-sets/custom-source-sets.iml" group="example/custom-source-sets" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/custom-source-sets/custom-source-sets_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/custom-source-sets/custom-source-sets_main.iml" group="example/custom-source-sets" />

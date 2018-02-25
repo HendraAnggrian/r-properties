@@ -13,16 +13,14 @@ class RPlugin : Plugin<Project> {
 
     private lateinit var project: Project
 
-    override fun apply(p: Project) {
-        project = p
-        val ext = project.extensions.create(EXTENSION_NAME, RExtension::class.java)
+    override fun apply(target: Project) {
+        project = target
+        val extension = project.extensions.create(EXTENSION_NAME, RExtension::class.java)
         project.afterEvaluate {
-            if (ext.pkgName == null) ext.pkgName = project.group.findInClosure()
+            val generateTask = extension.createGenerateTask()
+            generateTask.outputDir = buildDir.resolve(GENERATED_SOURCE_OUTPUT)
 
-            val generateTask = ext.generateTask
-            generateTask.outputDir = project.buildDir.toPath().resolve(GENERATED_SOURCE_OUTPUT).toFile()
-
-            val compileTask = generateTask.compileTask
+            val compileTask = generateTask.createCompileTask()
             val compiledClasses = project.files(compileTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
             compiledClasses.builtBy(compileTask)
 
@@ -37,17 +35,21 @@ class RPlugin : Plugin<Project> {
         }
     }
 
-    private inline val RExtension.generateTask: GenerateRTask
-        get() = project.task(mapOf("type" to GenerateRTask::class.java), "generate$CLASS_NAME", closureOf<GenerateRTask> {
-            packageName = pkgName!!
-            resourcesDir = resDir
+    private fun RExtension.createGenerateTask(): GenerateRTask = project.task(
+        mapOf("type" to GenerateRTask::class.java),
+        "generate$CLASS_NAME",
+        closureOf<GenerateRTask> {
+            packageName = _packageName ?: project.group.findInClosure()
+            resourcesDir = _resourcesDir ?: "src/main/resources"
         }) as GenerateRTask
 
-    private inline val GenerateRTask.compileTask: JavaCompile
-        get() = project.task(mapOf("type" to JavaCompile::class.java, "dependsOn" to this), "compile$CLASS_NAME", closureOf<JavaCompile> {
+    private fun GenerateRTask.createCompileTask(): JavaCompile = project.task(
+        mapOf("type" to JavaCompile::class.java, "dependsOn" to this),
+        "compile$CLASS_NAME",
+        closureOf<JavaCompile> {
             classpath = project.files()
             destinationDir = project.buildDir.toPath().resolve(GENERATED_SOURCE_CLASSES).toFile()
-            source(this@compileTask.outputDir)
+            source(this@createCompileTask.outputDir)
         }) as JavaCompile
 
     companion object {

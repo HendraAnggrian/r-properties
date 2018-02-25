@@ -1,5 +1,5 @@
 const val releaseUser = "hendraanggrian"
-const val releaseGroup = "com.hendraanggrian"
+const val releaseGroup = "com.$releaseUser"
 const val releaseArtifact = "r"
 const val releaseVersion = "0.3"
 const val releaseDesc = "Type-safe resources gradle plugin"
