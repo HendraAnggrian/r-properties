@@ -3,7 +3,7 @@ const val releaseGroup = "com.$releaseUser"
 const val releaseArtifact = "r"
 const val releaseVersion = "0.4"
 const val releaseDesc = "Type-safe resources gradle plugin"
-const val releaseWeb = "https://github.com/$releaseUser/$releaseArtifact"
+const val releaseWeb = "https://github.com/$releaseUser/$releaseArtifact-plugin"
 
 const val kotlinVersion = "1.2.21"
 const val spekVersion = "1.1.5"
