@@ -4,7 +4,6 @@ import com.google.common.collect.LinkedHashMultimap.create
 import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
 import com.hendraanggrian.r.RPlugin.Companion.CLASS_NAME
-import com.hendraanggrian.r.RPlugin.Companion.EXTENSION_NAME
 import com.hendraanggrian.r.RPlugin.Companion.GENERATED_DIRECTORY
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
@@ -42,7 +41,7 @@ open class RTask : DefaultTask() {
     /**
      * Path that `R.class` will be generated to.
      */
-    @OutputDirectory var outputDir: File = project.buildDir.resolve("$GENERATED_DIRECTORY/$EXTENSION_NAME/src/main")
+    @OutputDirectory var outputDir: File = project.buildDir.resolve("$GENERATED_DIRECTORY/r/src/main")
 
     @TaskAction
     @Throws(IOException::class)
@@ -89,7 +88,7 @@ open class RTask : DefaultTask() {
                 }
             }
             .build())
-            .addFileComment("$CLASS_NAME wrote this class at ${now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
+            .addFileComment("Generated at ${now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
             .writeTo(outputDir)
     }
@@ -100,8 +99,8 @@ open class RTask : DefaultTask() {
         put(cls, field to value)
     }
 
-    companion object {
-        private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
+    private companion object {
+        fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
             val properties = Properties()
             properties.load(stream)
             properties.keys
