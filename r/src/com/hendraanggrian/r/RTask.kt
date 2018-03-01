@@ -30,13 +30,13 @@ open class RTask : DefaultTask() {
      * Package name of which `r` class will be generated to.
      * Default is project group.
      */
-    @Input var packageName: String = project.group.toString()
+    @Input var packageName: String? = null
 
     /**
      * Path of resources that will be read.
      * Default is resources folder in main module.
      */
-    @Input var resourcesDir: String = "src/main/resources"
+    @Input var resourcesDir: String? = null
 
     /**
      * Path that `R.class` will be generated to.
@@ -48,7 +48,7 @@ open class RTask : DefaultTask() {
     fun generate() {
         val multimap: Multimap<String, Pair<String, String>> = create()
         outputDir.deleteRecursively()
-        project.projectDir.resolve(resourcesDir).listFiles().forEach { file ->
+        project.projectDir.resolve(resourcesDir!!).listFiles().forEach { file ->
             when {
                 file.isFile && file.isValid && file.isResourceBundle -> file.forEachProperties { key, _ ->
                     multimap.add(file.resourceBundleName, key, key)

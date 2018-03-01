@@ -44,7 +44,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.5'
+        classpath 'com.hendraanggrian:r:0.6'
     }
 }
 ```

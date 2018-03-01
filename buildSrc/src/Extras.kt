@@ -1,11 +1,11 @@
 const val releaseUser = "hendraanggrian"
 const val releaseGroup = "com.$releaseUser"
 const val releaseArtifact = "r"
-const val releaseVersion = "0.5"
+const val releaseVersion = "0.6"
 const val releaseDesc = "Type-safe resources gradle plugin"
 const val releaseWeb = "https://github.com/$releaseUser/$releaseArtifact-plugin"
 
-const val kotlinVersion = "1.2.21"
+const val kotlinVersion = "1.2.30"
 const val spekVersion = "1.1.5"
 const val junitPlatformVersion = "1.0.0"
 
