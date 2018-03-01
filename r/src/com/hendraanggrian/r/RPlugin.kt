@@ -15,48 +15,39 @@ class RPlugin : Plugin<Project> {
 
     override fun apply(target: Project) {
         project = target
-        val extension = project.extensions.create(EXTENSION_NAME, RExtension::class.java, project)
-        project.afterEvaluate {
-            extension.applyDefault(project)
 
-            val generateTask = extension.createGenerateTask()
-            val compileTask = generateTask.createCompileTask(extension.getTaskName("compile"))
-            val compiledClasses = project.files(compileTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
-            compiledClasses.builtBy(compileTask)
+        val generateTask = createGenerateTask()
+        val compileTask = generateTask.createCompileTask()
+        val compiledClasses = project.files(compileTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
+        compiledClasses.builtBy(compileTask)
 
-            val sourceSet = project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets["main"]
-            sourceSet.compileClasspath += compiledClasses
-            compiledClasses.forEach { sourceSet.output.dir(it) }
+        val sourceSet = project.convention.getPlugin(JavaPluginConvention::class.java).sourceSets["main"]
+        sourceSet.compileClasspath += compiledClasses
+        compiledClasses.forEach { sourceSet.output.dir(it) }
 
-            require(project.plugins.hasPlugin("org.gradle.idea")) { "plugin 'idea' must be applied" }
-            val providedConfig = project.configurations.create(extension.getTaskName("provided"))
-            providedConfig.dependencies += project.dependencies.create(compiledClasses)
-            (project.extensions["idea"] as IdeaModel).module.scopes["PROVIDED"]!!["plus"]!! += providedConfig
-        }
+        require(project.plugins.hasPlugin("org.gradle.idea")) { "plugin 'idea' must be applied" }
+        val providedConfig = project.configurations.create("provided$CLASS_NAME")
+        providedConfig.dependencies += project.dependencies.create(compiledClasses)
+        (project.extensions["idea"] as IdeaModel).module.scopes["PROVIDED"]!!["plus"]!! += providedConfig
     }
 
-    private fun RExtension.createGenerateTask(): GenerateRTask = project.task(
-        mapOf("type" to GenerateRTask::class.java),
-        getTaskName("generate"),
-        closureOf<GenerateRTask> {
-            group = GROUP_NAME
-            writer = toWriter()
-            outputDirectory = project.buildDir.resolve("$GENERATED_DIRECTORY/$EXTENSION_NAME/src/main")
-        }) as GenerateRTask
+    private fun createGenerateTask(): RTask = project.task(
+        mapOf("type" to RTask::class.java, "group" to GROUP_NAME),
+        "generate$CLASS_NAME") as RTask
 
-    private fun GenerateRTask.createCompileTask(taskName: String): JavaCompile = project.task(
-        mapOf("type" to JavaCompile::class.java, "dependsOn" to this),
-        taskName,
+    private fun RTask.createCompileTask(): JavaCompile = project.task(
+        mapOf("type" to JavaCompile::class.java, "group" to GROUP_NAME, "dependsOn" to this),
+        "compile$CLASS_NAME",
         closureOf<JavaCompile> {
-            group = GROUP_NAME
             classpath = project.files()
             destinationDir = project.buildDir.resolve("$GENERATED_DIRECTORY/$EXTENSION_NAME/classes/main")
-            source(this@createCompileTask.outputDirectory)
+            source(outputDir)
         }) as JavaCompile
 
     companion object {
         internal const val EXTENSION_NAME = "r"
-        private const val GROUP_NAME = "generation"
-        private const val GENERATED_DIRECTORY = "generated"
+        internal const val CLASS_NAME = "R"
+        internal const val GROUP_NAME = "generation"
+        internal const val GENERATED_DIRECTORY = "generated"
     }
 }

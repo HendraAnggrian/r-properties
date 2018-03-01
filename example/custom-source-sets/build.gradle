@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-0.4.jar')
+        classpath files('../r-0.5.jar')
         classpath 'com.google.guava:guava:24.0-jre'
         classpath 'com.squareup:javapoet:1.10.0'
     }
@@ -17,18 +17,15 @@ group 'com.example'
 version '1.0'
 
 sourceSets {
-    main {
-        resources.srcDir 'res'
-    }
-    test{
-        java.srcDir 'tests/src'
-    }
-}
-
-r {
-    resourcesDirectory 'res'
+    main.resources.srcDir 'res'
+    test.java.srcDir 'tests/src'
 }
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+}
+
+tasks.getByName('generateR') {
+    packageName 'com.example'
+    resourcesDir 'res'
 }

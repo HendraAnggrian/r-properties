@@ -44,7 +44,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.4'
+        classpath 'com.hendraanggrian:r:0.5'
     }
 }
 ```
@@ -60,15 +60,14 @@ that's it, `R` are now automatically generated after compilation with default be
 
 Usage
 -----
-Modify `R` fields generation with `r` closure.
+Modify `R` fields generation with task name `generateR`, or by type `RTask`.
 
 ```gradle
 group 'com.example' // project group
 
-buildconfig {
+tasks.getByName('generateR') {
     packageName 'my.app'        // package name of which R.class will be generated to, default is project group
-    className 'Res'             // generated class name, default is R
-    resDir 'my/path/resources'  // resources directory that will be scanned, default is "src/main/resources"
+    resourceDirectory 'my/path/resources'  // resources directory that will be scanned, default is "src/main/resources"
 }
 ```
 
