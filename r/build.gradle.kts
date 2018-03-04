@@ -45,45 +45,45 @@ dependencies {
     ktlint(ktlint())
     testImplementation(kotlin("test", kotlinVersion))
     testImplementation(kotlin("reflect", kotlinVersion))
-    testImplementation(spek("api", spekVersion)) {
+    testImplementation(spek("api")) {
         exclude("org.jetbrains.kotlin")
     }
-    testRuntime(spek("junit-platform-engine", spekVersion)) {
+    testRuntime(spek("junit-platform-engine")) {
         exclude("org.jetbrains.kotlin")
         exclude("org.junit.platform")
     }
-    testImplementation(junitPlatform("runner", junitPlatformVersion))
+    testImplementation(junitPlatform("runner"))
 }
 
 tasks {
-    val ktlint by creating(JavaExec::class) {
+    "ktlint"(JavaExec::class) {
+        get("check").dependsOn(ktlint)
         group = "verification"
         inputs.dir("src")
         outputs.dir("src")
         description = "Check Kotlin code style."
-        classpath = configurations["ktlint"]
+        classpath = ktlint
         main = "com.github.shyiko.ktlint.Main"
         args("src/**/*.kt")
     }
-    get("check").dependsOn(ktlint)
     "ktlintFormat"(JavaExec::class) {
         group = "formatting"
         inputs.dir("src")
         outputs.dir("src")
         description = "Fix Kotlin code style deviations."
-        classpath = configurations["ktlint"]
+        classpath = ktlint
         main = "com.github.shyiko.ktlint.Main"
         args("-F", "src/**/*.kt")
     }
 
     val dokka by getting(DokkaTask::class) {
+        get("gitPublishCopy").dependsOn(this)
         outputDirectory = "$buildDir/docs"
         doFirst {
             file(outputDirectory).deleteRecursively()
             buildDir.resolve("gitPublish").deleteRecursively()
         }
     }
-
     gitPublish {
         repoUri = releaseWeb
         branch = "gh-pages"
@@ -92,8 +92,6 @@ tasks {
             dokka.outputDirectory
         )
     }
-
-    get("gitPublishCopy").dependsOn(dokka)
 }
 
 publish {

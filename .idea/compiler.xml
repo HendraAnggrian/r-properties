@@ -12,6 +12,8 @@
       <module name="custom-source-sets_test" target="1.8" />
       <module name="example_main" target="1.8" />
       <module name="example_test" target="1.8" />
+      <module name="lowercase-field_main" target="1.8" />
+      <module name="lowercase-field_test" target="1.8" />
       <module name="r-properties-example_main" target="1.8" />
       <module name="r-properties-example_test" target="1.8" />
       <module name="r-properties-r-properties_main" target="1.8" />

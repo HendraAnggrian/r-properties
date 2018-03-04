@@ -1,3 +1,5 @@
+import java.nio.file.Files.delete
+
 buildscript {
     repositories {
         jcenter()
@@ -7,7 +9,7 @@ buildscript {
         classpath(dokka())
         classpath(gitPublish())
         classpath(bintrayRelease())
-        classpath(junitPlatform("gradle-plugin", junitPlatformVersion))
+        classpath(junitPlatform("gradle-plugin"))
     }
 }
 
@@ -25,7 +27,7 @@ tasks {
         delete(rootProject.buildDir)
     }
     "wrapper"(Wrapper::class) {
-        gradleVersion = "4.4.1"
+        gradleVersion = "4.5.1"
     }
 }
 

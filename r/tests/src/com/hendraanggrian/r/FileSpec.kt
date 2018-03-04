@@ -10,15 +10,15 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 @RunWith(JUnitPlatform::class)
-object ResourceBundleSpec : Spek({
+object FileSpec : Spek({
 
     given("some resource bundle names") {
-        val names = listOf("string_en", "string_zh", "string_in").map { File("$it.properties") }
+        val files = listOf("string_en", "string_zh", "string_in").map { File("$it.properties") }
         it("is resources bundle") {
-            names.forEach { assertTrue(it.isResourceBundle) }
+            files.forEach { assertTrue(it.isResourceBundle()) }
         }
         it("has the same resource bundle name") {
-            names.forEach { assertEquals(it.resourceBundleName, "string") }
+            files.forEach { assertEquals(it.resourceBundleName, "string") }
         }
     }
 })

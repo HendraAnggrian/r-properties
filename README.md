@@ -44,7 +44,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.6'
+        classpath 'com.hendraanggrian:r:0.7'
     }
 }
 ```
@@ -66,8 +66,9 @@ Modify `R` fields generation with task name `generateR`, or by type `RTask`.
 group 'com.example' // project group
 
 tasks.getByName('generateR') {
-    packageName 'my.app'        // package name of which R.class will be generated to, default is project group
-    resourceDirectory 'my/path/resources'  // resources directory that will be scanned, default is "src/main/resources"
+    packageName 'my.app'            // package name of which R.class will be generated to, default is project group
+    resourceDir 'my/path/resources' // resources directory that will be scanned, default is "src/main/resources"
+    lowercaseField false            // will lowercase all fields generated in `R.class`
 }
 ```
 

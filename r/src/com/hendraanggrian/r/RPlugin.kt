@@ -16,10 +16,7 @@ class RPlugin : Plugin<Project> {
             tasks {
                 val generateTask = "generate$CLASS_NAME"(RTask::class) {
                     group = GROUP_NAME
-                    afterEvaluate {
-                        if (packageName == null) packageName = project.group.toString()
-                        if (resourcesDir == null) resourcesDir = "src/main/resources"
-                    }
+                    afterEvaluate { if (packageName == null) packageName = project.group.toString() }
                 }
 
                 val compileTask = "compile$CLASS_NAME"(JavaCompile::class) {

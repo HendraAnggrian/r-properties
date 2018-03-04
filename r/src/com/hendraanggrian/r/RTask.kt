@@ -36,7 +36,13 @@ open class RTask : DefaultTask() {
      * Path of resources that will be read.
      * Default is resources folder in main module.
      */
-    @Input var resourcesDir: String? = null
+    @Input var resourcesDir: String = "src/main/resources"
+
+    /**
+     * Will lowercase all fields generated in `R.class`.
+     * Default is false.
+     */
+    @Input var lowercaseField: Boolean = false
 
     /**
      * Path that `R.class` will be generated to.
@@ -46,16 +52,19 @@ open class RTask : DefaultTask() {
     @TaskAction
     @Throws(IOException::class)
     fun generate() {
+        val root = project.projectDir.resolve(resourcesDir)
+        requireNotNull(root) { "Resources folder not found" }
+
         val multimap: Multimap<String, Pair<String, String>> = create()
         outputDir.deleteRecursively()
-        project.projectDir.resolve(resourcesDir!!).listFiles().forEach { file ->
+        root.listFiles().forEach { file ->
             when {
-                file.isFile && file.isValid && file.isResourceBundle -> file.forEachProperties { key, _ ->
+                file.isFile && file.isValid() && file.isResourceBundle() -> file.forEachProperties { key, _ ->
                     multimap.add(file.resourceBundleName, key, key)
                 }
-                file.isDirectory -> file.listFiles().filter { it.isFile && it.isValid }.let { innerFiles ->
+                file.isDirectory -> file.listFiles().filter { it.isFile && it.isValid() }.let { innerFiles ->
                     when (file.name) {
-                        "values" -> innerFiles.filter { it.isProperties }.forEach { innerFile ->
+                        "values" -> innerFiles.filter { it.isProperties() }.forEach { innerFile ->
                             innerFile.forEachProperties { key, value ->
                                 multimap.add(innerFile.nameWithoutExtension, key, value)
                             }
@@ -94,18 +103,19 @@ open class RTask : DefaultTask() {
     }
 
     private fun Multimap<String, Pair<String, String>>.add(cls: String, field: String, value: String) {
+        var normalizedField = field.normalizedSymbols
+        if (lowercaseField) normalizedField = normalizedField.toLowerCase()
         check(SourceVersion.isName(cls)) { "$cls is not a qualified class name" }
-        check(SourceVersion.isName(field)) { "$field is not a qualified field name" }
-        put(cls, field to value)
+        check(SourceVersion.isName(normalizedField)) { "$field is not a qualified field name" }
+        put(cls, normalizedField to value)
     }
 
     private companion object {
         fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
-            val properties = Properties()
-            properties.load(stream)
-            properties.keys
-                .map { it as? String ?: it.toString() }
-                .forEach { key -> action(key, properties.getProperty(key)) }
+            Properties().run {
+                load(stream)
+                keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
+            }
         }
     }
 }
