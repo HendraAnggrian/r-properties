@@ -5,7 +5,7 @@
 <link rel="stylesheet" href="../../../style.css">
 </HEAD>
 <BODY>
-<a href="../../index.html">r</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.r</a>&nbsp;/&nbsp;<a href=".">RTask</a><br/>
+<a href="../../index.html">r</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.r</a>&nbsp;/&nbsp;<a href="./index.html">RTask</a><br/>
 <br/>
 <h1>RTask</h1>
 <code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">RTask</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">DefaultTask</span></code>
@@ -26,10 +26,20 @@
 <tbody>
 <tr>
 <td>
+<p><a href="lowercase-field.html">lowercaseField</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">lowercaseField</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Will lowercase all fields generated in <code>R.class</code>.
+Default is false.</p>
+</td>
+</tr>
+<tr>
+<td>
 <p><a href="output-dir.html">outputDir</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">outputDir</span><span class="symbol">: </span><span class="identifier">File</span></code>
+<code><span class="keyword">var </span><span class="identifier">outputDir</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
 <p>Path that <code>R.class</code> will be generated to.</p>
 </td>
 </tr>
@@ -38,7 +48,7 @@
 <p><a href="package-name.html">packageName</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<code><span class="keyword">var </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">?</span></code>
 <p>Package name of which <code>r</code> class will be generated to.
 Default is project group.</p>
 </td>
