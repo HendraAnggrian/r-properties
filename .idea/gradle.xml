@@ -13,7 +13,8 @@
             <option value="$PROJECT_DIR$/example" />
             <option value="$PROJECT_DIR$/example/custom-package" />
             <option value="$PROJECT_DIR$/example/custom-source-sets" />
-            <option value="$PROJECT_DIR$/example/lowercase-field" />
+            <option value="$PROJECT_DIR$/example/exclusions" />
+            <option value="$PROJECT_DIR$/example/lowercase" />
             <option value="$PROJECT_DIR$/example/resource-bundles" />
             <option value="$PROJECT_DIR$/example/simple" />
             <option value="$PROJECT_DIR$/r" />

@@ -11,6 +11,7 @@ import com.squareup.javapoet.MethodSpec.constructorBuilder
 import com.squareup.javapoet.TypeSpec.classBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -30,7 +31,7 @@ import javax.lang.model.element.Modifier.STATIC
 open class RTask : DefaultTask() {
 
     /**
-     * Package name of which `r` class will be generated to.
+     * Package name of which R class will be generated to.
      * Default is project group.
      */
     @Input var packageName: String? = null
@@ -39,36 +40,40 @@ open class RTask : DefaultTask() {
      * Path of resources that will be read.
      * Default is resources folder in main module.
      */
-    @Input var resourcesDirectory: File = File("src/main/resources")
+    @InputDirectory var resourcesDir: File = project.projectDir.resolve("src/main/resources")
 
     /**
-     * Will lowercase all fields generated in `R.class`.
+     * Will lowercase name of all generated classes and fields in R class.
      * Default is false.
      */
-    @Input var lowercaseFields: Boolean = false
+    @Input var lowercase: Boolean = false
 
+    /**
+     * Collection of files (or directories) that are ignored from this task.
+     * Default is empty.
+     */
     @InputFiles var exclusions: MutableList<File> = mutableListOf()
 
     /**
-     * Path that `R.class` will be generated to.
+     * Path that R class will be generated to.
      */
-    @OutputDirectory var outputDirectory: File = project.buildDir.resolve("$GENERATED_DIRECTORY/r/src/main")
+    @OutputDirectory var outputDir: File = project.buildDir.resolve("$GENERATED_DIRECTORY/r/src/main")
 
-    fun exclude(vararg files: File) {
-        exclusions.addAll(files.map { resourcesDirectory.resolve(it) })
-    }
+    /** Exclude certain files and directories from generated R class. */
+    fun exclude(vararg files: File): Boolean = exclusions.addAll(files.map { resourcesDir.resolve(it) })
 
-    fun exclude(vararg paths: String) = exclude(File(path))
+    /** Exclude certain files and directories from generated R class. */
+    fun exclude(vararg files: String): Boolean = exclusions.addAll(files.map { resourcesDir.resolve(it) })
 
     /** Generate R class given provided options. */
     @TaskAction
     @Throws(IOException::class)
     fun generate() {
-        val root = project.projectDir.resolve(resourcesDirectory)
+        val root = project.projectDir.resolve(resourcesDir)
         requireNotNull(root) { "Resources folder not found" }
 
         val multimap: Multimap<String, Pair<String, String>> = create()
-        outputDirectory.deleteRecursively()
+        outputDir.deleteRecursively()
         root.listFiles()
             .filter { it !in exclusions }
             .forEach { file ->
@@ -116,15 +121,19 @@ open class RTask : DefaultTask() {
             .build())
             .addFileComment("Generated at ${now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
-            .writeTo(outputDirectory)
+            .writeTo(outputDir)
     }
 
     private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {
+        var actualInnerClassName = innerClassName
         var actualFieldName = fieldName.normalizedSymbols
-        if (lowercaseFields) actualFieldName = actualFieldName.toLowerCase()
-        check(isName(innerClassName)) { "$innerClassName is not a qualified class name" }
+        if (lowercase) {
+            actualInnerClassName = actualInnerClassName.toLowerCase()
+            actualFieldName = actualFieldName.toLowerCase()
+        }
+        check(isName(actualInnerClassName)) { "$innerClassName is not a qualified class name" }
         check(isName(actualFieldName)) { "$fieldName is not a qualified field name" }
-        put(innerClassName, actualFieldName to value)
+        put(actualInnerClassName, actualFieldName to value)
     }
 
     private companion object {

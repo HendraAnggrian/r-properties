@@ -16,7 +16,9 @@ class RPlugin : Plugin<Project> {
             tasks {
                 val generateTask = "generate$CLASS_NAME"(RTask::class) {
                     group = GROUP_NAME
-                    afterEvaluate { if (packageName == null) packageName = project.group.toString() }
+                    afterEvaluate {
+                        if (packageName == null) packageName = project.group.toString()
+                    }
                 }
 
                 val compileTask = "compile$CLASS_NAME"(JavaCompile::class) {
@@ -24,7 +26,7 @@ class RPlugin : Plugin<Project> {
                     group = GROUP_NAME
                     classpath = files()
                     destinationDir = buildDir.resolve("$GENERATED_DIRECTORY/r/classes/main")
-                    source(generateTask.outputDirectory)
+                    source(generateTask.outputDir)
                 }
 
                 val compiledClasses = files(compileTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
