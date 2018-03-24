@@ -16,7 +16,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
-import java.io.File.separator
 import java.io.IOException
 import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter.ofPattern
@@ -92,7 +91,7 @@ open class RTask : DefaultTask() {
                                 }
                                 else -> innerFiles.forEach { innerFile ->
                                     multimap.add(file.name, innerFile.nameWithoutExtension,
-                                        "$separator${file.name}$separator${innerFile.name}")
+                                        "/${file.name}/${innerFile.name}")
                                 }
                             }
                         }

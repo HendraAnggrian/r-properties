@@ -34,8 +34,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r/r-r_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r/r-r_main.iml" group="r" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r/r-r_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r/r-r_test.iml" group="r" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-sync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-sync-example.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example.iml" group="r-sync-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties-example/r-sync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties-example/r-sync-example.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_main.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/r-sync-example_test.iml" group="r-sync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync/r-sync-r-sync.iml" group="r-sync" />
@@ -47,8 +47,8 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/resource-bundles/resource-bundles_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/resource-bundles/resource-bundles_main.iml" group="example/resource-bundles" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/resource-bundles/resource-bundles_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/resource-bundles/resource-bundles_test.iml" group="example/resource-bundles" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-sync-example/rsync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/r-sync-example/rsync-example.iml" group="rsync-example" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_main.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_main.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_test.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync-example/rsync-example_test.iml" group="rsync-example" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/rsync/rsync-rsync.iml" filepath="$PROJECT_DIR$/.idea/modules/rsync/rsync-rsync.iml" group="rsync" />
