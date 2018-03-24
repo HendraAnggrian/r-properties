@@ -23,8 +23,12 @@ group = releaseGroup
 version = releaseVersion
 
 java.sourceSets {
-    get("main").java.srcDir("src")
-    get("test").java.srcDir("tests/src")
+    "main" {
+        java.srcDir("src")
+    }
+    "test" {
+        java.srcDir("tests/src")
+    }
 }
 
 gradlePlugin {
@@ -42,7 +46,7 @@ dependencies {
     implementation(kotlin("stdlib", kotlinVersion))
     implementation(guava())
     implementation(javapoet())
-    ktlint(ktlint())
+
     testImplementation(kotlin("test", kotlinVersion))
     testImplementation(kotlin("reflect", kotlinVersion))
     testImplementation(spek("api")) {
@@ -53,6 +57,8 @@ dependencies {
         exclude("org.junit.platform")
     }
     testImplementation(junitPlatform("runner"))
+
+    ktlint(ktlint())
 }
 
 tasks {

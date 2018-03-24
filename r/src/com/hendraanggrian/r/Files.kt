@@ -5,7 +5,7 @@ package com.hendraanggrian.r
 import java.io.File
 import java.lang.Character.isLetter
 
-internal inline fun File.isValid(): Boolean = !isHidden && isLetter(name[0])
+internal inline fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && isLetter(name.first())
 
 internal inline fun File.isProperties(): Boolean = extension == "properties"
 
