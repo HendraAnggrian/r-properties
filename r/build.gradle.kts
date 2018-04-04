@@ -9,6 +9,7 @@ import org.jetbrains.dokka.gradle.DokkaTask
 import org.junit.platform.gradle.plugin.FiltersExtension
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
+import org.gradle.language.base.plugins.LifecycleBasePlugin.*
 
 plugins {
     `java-gradle-plugin`
@@ -19,8 +20,8 @@ plugins {
     `junit-platform`
 }
 
-group = releaseGroup
-version = releaseVersion
+group = RELEASE_GROUP
+version = RELEASE_VERSION
 
 java.sourceSets {
     "main" {
@@ -33,9 +34,9 @@ java.sourceSets {
 
 gradlePlugin {
     (plugins) {
-        releaseArtifact {
-            id = releaseArtifact
-            implementationClass = "$releaseGroup.$releaseArtifact.RPlugin"
+        RELEASE_ARTIFACT {
+            id = RELEASE_ARTIFACT
+            implementationClass = "$RELEASE_GROUP.$RELEASE_ARTIFACT.RPlugin"
         }
     }
 }
@@ -43,12 +44,12 @@ gradlePlugin {
 val ktlint by configurations.creating
 
 dependencies {
-    implementation(kotlin("stdlib", kotlinVersion))
+    implementation(kotlin("stdlib", VERSION_KOTLIN))
     implementation(guava())
     implementation(javapoet())
 
-    testImplementation(kotlin("test", kotlinVersion))
-    testImplementation(kotlin("reflect", kotlinVersion))
+    testImplementation(kotlin("test", VERSION_KOTLIN))
+    testImplementation(kotlin("reflect", VERSION_KOTLIN))
     testImplementation(spek("api")) {
         exclude("org.jetbrains.kotlin")
     }
@@ -64,7 +65,7 @@ dependencies {
 tasks {
     "ktlint"(JavaExec::class) {
         get("check").dependsOn(ktlint)
-        group = "verification"
+        group = VERIFICATION_GROUP
         inputs.dir("src")
         outputs.dir("src")
         description = "Check Kotlin code style."
@@ -91,7 +92,7 @@ tasks {
         }
     }
     gitPublish {
-        repoUri = releaseWeb
+        repoUri = RELEASE_WEBSITE
         branch = "gh-pages"
         contents.from(
             "pages",
@@ -101,12 +102,12 @@ tasks {
 }
 
 publish {
-    userOrg = releaseUser
-    groupId = releaseGroup
-    artifactId = releaseArtifact
-    publishVersion = releaseVersion
-    desc = releaseDesc
-    website = releaseWeb
+    userOrg = RELEASE_USER
+    groupId = RELEASE_GROUP
+    artifactId = RELEASE_ARTIFACT
+    publishVersion = RELEASE_VERSION
+    desc = RELEASE_DESC
+    website = RELEASE_WEBSITE
 }
 
 configure<JUnitPlatformExtension> {

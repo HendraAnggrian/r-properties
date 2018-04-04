@@ -1,5 +1,6 @@
 package com.hendraanggrian.r
 
+import com.hendraanggrian.r.internal.normalizedSymbols
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it

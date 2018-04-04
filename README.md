@@ -38,13 +38,12 @@ Download
 --------
 Add plugin to buildscript:
 
-```gradle
-buildscript {
+```gradlebuildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.hendraanggrian:r:0.8'
+        classpath 'com.hendraanggrian:r:0.9'
     }
 }
 ```

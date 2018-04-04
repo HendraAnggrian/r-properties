@@ -1,10 +1,15 @@
 package com.hendraanggrian.r
 
-import com.google.common.collect.LinkedHashMultimap.create
+import com.google.common.collect.LinkedHashMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
 import com.hendraanggrian.r.RPlugin.Companion.CLASS_NAME
 import com.hendraanggrian.r.RPlugin.Companion.GENERATED_DIRECTORY
+import com.hendraanggrian.r.internal.isProperties
+import com.hendraanggrian.r.internal.isResourceBundle
+import com.hendraanggrian.r.internal.isValid
+import com.hendraanggrian.r.internal.normalizedSymbols
+import com.hendraanggrian.r.internal.resourceBundleName
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
 import com.squareup.javapoet.MethodSpec.constructorBuilder
@@ -70,15 +75,18 @@ open class RTask : DefaultTask() {
     fun generate() {
         val root = project.projectDir.resolve(resourcesDir)
         requireNotNull(root) { "Resources folder not found" }
-
-        val multimap: Multimap<String, Pair<String, String>> = create()
+        val multimap = LinkedHashMultimap.create<String, Pair<String, String>>()
+        val resourceBundles = mutableListOf<String>()
         outputDir.deleteRecursively()
         root.listFiles()
             .filter { it !in exclusions }
             .forEach { file ->
                 when {
-                    file.isFile && file.isValid() && file.isResourceBundle() -> file.forEachProperties { key, _ ->
-                        multimap.add(file.resourceBundleName, key, key)
+                    file.isFile && file.isValid() && file.isResourceBundle() -> {
+                        resourceBundles += file.nameWithoutExtension
+                        file.forEachProperties { key, _ ->
+                            multimap.add(file.resourceBundleName, key, key)
+                        }
                     }
                     file.isDirectory -> file.listFiles()
                         .filter { it !in exclusions && it.isFile && it.isValid() }
@@ -116,6 +124,10 @@ open class RTask : DefaultTask() {
                         }
                         .build())
                 }
+                if (resourceBundles.isNotEmpty())
+                    addField(builder(Array<String>::class.java, "bundles", PUBLIC, STATIC, FINAL)
+                        .initializer("new String[] { ${resourceBundles.joinToString(", ") { "\"$it\"" }} }")
+                        .build())
             }
             .build())
             .addFileComment("Generated at ${now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")

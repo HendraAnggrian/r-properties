@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.hendraanggrian.r
+package com.hendraanggrian.r.internal
 
 import java.lang.Character.isDigit
 import java.lang.Character.isLetter
