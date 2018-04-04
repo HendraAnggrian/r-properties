@@ -8,7 +8,7 @@ public class RTest {
 
     @Test
     public void test() {
-        assertThat(R.bundles).asList().containsExactly("string_en", "string_in");
+        assertThat(R.string.names()).containsExactly("string_en", "string_in");
         assertEquals(R.string.im, "im");
         assertEquals(R.string.a, "a");
         assertEquals(R.string.little, "little");

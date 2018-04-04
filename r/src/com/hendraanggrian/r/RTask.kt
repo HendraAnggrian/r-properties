@@ -5,14 +5,18 @@ import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
 import com.hendraanggrian.r.RPlugin.Companion.CLASS_NAME
 import com.hendraanggrian.r.RPlugin.Companion.GENERATED_DIRECTORY
+import com.hendraanggrian.r.internal.forEachProperties
 import com.hendraanggrian.r.internal.isProperties
 import com.hendraanggrian.r.internal.isResourceBundle
 import com.hendraanggrian.r.internal.isValid
-import com.hendraanggrian.r.internal.normalizedSymbols
+import com.hendraanggrian.r.internal.normalizeSymbols
 import com.hendraanggrian.r.internal.resourceBundleName
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
+import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.MethodSpec.constructorBuilder
+import com.squareup.javapoet.MethodSpec.methodBuilder
+import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeSpec.classBuilder
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -24,7 +28,6 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime.now
 import java.time.format.DateTimeFormatter.ofPattern
-import java.util.Properties
 import javax.lang.model.SourceVersion.isName
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PRIVATE
@@ -75,17 +78,17 @@ open class RTask : DefaultTask() {
     fun generate() {
         val root = project.projectDir.resolve(resourcesDir)
         requireNotNull(root) { "Resources folder not found" }
-        val multimap = LinkedHashMultimap.create<String, Pair<String, String>>()
-        val resourceBundles = mutableListOf<String>()
+        val resources = LinkedHashMultimap.create<String, Pair<String, String>>()
+        val resourceBundles = LinkedHashMultimap.create<String, String>()
         outputDir.deleteRecursively()
         root.listFiles()
             .filter { it !in exclusions }
             .forEach { file ->
                 when {
                     file.isFile && file.isValid() && file.isResourceBundle() -> {
-                        resourceBundles += file.nameWithoutExtension
+                        resourceBundles[file.resourceBundleName].add(file.nameWithoutExtension)
                         file.forEachProperties { key, _ ->
-                            multimap.add(file.resourceBundleName, key, key)
+                            resources.add(file.resourceBundleName, key, key)
                         }
                     }
                     file.isDirectory -> file.listFiles()
@@ -94,11 +97,11 @@ open class RTask : DefaultTask() {
                             when (file.name) {
                                 "values" -> innerFiles.filter { it.isProperties() }.forEach { innerFile ->
                                     innerFile.forEachProperties { key, value ->
-                                        multimap.add(innerFile.nameWithoutExtension, key, value)
+                                        resources.add(innerFile.nameWithoutExtension, key, value)
                                     }
                                 }
                                 else -> innerFiles.forEach { innerFile ->
-                                    multimap.add(file.name, innerFile.nameWithoutExtension,
+                                    resources.add(file.name, innerFile.nameWithoutExtension,
                                         "/${file.name}/${innerFile.name}")
                                 }
                             }
@@ -107,15 +110,19 @@ open class RTask : DefaultTask() {
             }
         builder(packageName, classBuilder(CLASS_NAME)
             .addModifiers(PUBLIC, FINAL)
-            .addMethod(constructorBuilder().addModifiers(PRIVATE).build())
+            .addMethod(privateConstructor())
             .apply {
-                asMap(multimap).forEach { innerClass, pairs ->
+                asMap(resources).forEach { innerClass, pairs ->
                     addType(classBuilder(innerClass)
                         .addModifiers(PUBLIC, STATIC, FINAL)
-                        .addMethod(constructorBuilder()
-                            .addModifiers(PRIVATE)
-                            .build())
+                        .addMethod(privateConstructor())
                         .apply {
+                            if (resourceBundles.containsKey(innerClass)) addMethod(methodBuilder("names")
+                                .addModifiers(PUBLIC, STATIC, FINAL)
+                                .returns(ParameterizedTypeName.get(List::class.java, String::class.java))
+                                .addStatement("return java.util.Arrays.asList(\$L)", resourceBundles[innerClass]
+                                    .joinToString(", ") { "\"$it\"" })
+                                .build())
                             pairs.forEach { (field, value) ->
                                 addField(builder(String::class.java, field, PUBLIC, STATIC, FINAL)
                                     .initializer("\$S", value)
@@ -124,10 +131,6 @@ open class RTask : DefaultTask() {
                         }
                         .build())
                 }
-                if (resourceBundles.isNotEmpty())
-                    addField(builder(Array<String>::class.java, "bundles", PUBLIC, STATIC, FINAL)
-                        .initializer("new String[] { ${resourceBundles.joinToString(", ") { "\"$it\"" }} }")
-                        .build())
             }
             .build())
             .addFileComment("Generated at ${now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
@@ -137,7 +140,7 @@ open class RTask : DefaultTask() {
 
     private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {
         var actualInnerClassName = innerClassName
-        var actualFieldName = fieldName.normalizedSymbols
+        var actualFieldName = fieldName.normalizeSymbols()
         if (lowercase) {
             actualInnerClassName = actualInnerClassName.toLowerCase()
             actualFieldName = actualFieldName.toLowerCase()
@@ -147,13 +150,8 @@ open class RTask : DefaultTask() {
         put(actualInnerClassName, actualFieldName to value)
     }
 
-    private companion object {
-
-        fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
-            Properties().run {
-                load(stream)
-                keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
-            }
-        }
+    companion object {
+        @Suppress("NOTHING_TO_INLINE")
+        private inline fun privateConstructor(): MethodSpec = constructorBuilder().addModifiers(PRIVATE).build()
     }
 }
