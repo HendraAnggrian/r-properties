@@ -24,19 +24,15 @@ group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 java.sourceSets {
-    "main" {
-        java.srcDir("src")
-    }
-    "test" {
-        java.srcDir("tests/src")
-    }
+    get("main").java.srcDir("src")
+    get("test").java.srcDir("tests/src")
 }
 
 gradlePlugin {
     (plugins) {
         RELEASE_ARTIFACT {
-            id = RELEASE_ARTIFACT
-            implementationClass = "$RELEASE_GROUP.$RELEASE_ARTIFACT.RPlugin"
+            id = RELEASE_GROUP
+            implementationClass = "$RELEASE_GROUP.RPlugin"
         }
     }
 }
@@ -94,14 +90,13 @@ tasks {
     gitPublish {
         repoUri = RELEASE_WEBSITE
         branch = "gh-pages"
-        contents.from(
-            "pages",
-            dokka.outputDirectory
-        )
+        contents.from(dokka.outputDirectory)
     }
 }
 
 publish {
+    repoName = RELEASE_ARTIFACT
+
     userOrg = RELEASE_USER
     groupId = RELEASE_GROUP
     artifactId = RELEASE_ARTIFACT

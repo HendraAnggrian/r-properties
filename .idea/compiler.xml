@@ -23,6 +23,8 @@
       <module name="lowercase-fields_test" target="1.8" />
       <module name="lowercase_main" target="1.8" />
       <module name="lowercase_test" target="1.8" />
+      <module name="r-gradle-plugin-r-gradle-plugin_main" target="1.8" />
+      <module name="r-gradle-plugin-r-gradle-plugin_test" target="1.8" />
       <module name="r-properties-example_main" target="1.8" />
       <module name="r-properties-example_test" target="1.8" />
       <module name="r-properties-r-properties_main" target="1.8" />

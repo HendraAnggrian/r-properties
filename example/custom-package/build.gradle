@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-0.9.jar')
+        classpath files('../r-gradle-plugin-0.1.jar')
         classpath 'com.google.guava:guava:24.1-jre'
         classpath 'com.squareup:javapoet:1.10.0'
     }
@@ -11,7 +11,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'r'
+apply plugin: 'com.hendraanggrian.r'
 
 group 'com.example'
 version '1.0'

@@ -1,4 +1,4 @@
-include(":r")
+include(":$RELEASE_ARTIFACT")
 
 include(":example:simple")
 include(":example:lowercase")

@@ -17,7 +17,7 @@
             <option value="$PROJECT_DIR$/example/lowercase" />
             <option value="$PROJECT_DIR$/example/resource-bundles" />
             <option value="$PROJECT_DIR$/example/simple" />
-            <option value="$PROJECT_DIR$/r" />
+            <option value="$PROJECT_DIR$/r-gradle-plugin" />
           </set>
         </option>
       </GradleProjectSettings>
