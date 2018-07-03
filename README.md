@@ -51,14 +51,14 @@ buildscript {
 }
 ```
 
-then apply it in your module, along with idea plugin:
+Then apply it in your module, along with idea plugin:
 
 ```gradle
 apply plugin: 'idea'
 apply plugin: 'r'
 ```
 
-that's it, `R` are now automatically generated after compilation with default behavior.
+That's it, `R` are now automatically generated after compilation with default behavior.
 
 Usage
 -----

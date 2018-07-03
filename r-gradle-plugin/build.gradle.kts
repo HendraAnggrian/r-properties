@@ -30,7 +30,7 @@ java.sourceSets {
 
 gradlePlugin {
     (plugins) {
-        RELEASE_ARTIFACT {
+        RELEASE_GROUP {
             id = RELEASE_GROUP
             implementationClass = "$RELEASE_GROUP.RPlugin"
         }
@@ -95,6 +95,9 @@ tasks {
 }
 
 publish {
+    bintrayUser = System.getenv("BINTRAY_USER")
+    bintrayKey = System.getenv("BINTRAY_KEY")
+    dryRun = false
     repoName = RELEASE_ARTIFACT
 
     userOrg = RELEASE_USER

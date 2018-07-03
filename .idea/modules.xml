@@ -36,11 +36,15 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/lowercase/lowercase_main.iml" filepath="$PROJECT_DIR$/.idea/modules/example/lowercase/lowercase_main.iml" group="example/lowercase" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/lowercase/lowercase_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/lowercase/lowercase_test.iml" group="example/lowercase" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/example/lowercase/lowercase_test.iml" filepath="$PROJECT_DIR$/.idea/modules/example/lowercase/lowercase_test.iml" group="example/lowercase" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r/r.iml" filepath="$PROJECT_DIR$/.idea/modules/r/r.iml" group="r" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r.iml" filepath="$PROJECT_DIR$/.idea/modules/r.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r/r.iml" filepath="$PROJECT_DIR$/.idea/modules/r/r.iml" group="r" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin.iml" group="r-gradle-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin.iml" group="r-gradle-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" group="r-gradle-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" group="r-gradle-plugin" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_test.iml" group="r-gradle-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_test.iml" group="r-gradle-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/r-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-properties.iml" filepath="$PROJECT_DIR$/.idea/modules/r-properties.iml" />

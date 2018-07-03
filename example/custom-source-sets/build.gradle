@@ -4,8 +4,8 @@ buildscript {
     }
     dependencies {
         classpath files('../r-gradle-plugin-0.1.jar')
-        classpath 'com.google.guava:guava:24.1-jre'
-        classpath 'com.squareup:javapoet:1.10.0'
+        classpath 'com.google.guava:guava:25.1-jre'
+        classpath 'com.squareup:javapoet:1.11.1'
     }
 }
 
