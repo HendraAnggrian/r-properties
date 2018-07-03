@@ -16,6 +16,7 @@ plugins {
     `kotlin-dsl`
     dokka
     `git-publish`
+    bintray
     `bintray-release`
     `junit-platform`
 }
@@ -95,8 +96,8 @@ tasks {
 }
 
 publish {
-    bintrayUser = System.getenv("BINTRAY_USER")
-    bintrayKey = System.getenv("BINTRAY_KEY")
+    bintrayUser = bintrayUserEnv
+    bintrayKey = bintrayKeyEnv
     dryRun = false
     repoName = RELEASE_ARTIFACT
 
