@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.hendraanggrian.r.internal
+package com.hendraanggrian.gradle.r.internal
 
 import java.lang.Character.isDigit
 import java.lang.Character.isLetter

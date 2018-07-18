@@ -1,7 +1,7 @@
 package com.hendraanggrian.r
 
-import com.hendraanggrian.r.internal.isResourceBundle
-import com.hendraanggrian.r.internal.resourceBundleName
+import com.hendraanggrian.gradle.r.internal.isResourceBundle
+import com.hendraanggrian.gradle.r.internal.resourceBundleName
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it

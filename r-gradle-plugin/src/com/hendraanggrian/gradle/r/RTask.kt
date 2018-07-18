@@ -1,16 +1,16 @@
-package com.hendraanggrian.r
+package com.hendraanggrian.gradle.r
 
 import com.google.common.collect.LinkedHashMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
-import com.hendraanggrian.r.RPlugin.Companion.CLASS_NAME
-import com.hendraanggrian.r.RPlugin.Companion.GENERATED_DIRECTORY
-import com.hendraanggrian.r.internal.forEachProperties
-import com.hendraanggrian.r.internal.isProperties
-import com.hendraanggrian.r.internal.isResourceBundle
-import com.hendraanggrian.r.internal.isValid
-import com.hendraanggrian.r.internal.normalizeSymbols
-import com.hendraanggrian.r.internal.resourceBundleName
+import com.hendraanggrian.gradle.r.RPlugin.Companion.CLASS_NAME
+import com.hendraanggrian.gradle.r.RPlugin.Companion.GENERATED_DIRECTORY
+import com.hendraanggrian.gradle.r.internal.forEachProperties
+import com.hendraanggrian.gradle.r.internal.isProperties
+import com.hendraanggrian.gradle.r.internal.isResourceBundle
+import com.hendraanggrian.gradle.r.internal.isValid
+import com.hendraanggrian.gradle.r.internal.normalizeSymbols
+import com.hendraanggrian.gradle.r.internal.resourceBundleName
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
 import com.squareup.javapoet.MethodSpec
