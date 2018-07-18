@@ -46,7 +46,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.hendraanggrian.r:r-gradle-plugin:$version"
+        classpath "com.hendraanggrian.generation:r-gradle-plugin:$version"
     }
 }
 ```
@@ -55,7 +55,7 @@ Then apply it in your module, along with idea plugin:
 
 ```gradle
 apply plugin: 'idea'
-apply plugin: 'r'
+apply plugin: 'com.hendraanggrian.generation.r'
 ```
 
 That's it, `R` are now automatically generated after compilation with default behavior.
