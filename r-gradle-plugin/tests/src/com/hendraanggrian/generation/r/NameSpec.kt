@@ -1,6 +1,6 @@
-package com.hendraanggrian.r
+package com.hendraanggrian.generation.r
 
-import com.hendraanggrian.gradle.r.internal.normalizeSymbols
+import com.hendraanggrian.generation.r.internal.normalizeSymbols
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it

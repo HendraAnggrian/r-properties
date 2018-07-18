@@ -11,7 +11,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'com.hendraanggrian.r'
+apply plugin: 'com.hendraanggrian.generation.r'
 
 group 'com.example'
 version '1.0'
