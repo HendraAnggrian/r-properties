@@ -1,8 +1,9 @@
 R Gradle Plugin
 ===============
-[![Download](https://api.bintray.com/packages/hendraanggrian/r-gradle-plugin/r-gradle-plugin/images/download.svg) ](https://bintray.com/hendraanggrian/r-gradle-plugin/r-gradle-plugin/_latestVersion)
-[![Build Status](https://travis-ci.org/hendraanggrian/r-gradle-plugin.svg)](https://travis-ci.org/hendraanggrian/r-gradle-plugin)
-[![GitHub license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
+[![bintray](https://img.shields.io/badge/bintray-generation-brightgreen.svg)](https://bintray.com/hendraanggrian/generation)
+[![download](https://api.bintray.com/packages/hendraanggrian/generation/r-gradle-plugin/images/download.svg) ](https://bintray.com/hendraanggrian/generation/r-gradle-plugin/_latestVersion)
+[![build](https://travis-ci.com/hendraanggrian/r-gradle-plugin.svg)](https://travis-ci.com/hendraanggrian/r-gradle-plugin)
+[![license](https://img.shields.io/badge/license-Apache%20License%202.0-blue.svg?style=flat)](http://www.apache.org/licenses/LICENSE-2.0)
 
 Generate Android-like `R` class on any JVM projects.
 Currently only supported with <b>IntelliJ IDEA</b>.
