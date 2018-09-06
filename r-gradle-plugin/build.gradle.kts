@@ -10,6 +10,7 @@ import org.junit.platform.gradle.plugin.FiltersExtension
 import org.junit.platform.gradle.plugin.EnginesExtension
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import org.gradle.language.base.plugins.LifecycleBasePlugin.*
+import org.jetbrains.kotlin.serialization.js.DynamicTypeDeserializer.id
 
 plugins {
     `java-gradle-plugin`
@@ -24,21 +25,21 @@ plugins {
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
-java.sourceSets {
+sourceSets {
     get("main").java.srcDir("src")
     get("test").java.srcDir("tests/src")
 }
 
 gradlePlugin {
     (plugins) {
-        RELEASE_ARTIFACT {
+        create(RELEASE_ARTIFACT) {
             id = "$RELEASE_GROUP.r"
             implementationClass = "$RELEASE_GROUP.r.RPlugin"
         }
     }
 }
 
-val ktlint by configurations.creating
+val ktlint by configurations.registering
 
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
@@ -56,28 +57,28 @@ dependencies {
     }
     testImplementation(junitPlatform("runner"))
 
-    ktlint(ktlint())
+    // ktlint(ktlint())
 }
 
 tasks {
-    "ktlint"(JavaExec::class) {
+    register("ktlint", JavaExec::class) {
         get("check").dependsOn(ktlint)
         group = VERIFICATION_GROUP
         inputs.dir("src")
         outputs.dir("src")
         description = "Check Kotlin code style."
-        classpath = ktlint
+        classpath(ktlint)
         main = "com.github.shyiko.ktlint.Main"
-        args("src/**/*.kt")
+        args("src/**.kt")
     }
-    "ktlintFormat"(JavaExec::class) {
+    register("ktlintformat", JavaExec::class) {
         group = "formatting"
         inputs.dir("src")
         outputs.dir("src")
         description = "Fix Kotlin code style deviations."
-        classpath = ktlint
+        classpath(ktlint)
         main = "com.github.shyiko.ktlint.Main"
-        args("-F", "src/**/*.kt")
+        args("-F", "src*.kt")
     }
 
     val dokka by getting(DokkaTask::class) {
