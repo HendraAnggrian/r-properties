@@ -82,7 +82,7 @@ tasks {
         args("-F", "src*.kt")
     }
 
-    val dokka by getting(DokkaTask::class) {
+    val dokka by existing(DokkaTask::class) {
         get("gitPublishCopy").dependsOn(this)
         outputDirectory = "$buildDir/docs"
         doFirst {
@@ -93,7 +93,7 @@ tasks {
     gitPublish {
         repoUri = RELEASE_WEBSITE
         branch = "gh-pages"
-        contents.from(dokka.outputDirectory)
+        contents.from(dokka.get().outputDirectory)
     }
 }
 
