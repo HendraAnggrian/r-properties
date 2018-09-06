@@ -1,3 +1,4 @@
+import org.codehaus.groovy.ast.tools.GeneralUtils.args
 import org.gradle.api.plugins.ExtensionAware
 import org.gradle.api.tasks.JavaExec
 import org.gradle.kotlin.dsl.`kotlin-dsl`
@@ -32,7 +33,7 @@ sourceSets {
 
 gradlePlugin {
     (plugins) {
-        create(RELEASE_ARTIFACT) {
+        register(RELEASE_ARTIFACT) {
             id = "$RELEASE_GROUP.r"
             implementationClass = "$RELEASE_GROUP.r.RPlugin"
         }
@@ -57,7 +58,7 @@ dependencies {
     }
     testImplementation(junitPlatform("runner"))
 
-    // ktlint(ktlint())
+    ktlint.get()(ktlint())
 }
 
 tasks {
@@ -67,7 +68,7 @@ tasks {
         inputs.dir("src")
         outputs.dir("src")
         description = "Check Kotlin code style."
-        classpath(ktlint)
+        classpath(ktlint.get())
         main = "com.github.shyiko.ktlint.Main"
         args("src/**.kt")
     }
@@ -76,7 +77,7 @@ tasks {
         inputs.dir("src")
         outputs.dir("src")
         description = "Fix Kotlin code style deviations."
-        classpath(ktlint)
+        classpath(ktlint.get())
         main = "com.github.shyiko.ktlint.Main"
         args("-F", "src*.kt")
     }

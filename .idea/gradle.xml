@@ -11,6 +11,13 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/r-gradle-plugin" />
+            <option value="$PROJECT_DIR$/samples" />
+            <option value="$PROJECT_DIR$/samples/custom-package" />
+            <option value="$PROJECT_DIR$/samples/custom-source-sets" />
+            <option value="$PROJECT_DIR$/samples/exclusions" />
+            <option value="$PROJECT_DIR$/samples/lowercase" />
+            <option value="$PROJECT_DIR$/samples/resource-bundles" />
+            <option value="$PROJECT_DIR$/samples/simple" />
           </set>
         </option>
       </GradleProjectSettings>
