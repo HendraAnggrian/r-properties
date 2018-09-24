@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-gradle-plugin-0.2.jar')
+        classpath files('../r-gradle-plugin-0.3.jar')
         classpath 'com.google.guava:guava:26.0-jre'
         classpath 'com.squareup:javapoet:1.11.1'
     }
@@ -26,5 +26,5 @@ dependencies {
 }
 
 tasks.getByName('generateR') {
-    resourcesDir file('res')
+    resourcesDirectory file('res')
 }

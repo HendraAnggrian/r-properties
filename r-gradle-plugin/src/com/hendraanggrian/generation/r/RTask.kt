@@ -5,12 +5,6 @@ import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
 import com.hendraanggrian.generation.r.RPlugin.Companion.CLASS_NAME
 import com.hendraanggrian.generation.r.RPlugin.Companion.GENERATED_DIRECTORY
-import com.hendraanggrian.generation.r.internal.forEachProperties
-import com.hendraanggrian.generation.r.internal.isProperties
-import com.hendraanggrian.generation.r.internal.isResourceBundle
-import com.hendraanggrian.generation.r.internal.isValid
-import com.hendraanggrian.generation.r.internal.normalizeSymbols
-import com.hendraanggrian.generation.r.internal.resourceBundleName
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
 import com.squareup.javapoet.MethodSpec
@@ -26,8 +20,9 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.io.IOException
-import java.time.LocalDateTime.now
+import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
+import java.util.Properties
 import javax.lang.model.SourceVersion.isName
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PRIVATE
@@ -47,40 +42,46 @@ open class RTask : DefaultTask() {
      * Path of resources that will be read.
      * Default is resources folder in main module.
      */
-    @InputDirectory var resourcesDir: File = project.projectDir.resolve("src/main/resources")
+    @InputDirectory var resourcesDirectory: File = project.projectDir.resolve("src/main/resources")
 
     /**
      * Will lowercase name of all generated classes and fields in R class.
      * Default is false.
      */
-    @Input var lowercase: Boolean = false
+    private var isLowercase: Boolean = false
+
+    @Input fun setLowercase(lowercase: Boolean) {
+        isLowercase = lowercase
+    }
 
     /**
      * Collection of files (or directories) that are ignored from this task.
      * Default is empty.
      */
-    @InputFiles var exclusions: MutableList<File> = mutableListOf()
+    @InputFiles var exclusions: MutableCollection<File> = mutableListOf()
+
+    /** Exclude certain files and directories from generated R class. */
+    @InputFiles fun exclude(vararg files: File): Boolean =
+        exclusions.addAll(files.map { resourcesDirectory.resolve(it) })
+
+    /** Exclude certain files and directories from generated R class. */
+    @InputFiles fun exclude(vararg files: String): Boolean =
+        exclusions.addAll(files.map { resourcesDirectory.resolve(it) })
 
     /**
      * Path that R class will be generated to.
      */
-    @OutputDirectory var outputDir: File = project.buildDir.resolve("$GENERATED_DIRECTORY/r/src/main")
-
-    /** Exclude certain files and directories from generated R class. */
-    fun exclude(vararg files: File): Boolean = exclusions.addAll(files.map { resourcesDir.resolve(it) })
-
-    /** Exclude certain files and directories from generated R class. */
-    fun exclude(vararg files: String): Boolean = exclusions.addAll(files.map { resourcesDir.resolve(it) })
+    @OutputDirectory var outputDirectory: File = project.buildDir.resolve("$GENERATED_DIRECTORY/r/src/main")
 
     /** Generate R class given provided options. */
     @TaskAction
     @Throws(IOException::class)
     fun generate() {
-        val root = project.projectDir.resolve(resourcesDir)
+        val root = project.projectDir.resolve(resourcesDirectory)
         requireNotNull(root) { "Resources folder not found" }
         val resources = LinkedHashMultimap.create<String, Pair<String, String>>()
         val resourceBundles = LinkedHashMultimap.create<String, String>()
-        outputDir.deleteRecursively()
+        outputDirectory.deleteRecursively()
         root.listFiles()
             .filter { it !in exclusions }
             .forEach { file ->
@@ -101,8 +102,11 @@ open class RTask : DefaultTask() {
                                     }
                                 }
                                 else -> innerFiles.forEach { innerFile ->
-                                    resources.add(file.name, innerFile.nameWithoutExtension,
-                                        "/${file.name}/${innerFile.name}")
+                                    resources.add(
+                                        file.name,
+                                        innerFile.nameWithoutExtension,
+                                        "/${file.name}/${innerFile.name}"
+                                    )
                                 }
                             }
                         }
@@ -117,31 +121,42 @@ open class RTask : DefaultTask() {
                         .addModifiers(PUBLIC, STATIC, FINAL)
                         .addMethod(privateConstructor())
                         .apply {
-                            if (resourceBundles.containsKey(innerClass)) addMethod(methodBuilder("names")
-                                .addModifiers(PUBLIC, STATIC, FINAL)
-                                .returns(ParameterizedTypeName.get(List::class.java, String::class.java))
-                                .addStatement("return java.util.Arrays.asList(\$L)", resourceBundles[innerClass]
-                                    .joinToString(", ") { "\"$it\"" })
-                                .build())
+                            if (resourceBundles.containsKey(innerClass)) {
+                                addMethod(
+                                    methodBuilder("names")
+                                        .addModifiers(PUBLIC, STATIC, FINAL)
+                                        .returns(
+                                            ParameterizedTypeName.get(
+                                                List::class.java,
+                                                String::class.java
+                                            )
+                                        )
+                                        .addStatement("return java.util.Arrays.asList(\$L)", resourceBundles[innerClass]
+                                            .joinToString(", ") { "\"$it\"" })
+                                        .build()
+                                )
+                            }
                             pairs.forEach { (field, value) ->
-                                addField(builder(String::class.java, field, PUBLIC, STATIC, FINAL)
-                                    .initializer("\$S", value)
-                                    .build())
+                                addField(
+                                    builder(String::class.java, field, PUBLIC, STATIC, FINAL)
+                                        .initializer("\$S", value)
+                                        .build()
+                                )
                             }
                         }
                         .build())
                 }
             }
             .build())
-            .addFileComment("Generated at ${now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
+            .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
-            .writeTo(outputDir)
+            .writeTo(outputDirectory)
     }
 
     private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {
         var actualInnerClassName = innerClassName
         var actualFieldName = fieldName.normalizeSymbols()
-        if (lowercase) {
+        if (isLowercase) {
             actualInnerClassName = actualInnerClassName.toLowerCase()
             actualFieldName = actualFieldName.toLowerCase()
         }
@@ -150,8 +165,33 @@ open class RTask : DefaultTask() {
         put(actualInnerClassName, actualFieldName to value)
     }
 
-    companion object {
-        @Suppress("NOTHING_TO_INLINE")
-        private inline fun privateConstructor(): MethodSpec = constructorBuilder().addModifiers(PRIVATE).build()
+    internal companion object {
+
+        private fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
+
+        fun String.normalizeSymbols(): String {
+            var s = ""
+            forEach { s += if (it.isSymbol()) "_" else it }
+            return s
+        }
+
+        private fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && Character.isLetter(name.first())
+
+        private fun File.isProperties(): Boolean = extension == "properties"
+
+        fun File.isResourceBundle(): Boolean = isValid() && isProperties() && nameWithoutExtension.let { name ->
+            name.contains("_") && name.substringAfterLast("_").length == 2
+        }
+
+        inline val File.resourceBundleName: String get() = nameWithoutExtension.substringBeforeLast("_")
+
+        private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
+            Properties().run {
+                load(stream)
+                keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
+            }
+        }
+
+        private fun privateConstructor(): MethodSpec = constructorBuilder().addModifiers(PRIVATE).build()
     }
 }
