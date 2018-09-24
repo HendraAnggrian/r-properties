@@ -39,20 +39,10 @@ Default is empty.</p>
 </tr>
 <tr>
 <td>
-<p><a href="lowercase.html">lowercase</a></p>
+<p><a href="output-directory.html">outputDirectory</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">lowercase</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
-<p>Will lowercase name of all generated classes and fields in R class.
-Default is false.</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="output-dir.html">outputDir</a></p>
-</td>
-<td>
-<code><span class="keyword">var </span><span class="identifier">outputDir</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
+<code><span class="keyword">var </span><span class="identifier">outputDirectory</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
 <p>Path that R class will be generated to.</p>
 </td>
 </tr>
@@ -68,10 +58,10 @@ Default is project group.</p>
 </tr>
 <tr>
 <td>
-<p><a href="resources-dir.html">resourcesDir</a></p>
+<p><a href="resources-directory.html">resourcesDirectory</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">resourcesDir</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
+<code><span class="keyword">var </span><span class="identifier">resourcesDirectory</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
 <p>Path of resources that will be read.
 Default is resources folder in main module.</p>
 </td>
@@ -99,6 +89,13 @@ Default is resources folder in main module.</p>
 <code><span class="keyword">fun </span><span class="identifier">generate</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Generate R class given provided options.</p>
 </td>
+</tr>
+<tr>
+<td>
+<p><a href="set-lowercase.html">setLowercase</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">setLowercase</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generation.r.RTask$setLowercase(kotlin.Boolean)/lowercase">lowercase</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 </tbody>
 </table>
