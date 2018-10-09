@@ -32,9 +32,7 @@ class RPlugin : Plugin<Project> {
             // project group will return correct name after evaluated
             project.afterEvaluate {
                 generateR {
-                    if (!isPackageNameCustom()) {
-                        packageName = project.group.toString()
-                    }
+                    if (packageName.isEmpty()) packageName = project.group.toString()
                 }
             }
             compileR = register("compile$CLASS_NAME", JavaCompile::class) {

@@ -15,7 +15,6 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -39,7 +38,7 @@ open class RTask : DefaultTask() {
      * Package name of which R class will be generated to.
      * Default is project group.
      */
-    @Input lateinit var packageName: String
+    @Input var packageName: String = ""
 
     /**
      * Path of resources that will be read.
@@ -155,8 +154,6 @@ open class RTask : DefaultTask() {
             .build()
             .writeTo(outputDir)
     }
-
-    @Internal internal fun isPackageNameCustom(): Boolean = ::packageName.isInitialized
 
     private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {
         var actualInnerClassName = innerClassName
