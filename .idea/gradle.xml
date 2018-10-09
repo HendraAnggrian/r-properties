@@ -5,19 +5,48 @@
       <GradleProjectSettings>
         <option name="distributionType" value="DEFAULT_WRAPPED" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="gradleJvm" value="1.8" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/demo" />
+            <option value="$PROJECT_DIR$/demo/app" />
+            <option value="$PROJECT_DIR$/demo/binary" />
+            <option value="$PROJECT_DIR$/demo/build" />
+            <option value="$PROJECT_DIR$/demo/classes" />
+            <option value="$PROJECT_DIR$/demo/compileR" />
+            <option value="$PROJECT_DIR$/demo/compileTestJava" />
+            <option value="$PROJECT_DIR$/demo/css" />
+            <option value="$PROJECT_DIR$/demo/custom-package" />
+            <option value="$PROJECT_DIR$/demo/custom-source-sets" />
+            <option value="$PROJECT_DIR$/demo/demo" />
+            <option value="$PROJECT_DIR$/demo/exclusions" />
+            <option value="$PROJECT_DIR$/demo/font" />
+            <option value="$PROJECT_DIR$/demo/generated" />
+            <option value="$PROJECT_DIR$/demo/jar" />
+            <option value="$PROJECT_DIR$/demo/java" />
+            <option value="$PROJECT_DIR$/demo/js" />
+            <option value="$PROJECT_DIR$/demo/layout" />
+            <option value="$PROJECT_DIR$/demo/libs" />
+            <option value="$PROJECT_DIR$/demo/lowercase" />
+            <option value="$PROJECT_DIR$/demo/main" />
+            <option value="$PROJECT_DIR$/demo/my" />
+            <option value="$PROJECT_DIR$/demo/note" />
+            <option value="$PROJECT_DIR$/demo/packages" />
+            <option value="$PROJECT_DIR$/demo/r" />
+            <option value="$PROJECT_DIR$/demo/r-gradle-plugin" />
+            <option value="$PROJECT_DIR$/demo/reports" />
+            <option value="$PROJECT_DIR$/demo/res" />
+            <option value="$PROJECT_DIR$/demo/resource-bundles" />
+            <option value="$PROJECT_DIR$/demo/resources" />
+            <option value="$PROJECT_DIR$/demo/simple" />
+            <option value="$PROJECT_DIR$/demo/src" />
+            <option value="$PROJECT_DIR$/demo/test" />
+            <option value="$PROJECT_DIR$/demo/test-results" />
+            <option value="$PROJECT_DIR$/demo/tests" />
+            <option value="$PROJECT_DIR$/demo/tmp" />
+            <option value="$PROJECT_DIR$/demo/values" />
             <option value="$PROJECT_DIR$/r-gradle-plugin" />
-            <option value="$PROJECT_DIR$/samples" />
-            <option value="$PROJECT_DIR$/samples/custom-package" />
-            <option value="$PROJECT_DIR$/samples/custom-source-sets" />
-            <option value="$PROJECT_DIR$/samples/exclusions" />
-            <option value="$PROJECT_DIR$/samples/lowercase" />
-            <option value="$PROJECT_DIR$/samples/resource-bundles" />
-            <option value="$PROJECT_DIR$/samples/simple" />
           </set>
         </option>
       </GradleProjectSettings>

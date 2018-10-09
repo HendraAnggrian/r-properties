@@ -1,8 +1,6 @@
 include(RELEASE_ARTIFACT)
 
-include("samples:simple")
-include("samples:lowercase")
-include("samples:custom-source-sets")
-include("samples:custom-package")
-include("samples:resource-bundles")
-include("samples:exclusions")
+File("demo")
+    .walk()
+    .filter { it.isDirectory }
+    .forEach { include("demo:${it.name}") }

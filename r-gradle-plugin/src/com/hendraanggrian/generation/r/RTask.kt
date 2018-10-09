@@ -4,7 +4,6 @@ import com.google.common.collect.LinkedHashMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
 import com.hendraanggrian.generation.r.RPlugin.Companion.CLASS_NAME
-import com.hendraanggrian.generation.r.RPlugin.Companion.GENERATED_DIRECTORY
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
 import com.squareup.javapoet.MethodSpec
@@ -16,6 +15,7 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -32,27 +32,30 @@ import javax.lang.model.element.Modifier.STATIC
 /** R class generation task. */
 open class RTask : DefaultTask() {
 
+    /** Actual property of [isLowercase] since annotating [isLowercase] will result in Gradle warning. */
+    private var lowercase: Boolean = false
+
     /**
      * Package name of which R class will be generated to.
      * Default is project group.
      */
-    @Input var packageName: String? = null
+    @Input lateinit var packageName: String
 
     /**
      * Path of resources that will be read.
      * Default is resources folder in main module.
      */
-    @InputDirectory var resourcesDirectory: File = project.projectDir.resolve("src/main/resources")
+    @InputDirectory lateinit var resourcesDir: File
 
     /**
      * Will lowercase name of all generated classes and fields in R class.
      * Default is false.
      */
-    private var isLowercase: Boolean = false
-
-    @Input fun setLowercase(lowercase: Boolean) {
-        isLowercase = lowercase
-    }
+    var isLowercase: Boolean
+        @Input get() = lowercase
+        @Input set(value) {
+            lowercase = value
+        }
 
     /**
      * Collection of files (or directories) that are ignored from this task.
@@ -62,26 +65,26 @@ open class RTask : DefaultTask() {
 
     /** Exclude certain files and directories from generated R class. */
     @InputFiles fun exclude(vararg files: File): Boolean =
-        exclusions.addAll(files.map { resourcesDirectory.resolve(it) })
+        exclusions.addAll(files.map { resourcesDir.resolve(it) })
 
     /** Exclude certain files and directories from generated R class. */
     @InputFiles fun exclude(vararg files: String): Boolean =
-        exclusions.addAll(files.map { resourcesDirectory.resolve(it) })
+        exclusions.addAll(files.map { resourcesDir.resolve(it) })
 
     /**
      * Path that R class will be generated to.
      */
-    @OutputDirectory var outputDirectory: File = project.buildDir.resolve("$GENERATED_DIRECTORY/r/src/main")
+    @OutputDirectory lateinit var outputDir: File
 
     /** Generate R class given provided options. */
     @TaskAction
     @Throws(IOException::class)
     fun generate() {
-        val root = project.projectDir.resolve(resourcesDirectory)
+        val root = project.projectDir.resolve(resourcesDir)
         requireNotNull(root) { "Resources folder not found" }
         val resources = LinkedHashMultimap.create<String, Pair<String, String>>()
         val resourceBundles = LinkedHashMultimap.create<String, String>()
-        outputDirectory.deleteRecursively()
+        outputDir.deleteRecursively()
         root.listFiles()
             .filter { it !in exclusions }
             .forEach { file ->
@@ -150,13 +153,15 @@ open class RTask : DefaultTask() {
             .build())
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
-            .writeTo(outputDirectory)
+            .writeTo(outputDir)
     }
+
+    @Internal internal fun isPackageNameCustom(): Boolean = ::packageName.isInitialized
 
     private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {
         var actualInnerClassName = innerClassName
         var actualFieldName = fieldName.normalizeSymbols()
-        if (isLowercase) {
+        if (lowercase) {
             actualInnerClassName = actualInnerClassName.toLowerCase()
             actualFieldName = actualFieldName.toLowerCase()
         }

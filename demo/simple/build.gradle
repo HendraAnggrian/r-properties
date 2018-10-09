@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-gradle-plugin-0.3.jar')
+        classpath files('../r-gradle-plugin-0.4.jar')
         classpath 'com.google.guava:guava:26.0-jre'
         classpath 'com.squareup:javapoet:1.11.1'
     }
@@ -16,15 +16,6 @@ apply plugin: 'com.hendraanggrian.generation.r'
 group 'com.example'
 version '1.0'
 
-sourceSets {
-    main.resources.srcDir 'res'
-    test.java.srcDir 'tests/src'
-}
-
 dependencies {
     testImplementation 'junit:junit:4.12'
-}
-
-tasks.getByName('generateR') {
-    resourcesDirectory file('res')
 }
