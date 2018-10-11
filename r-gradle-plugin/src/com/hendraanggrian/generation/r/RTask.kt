@@ -60,15 +60,17 @@ open class RTask : DefaultTask() {
      * Collection of files (or directories) that are ignored from this task.
      * Default is empty.
      */
-    @InputFiles var exclusions: MutableCollection<File> = mutableListOf()
+    @InputFiles val exclusions: MutableCollection<File> = mutableSetOf()
 
     /** Exclude certain files and directories from generated R class. */
-    @InputFiles fun exclude(vararg files: File): Boolean =
-        exclusions.addAll(files.map { resourcesDir.resolve(it) })
+    @InputFiles fun exclude(vararg files: File) {
+        exclusions += files.map { resourcesDir.resolve(it) }
+    }
 
     /** Exclude certain files and directories from generated R class. */
-    @InputFiles fun exclude(vararg files: String): Boolean =
-        exclusions.addAll(files.map { resourcesDir.resolve(it) })
+    @InputFiles fun exclude(vararg files: String) {
+        exclusions += files.map { resourcesDir.resolve(it) }
+    }
 
     /**
      * Path that R class will be generated to.

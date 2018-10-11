@@ -1,6 +1,6 @@
 include(RELEASE_ARTIFACT)
 
-File("demo")
+File("r-integration-tests")
     .walk()
     .filter { it.isDirectory }
-    .forEach { include("demo:${it.name}") }
+    .forEach { include("r-integration-tests:${it.name}") }
