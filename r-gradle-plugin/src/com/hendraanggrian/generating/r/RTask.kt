@@ -1,9 +1,9 @@
-package com.hendraanggrian.generation.r
+package com.hendraanggrian.generating.r
 
 import com.google.common.collect.LinkedHashMultimap
 import com.google.common.collect.Multimap
 import com.google.common.collect.Multimaps.asMap
-import com.hendraanggrian.generation.r.RPlugin.Companion.CLASS_NAME
+import com.hendraanggrian.generating.r.RPlugin.Companion.CLASS_NAME
 import com.squareup.javapoet.FieldSpec.builder
 import com.squareup.javapoet.JavaFile.builder
 import com.squareup.javapoet.MethodSpec

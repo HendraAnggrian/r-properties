@@ -1,7 +1,7 @@
 const val VERSION_GRADLE = "4.10.2"
 const val VERSION_KOTLIN = "1.2.61"
 
-internal const val VERSION_GUAVA = "26.0-jre"
+internal const val VERSION_GUAVA = "27.0-jre"
 internal const val VERSION_JAVAPOET = "1.11.1"
 internal const val VERSION_DOKKA = "0.9.17"
 internal const val VERSION_SPEK = "1.1.5"

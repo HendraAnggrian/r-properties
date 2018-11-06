@@ -1,7 +1,7 @@
 R Gradle Plugin
 ===============
-[![bintray](https://img.shields.io/badge/bintray-generation-brightgreen.svg)](https://bintray.com/hendraanggrian/generation)
-[![download](https://api.bintray.com/packages/hendraanggrian/generation/r-gradle-plugin/images/download.svg)](https://bintray.com/hendraanggrian/generation/r-gradle-plugin/_latestVersion)
+[![bintray](https://img.shields.io/badge/bintray-generating-brightgreen.svg)](https://bintray.com/hendraanggrian/generating)
+[![download](https://api.bintray.com/packages/hendraanggrian/generating/r-gradle-plugin/images/download.svg)](https://bintray.com/hendraanggrian/generating/r-gradle-plugin/_latestVersion)
 [![build](https://travis-ci.com/hendraanggrian/r-gradle-plugin.svg)](https://travis-ci.com/hendraanggrian/r-gradle-plugin)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
 
@@ -47,7 +47,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.hendraanggrian.generation:r-gradle-plugin:$version"
+        classpath "com.hendraanggrian.generating:r-gradle-plugin:$version"
     }
 }
 ```
@@ -56,7 +56,7 @@ Then apply it in your module, along with idea plugin:
 
 ```gradle
 apply plugin: 'idea'
-apply plugin: 'com.hendraanggrian.generation.r'
+apply plugin: 'com.hendraanggrian.generating.r'
 ```
 
 That's it, `R` are now automatically generated after compilation with default behavior.

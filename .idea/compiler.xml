@@ -14,6 +14,22 @@
       <module name="com.example-resource-bundles_test" target="1.8" />
       <module name="com.example-simple_main" target="1.8" />
       <module name="com.example-simple_test" target="1.8" />
+      <module name="custom-package_main" target="1.8" />
+      <module name="custom-package_test" target="1.8" />
+      <module name="custom-source-sets_main" target="1.8" />
+      <module name="custom-source-sets_test" target="1.8" />
+      <module name="exclusions_main" target="1.8" />
+      <module name="exclusions_test" target="1.8" />
+      <module name="lowercase_main" target="1.8" />
+      <module name="lowercase_test" target="1.8" />
+      <module name="r-gradle-plugin-r-gradle-plugin_main" target="1.8" />
+      <module name="r-gradle-plugin-r-gradle-plugin_test" target="1.8" />
+      <module name="r-gradle-plugin_buildSrc_main" target="1.8" />
+      <module name="r-gradle-plugin_buildSrc_test" target="1.8" />
+      <module name="resource-bundles_main" target="1.8" />
+      <module name="resource-bundles_test" target="1.8" />
+      <module name="simple_main" target="1.8" />
+      <module name="simple_test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

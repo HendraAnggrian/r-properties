@@ -1,4 +1,4 @@
-package com.hendraanggrian.generation.r
+package com.hendraanggrian.generating.r
 
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
