@@ -12,6 +12,7 @@ import com.squareup.javapoet.MethodSpec.methodBuilder
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeSpec.classBuilder
 import org.gradle.api.DefaultTask
+import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
@@ -72,10 +73,12 @@ open class RTask : DefaultTask() {
         exclusions += files.map { resourcesDir.resolve(it) }
     }
 
-    /**
-     * Path that R class will be generated to.
-     */
+    /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
+
+    @Input var printResourceBundles: Boolean = false
+
+    @Input var printCssStyles: Boolean = false
 
     /** Generate R class given provided options. */
     @TaskAction
@@ -85,8 +88,14 @@ open class RTask : DefaultTask() {
         requireNotNull(root) { "Resources folder not found" }
         val resources = LinkedHashMultimap.create<String, Pair<String, String>>()
         val resourceBundles = LinkedHashMultimap.create<String, String>()
+
+        logger.log(LogLevel.INFO, "Deleting old R")
         outputDir.deleteRecursively()
-        root.listFiles()
+        outputDir.mkdirs()
+
+        processDir(root)
+
+        root.walk()
             .filter { it !in exclusions }
             .forEach { file ->
                 when {
@@ -96,7 +105,7 @@ open class RTask : DefaultTask() {
                             resources.add(file.resourceBundleName, key, key)
                         }
                     }
-                    file.isDirectory -> file.listFiles()
+                    file.isDirectory -> file.walk()
                         .filter { it !in exclusions && it.isFile && it.isValid() }
                         .let { innerFiles ->
                             when (file.name) {
@@ -155,6 +164,17 @@ open class RTask : DefaultTask() {
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
             .writeTo(outputDir)
+    }
+
+    private fun processDir(dir: File): Unit = dir.walk().forEach {
+        when {
+            it.isFile -> processFile(it)
+            it.isDirectory -> processDir(it)
+        }
+    }
+
+    private fun processFile(file: File) {
+
     }
 
     private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {

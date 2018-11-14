@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-gradle-plugin-0.1.jar')
+        classpath files('../r-gradle-plugin-0.2.jar')
         classpath 'com.google.guava:guava:27.0-jre'
         classpath 'com.squareup:javapoet:1.11.1'
     }

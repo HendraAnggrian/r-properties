@@ -18,7 +18,7 @@ import org.gradle.plugins.ide.idea.model.IdeaModel
 /** Generate Android-like R class with this plugin. */
 class RPlugin : Plugin<Project> {
 
-    internal companion object {
+    companion object {
         const val CLASS_NAME = "R"
         const val GROUP_NAME = "generating"
         const val GENERATED_DIRECTORY = "generated"
