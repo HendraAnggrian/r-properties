@@ -1,13 +1,3 @@
-import org.gradle.api.plugins.ExtensionAware
-import org.gradle.kotlin.dsl.`kotlin-dsl`
-import org.gradle.kotlin.dsl.configure
-import org.gradle.kotlin.dsl.creating
-import org.gradle.kotlin.dsl.kotlin
-
-import org.junit.platform.gradle.plugin.FiltersExtension
-import org.junit.platform.gradle.plugin.EnginesExtension
-import org.junit.platform.gradle.plugin.JUnitPlatformExtension
-
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
@@ -15,7 +5,6 @@ plugins {
     `git-publish`
     bintray
     `bintray-release`
-    `junit-platform`
 }
 
 group = RELEASE_GROUP
@@ -39,19 +28,10 @@ val ktlint by configurations.registering
 
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
-    implementation(guava())
     implementation(javapoet())
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
-    testImplementation(kotlin("reflect", VERSION_KOTLIN))
-    testImplementation(spek("api")) {
-        exclude("org.jetbrains.kotlin")
-    }
-    testRuntime(spek("junit-platform-engine")) {
-        exclude("org.jetbrains.kotlin")
-        exclude("org.junit.platform")
-    }
-    testImplementation(junitPlatform("runner"))
+    testImplementation(junit())
 
     ktlint {
         invoke(ktlint())
@@ -108,10 +88,4 @@ publish {
     publishVersion = RELEASE_VERSION
     desc = RELEASE_DESC
     website = RELEASE_WEBSITE
-}
-
-configure<JUnitPlatformExtension> {
-    if (this is ExtensionAware) extensions.getByType(FiltersExtension::class.java).apply {
-        if (this is ExtensionAware) extensions.getByType(EnginesExtension::class.java).include("spek")
-    }
 }
