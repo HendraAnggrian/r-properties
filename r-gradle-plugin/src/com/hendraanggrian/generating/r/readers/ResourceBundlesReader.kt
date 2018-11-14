@@ -1,22 +1,19 @@
 package com.hendraanggrian.generating.r.readers
 
-import com.hendraanggrian.generating.r.fieldBuilder
-import com.hendraanggrian.generating.r.forEachProperties
-import com.hendraanggrian.generating.r.newInnerTypeBuilder
+import com.hendraanggrian.generating.r.RTask
+import com.hendraanggrian.generating.r.newTypeBuilder
+import com.hendraanggrian.generating.r.resourceBundleName
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 
-internal object ResourceBundlesReader : Reader() {
+internal object ResourceBundlesReader : PropertiesReader() {
 
-    override fun read(typeBuilder: TypeSpec.Builder, file: File, convert: String.() -> String) {
-        val innerTypeBuilder = newInnerTypeBuilder(file.name.convert())
-        file.forEachProperties { key, value ->
-            innerTypeBuilder.addField(
-                fieldBuilder(key.convert())
-                    .initializer("\$S", value)
-                    .build()
-            )
+    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File) {
+        val className = task.name(file.resourceBundleName)
+        if (className !in typeBuilder.build().typeSpecs.map { it.name }) {
+            val innerTypeBuilder = newTypeBuilder(className)
+            super.read(task, innerTypeBuilder, file)
+            typeBuilder.addType(innerTypeBuilder.build())
         }
-        typeBuilder.addType(innerTypeBuilder.build())
     }
 }

@@ -4,24 +4,31 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import java.io.File
-import java.util.Properties
-import javax.lang.model.element.Modifier.FINAL
-import javax.lang.model.element.Modifier.PRIVATE
-import javax.lang.model.element.Modifier.PUBLIC
-import javax.lang.model.element.Modifier.STATIC
+import javax.lang.model.element.Modifier
 
-fun newInnerTypeBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name)
-    .addModifiers(PUBLIC, STATIC, FINAL)
+fun privateConstructor(): MethodSpec = MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE).build()
+
+fun newTypeBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name)
+    .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
     .addMethod(privateConstructor())
 
-fun privateConstructor(): MethodSpec = MethodSpec.constructorBuilder().addModifiers(PRIVATE).build()
+fun newField(name: String, value: String): FieldSpec =
+    FieldSpec.builder(String::class.java, name, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+        .initializer("\$S", value)
+        .build()
 
-fun fieldBuilder(name: String): FieldSpec.Builder =
-    FieldSpec.builder(String::class.java, name, PUBLIC, STATIC, FINAL)
+private fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
 
-fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
-    Properties().run {
-        load(stream)
-        keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
-    }
+fun String.normalizeSymbols(): String {
+    var s = ""
+    forEach { s += if (it.isSymbol()) "_" else it }
+    return s
 }
+
+fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && name.first().isLetter()
+
+fun File.isResourceBundle(): Boolean = isValid() && extension == "properties" && nameWithoutExtension.let { name ->
+    name.contains("_") && name.substringAfterLast("_").length == 2
+}
+
+inline val File.resourceBundleName: String get() = nameWithoutExtension.substringBeforeLast("_")

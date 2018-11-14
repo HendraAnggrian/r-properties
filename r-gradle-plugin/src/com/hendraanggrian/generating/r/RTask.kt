@@ -17,7 +17,6 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
-import java.util.Properties
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PUBLIC
 
@@ -68,9 +67,11 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
 
+    /** Set false to skip reading keys of properties files. */
     @Input var readProperties: Boolean = true
 
-    @Input var readCssStyles: Boolean = true
+    /** Set false to skip reading style class of css files. */
+    @Input var readCss: Boolean = true
 
     /** Generate R class given provided options. */
     @TaskAction
@@ -86,60 +87,36 @@ open class RTask : DefaultTask() {
         val rClassBuilder = TypeSpec.classBuilder(RPlugin.CLASS_NAME)
             .addModifiers(PUBLIC, FINAL)
             .addMethod(privateConstructor())
-        processDir(rClassBuilder, root) { if (isLowercase) toLowerCase() else this }
+        processDir(rClassBuilder, root)
         JavaFile.builder(packageName, rClassBuilder.build())
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
             .writeTo(outputDir)
     }
 
-    private fun processDir(typeBuilder: TypeSpec.Builder, dir: File, convert: String.() -> String) {
-        dir.listFiles().forEach {
-            when {
-                it.isDirectory -> {
-                    val innerTypeBuilder = newInnerTypeBuilder(it.name.convert())
-                    processDir(innerTypeBuilder, it, convert)
-                    typeBuilder.addType(innerTypeBuilder.build())
-                }
-                it.isFile -> {
-                    when {
-                        readProperties && it.extension == "properties" -> when {
-                            it.isResourceBundle() -> ResourceBundlesReader.read(typeBuilder, it, convert)
-                            else -> PropertiesReader.read(typeBuilder, it, convert)
+    private fun processDir(typeBuilder: TypeSpec.Builder, dir: File) {
+        dir.listFiles()
+            .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
+            .forEach {
+                when {
+                    it.isDirectory -> {
+                        val innerTypeBuilder = newTypeBuilder(name(it.name))
+                        processDir(innerTypeBuilder, it)
+                        typeBuilder.addType(innerTypeBuilder.build())
+                    }
+                    it.isFile -> {
+                        when {
+                            readProperties && it.extension == "properties" -> when {
+                                it.isResourceBundle() -> ResourceBundlesReader.read(this, typeBuilder, it)
+                                else -> PropertiesReader.read(this, typeBuilder, it)
+                            }
+                            readCss && it.extension == "css" -> CssReader.read(this, typeBuilder, it)
+                            else -> Reader.read(this, typeBuilder, it)
                         }
-                        readCssStyles && it.extension == "css" -> CssReader.read(typeBuilder, it, convert)
-                        else -> Reader.read(typeBuilder, it, convert)
                     }
                 }
             }
-        }
     }
 
-    internal companion object {
-
-        private fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
-
-        fun String.normalizeSymbols(): String {
-            var s = ""
-            forEach { s += if (it.isSymbol()) "_" else it }
-            return s
-        }
-
-        private fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && Character.isLetter(name.first())
-
-        private fun File.isProperties(): Boolean = extension == "properties"
-
-        fun File.isResourceBundle(): Boolean = isValid() && isProperties() && nameWithoutExtension.let { name ->
-            name.contains("_") && name.substringAfterLast("_").length == 2
-        }
-
-        inline val File.resourceBundleName: String get() = nameWithoutExtension.substringBeforeLast("_")
-
-        private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
-            Properties().run {
-                load(stream)
-                keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
-            }
-        }
-    }
+    internal fun name(name: String): String = (if (isLowercase) name.toLowerCase() else name).normalizeSymbols().trim()
 }

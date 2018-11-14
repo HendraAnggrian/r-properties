@@ -1,19 +1,25 @@
 package com.hendraanggrian.generating.r.readers
 
-import com.hendraanggrian.generating.r.fieldBuilder
-import com.hendraanggrian.generating.r.forEachProperties
+import com.hendraanggrian.generating.r.RTask
+import com.hendraanggrian.generating.r.newField
 import com.squareup.javapoet.TypeSpec
 import java.io.File
+import java.util.Properties
 
-internal object PropertiesReader : Reader() {
+internal open class PropertiesReader : Reader() {
 
-    override fun read(typeBuilder: TypeSpec.Builder, file: File, convert: String.() -> String) {
-        file.forEachProperties { key, value ->
-            typeBuilder.addField(
-                fieldBuilder(key.convert())
-                    .initializer("\$S", value)
-                    .build()
-            )
+    companion object : PropertiesReader()
+
+    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File) {
+        file.forEachProperties { key, _ ->
+            typeBuilder.addField(newField(task.name(key), key))
+        }
+    }
+
+    private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
+        Properties().run {
+            load(stream)
+            keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
         }
     }
 }

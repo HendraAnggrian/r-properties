@@ -10,6 +10,45 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/r-gradle-plugin" />
+            <option value="$PROJECT_DIR$/r-integration-tests" />
+            <option value="$PROJECT_DIR$/r-integration-tests/app" />
+            <option value="$PROJECT_DIR$/r-integration-tests/binary" />
+            <option value="$PROJECT_DIR$/r-integration-tests/build" />
+            <option value="$PROJECT_DIR$/r-integration-tests/classes" />
+            <option value="$PROJECT_DIR$/r-integration-tests/com" />
+            <option value="$PROJECT_DIR$/r-integration-tests/compileR" />
+            <option value="$PROJECT_DIR$/r-integration-tests/compileTestJava" />
+            <option value="$PROJECT_DIR$/r-integration-tests/css" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom-package" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom-source-sets" />
+            <option value="$PROJECT_DIR$/r-integration-tests/example" />
+            <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
+            <option value="$PROJECT_DIR$/r-integration-tests/font" />
+            <option value="$PROJECT_DIR$/r-integration-tests/generated" />
+            <option value="$PROJECT_DIR$/r-integration-tests/jar" />
+            <option value="$PROJECT_DIR$/r-integration-tests/java" />
+            <option value="$PROJECT_DIR$/r-integration-tests/js" />
+            <option value="$PROJECT_DIR$/r-integration-tests/layout" />
+            <option value="$PROJECT_DIR$/r-integration-tests/libs" />
+            <option value="$PROJECT_DIR$/r-integration-tests/lowercase" />
+            <option value="$PROJECT_DIR$/r-integration-tests/main" />
+            <option value="$PROJECT_DIR$/r-integration-tests/my" />
+            <option value="$PROJECT_DIR$/r-integration-tests/note" />
+            <option value="$PROJECT_DIR$/r-integration-tests/packages" />
+            <option value="$PROJECT_DIR$/r-integration-tests/r" />
+            <option value="$PROJECT_DIR$/r-integration-tests/r-integration-tests" />
+            <option value="$PROJECT_DIR$/r-integration-tests/reports" />
+            <option value="$PROJECT_DIR$/r-integration-tests/res" />
+            <option value="$PROJECT_DIR$/r-integration-tests/resource-bundles" />
+            <option value="$PROJECT_DIR$/r-integration-tests/resources" />
+            <option value="$PROJECT_DIR$/r-integration-tests/simple" />
+            <option value="$PROJECT_DIR$/r-integration-tests/src" />
+            <option value="$PROJECT_DIR$/r-integration-tests/style" />
+            <option value="$PROJECT_DIR$/r-integration-tests/test" />
+            <option value="$PROJECT_DIR$/r-integration-tests/test-results" />
+            <option value="$PROJECT_DIR$/r-integration-tests/tests" />
+            <option value="$PROJECT_DIR$/r-integration-tests/tmp" />
+            <option value="$PROJECT_DIR$/r-integration-tests/values" />
           </set>
         </option>
       </GradleProjectSettings>
