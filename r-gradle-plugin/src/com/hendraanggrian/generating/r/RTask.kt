@@ -1,16 +1,13 @@
 package com.hendraanggrian.generating.r
 
-import com.google.common.collect.LinkedHashMultimap
-import com.google.common.collect.Multimap
-import com.google.common.collect.Multimaps.asMap
-import com.hendraanggrian.generating.r.RPlugin.Companion.CLASS_NAME
-import com.squareup.javapoet.FieldSpec.builder
-import com.squareup.javapoet.JavaFile.builder
+import com.hendraanggrian.generating.r.readers.CssReader
+import com.hendraanggrian.generating.r.readers.PropertiesReader
+import com.hendraanggrian.generating.r.readers.Reader
+import com.hendraanggrian.generating.r.readers.ResourceBundlesReader
+import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.MethodSpec.constructorBuilder
-import com.squareup.javapoet.MethodSpec.methodBuilder
-import com.squareup.javapoet.ParameterizedTypeName
-import com.squareup.javapoet.TypeSpec.classBuilder
+import com.squareup.javapoet.TypeSpec
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
@@ -23,7 +20,6 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
 import java.util.Properties
-import javax.lang.model.SourceVersion.isName
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
@@ -76,9 +72,9 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
 
-    @Input var printResourceBundles: Boolean = false
+    @Input var readProperties: Boolean = false
 
-    @Input var printCssStyles: Boolean = false
+    @Input var readCssStyles: Boolean = false
 
     /** Generate R class given provided options. */
     @TaskAction
@@ -86,107 +82,41 @@ open class RTask : DefaultTask() {
     fun generate() {
         val root = project.projectDir.resolve(resourcesDir)
         requireNotNull(root) { "Resources folder not found" }
-        val resources = LinkedHashMultimap.create<String, Pair<String, String>>()
-        val resourceBundles = LinkedHashMultimap.create<String, String>()
 
         logger.log(LogLevel.INFO, "Deleting old R")
         outputDir.deleteRecursively()
         outputDir.mkdirs()
 
-        processDir(root)
-
-        root.walk()
-            .filter { it !in exclusions }
-            .forEach { file ->
-                when {
-                    file.isFile && file.isValid() && file.isResourceBundle() -> {
-                        resourceBundles[file.resourceBundleName].add(file.nameWithoutExtension)
-                        file.forEachProperties { key, _ ->
-                            resources.add(file.resourceBundleName, key, key)
-                        }
-                    }
-                    file.isDirectory -> file.walk()
-                        .filter { it !in exclusions && it.isFile && it.isValid() }
-                        .let { innerFiles ->
-                            when (file.name) {
-                                "values" -> innerFiles.filter { it.isProperties() }.forEach { innerFile ->
-                                    innerFile.forEachProperties { key, value ->
-                                        resources.add(innerFile.nameWithoutExtension, key, value)
-                                    }
-                                }
-                                else -> innerFiles.forEach { innerFile ->
-                                    resources.add(
-                                        file.name,
-                                        innerFile.nameWithoutExtension,
-                                        "/${file.name}/${innerFile.name}"
-                                    )
-                                }
-                            }
-                        }
-                }
-            }
-        builder(packageName, classBuilder(CLASS_NAME)
+        val rClassBuilder = TypeSpec.classBuilder(RPlugin.CLASS_NAME)
             .addModifiers(PUBLIC, FINAL)
             .addMethod(privateConstructor())
-            .apply {
-                asMap(resources).forEach { innerClass, pairs ->
-                    addType(classBuilder(innerClass)
-                        .addModifiers(PUBLIC, STATIC, FINAL)
-                        .addMethod(privateConstructor())
-                        .apply {
-                            if (resourceBundles.containsKey(innerClass)) {
-                                addMethod(
-                                    methodBuilder("names")
-                                        .addModifiers(PUBLIC, STATIC, FINAL)
-                                        .returns(
-                                            ParameterizedTypeName.get(
-                                                List::class.java,
-                                                String::class.java
-                                            )
-                                        )
-                                        .addStatement("return java.util.Arrays.asList(\$L)", resourceBundles[innerClass]
-                                            .joinToString(", ") { "\"$it\"" })
-                                        .build()
-                                )
-                            }
-                            pairs.forEach { (field, value) ->
-                                addField(
-                                    builder(String::class.java, field, PUBLIC, STATIC, FINAL)
-                                        .initializer("\$S", value)
-                                        .build()
-                                )
-                            }
-                        }
-                        .build())
-                }
-            }
-            .build())
+        processDir(rClassBuilder, root)
+        JavaFile.builder(packageName, rClassBuilder.build())
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
             .writeTo(outputDir)
     }
 
-    private fun processDir(dir: File): Unit = dir.walk().forEach {
+    private fun processDir(typeBuilder: TypeSpec.Builder, dir: File): Unit = dir.walk().forEach {
+        val innerTypeBuilder = TypeSpec.classBuilder(dir.name)
+            .addModifiers(PUBLIC, STATIC, FINAL)
+            .addMethod(privateConstructor())
         when {
-            it.isFile -> processFile(it)
-            it.isDirectory -> processDir(it)
+            it.isFile -> processFile(innerTypeBuilder, it)
+            it.isDirectory -> processDir(innerTypeBuilder, it)
         }
+        typeBuilder.addType(innerTypeBuilder.build())
     }
 
-    private fun processFile(file: File) {
-
-    }
-
-    private fun Multimap<String, Pair<String, String>>.add(innerClassName: String, fieldName: String, value: String) {
-        var actualInnerClassName = innerClassName
-        var actualFieldName = fieldName.normalizeSymbols()
-        if (lowercase) {
-            actualInnerClassName = actualInnerClassName.toLowerCase()
-            actualFieldName = actualFieldName.toLowerCase()
+    private fun processFile(typeBuilder: TypeSpec.Builder, file: File) {
+        when {
+            readProperties -> when {
+                file.extension == "properties" -> PropertiesReader.read(typeBuilder, file)
+                file.isResourceBundle() -> ResourceBundlesReader.read(typeBuilder, file)
+            }
+            readCssStyles && file.extension == "css" -> CssReader.read(typeBuilder, file)
+            else -> Reader.read(typeBuilder, file)
         }
-        check(isName(actualInnerClassName)) { "$innerClassName is not a qualified class name" }
-        check(isName(actualFieldName)) { "$fieldName is not a qualified field name" }
-        put(actualInnerClassName, actualFieldName to value)
     }
 
     internal companion object {
