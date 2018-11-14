@@ -1,6 +1,7 @@
 package com.hendraanggrian.generating.r
 
 import com.hendraanggrian.generating.r.readers.CssReader
+import com.hendraanggrian.generating.r.readers.PrefixedReader
 import com.hendraanggrian.generating.r.readers.PropertiesReader
 import com.hendraanggrian.generating.r.readers.Reader
 import com.hendraanggrian.generating.r.readers.ResourceBundlesReader
@@ -108,11 +109,17 @@ open class RTask : DefaultTask() {
                     }
                     it.isFile -> {
                         when {
-                            readProperties && it.extension == "properties" -> when {
-                                it.isResourceBundle() -> ResourceBundlesReader.read(this, typeBuilder, it)
-                                else -> PropertiesReader.read(this, typeBuilder, it)
+                            readProperties && it.extension == "properties" -> {
+                                when {
+                                    it.isResourceBundle() -> ResourceBundlesReader.read(this, typeBuilder, it)
+                                    else -> PropertiesReader.read(this, typeBuilder, it)
+                                }
+                                PrefixedReader("properties").read(this, typeBuilder, it)
                             }
-                            readCss && it.extension == "css" -> CssReader.read(this, typeBuilder, it)
+                            readCss && it.extension == "css" -> {
+                                CssReader.read(this, typeBuilder, it)
+                                PrefixedReader("css").read(this, typeBuilder, it)
+                            }
                             else -> Reader.read(this, typeBuilder, it)
                         }
                     }
