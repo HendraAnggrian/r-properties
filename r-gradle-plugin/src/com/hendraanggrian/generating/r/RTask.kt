@@ -11,6 +11,7 @@ import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -84,6 +85,7 @@ open class RTask : DefaultTask() {
         outputDir.deleteRecursively()
         outputDir.mkdirs()
 
+        logger.log(LogLevel.INFO, "Writing new R")
         val rClassBuilder = TypeSpec.classBuilder(RPlugin.CLASS_NAME)
             .addModifiers(PUBLIC, FINAL)
             .addMethod(privateConstructor())
@@ -118,5 +120,6 @@ open class RTask : DefaultTask() {
             }
     }
 
+    @Internal
     internal fun name(name: String): String = (if (isLowercase) name.toLowerCase() else name).normalizeSymbols().trim()
 }

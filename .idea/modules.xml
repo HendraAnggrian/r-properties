@@ -20,6 +20,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions.iml" group="r-integration-tests/exclusions" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_main.iml" group="r-integration-tests/exclusions" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_test.iml" group="r-integration-tests/exclusions" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/folder/folder.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/folder/folder.iml" group="r-integration-tests/folder" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/font/font.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/font/font.iml" group="r-integration-tests/font" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/generated/generated.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/generated/generated.iml" group="r-integration-tests/generated" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/jar/jar.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/jar/jar.iml" group="r-integration-tests/jar" />
@@ -31,6 +32,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/lowercase/lowercase_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/lowercase/lowercase_main.iml" group="r-integration-tests/lowercase" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/lowercase/lowercase_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/lowercase/lowercase_test.iml" group="r-integration-tests/lowercase" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/main/main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/main/main.iml" group="r-integration-tests/main" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/multi/multi.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/multi/multi.iml" group="r-integration-tests/multi" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/my/my.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/my/my.iml" group="r-integration-tests/my" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/note/note.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/note/note.iml" group="r-integration-tests/note" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/packages/packages.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/packages/packages.iml" group="r-integration-tests/packages" />

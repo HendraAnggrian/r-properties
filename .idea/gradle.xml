@@ -23,6 +23,7 @@
             <option value="$PROJECT_DIR$/r-integration-tests/custom-source-sets" />
             <option value="$PROJECT_DIR$/r-integration-tests/example" />
             <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
+            <option value="$PROJECT_DIR$/r-integration-tests/folder" />
             <option value="$PROJECT_DIR$/r-integration-tests/font" />
             <option value="$PROJECT_DIR$/r-integration-tests/generated" />
             <option value="$PROJECT_DIR$/r-integration-tests/jar" />
@@ -32,6 +33,7 @@
             <option value="$PROJECT_DIR$/r-integration-tests/libs" />
             <option value="$PROJECT_DIR$/r-integration-tests/lowercase" />
             <option value="$PROJECT_DIR$/r-integration-tests/main" />
+            <option value="$PROJECT_DIR$/r-integration-tests/multi" />
             <option value="$PROJECT_DIR$/r-integration-tests/my" />
             <option value="$PROJECT_DIR$/r-integration-tests/note" />
             <option value="$PROJECT_DIR$/r-integration-tests/packages" />
