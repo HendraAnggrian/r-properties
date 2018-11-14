@@ -1,4 +1,7 @@
 $dokka.format:html
 $dokka.linkExtension:html
-
+$dokka.location:com.hendraanggrian.generating.r$isResourceBundle(java.io.File)com.hendraanggrian.generating.r/java.io.-file/is-resource-bundle.html
+$dokka.location:com.hendraanggrian.generating.r$isValid(java.io.File)com.hendraanggrian.generating.r/java.io.-file/is-valid.html
+$dokka.location:com.hendraanggrian.generating.r$normalizeSymbols(kotlin.String)com.hendraanggrian.generating.r/kotlin.-string/normalize-symbols.html
+$dokka.location:com.hendraanggrian.generating.r$resourceBundleName#java.io.Filecom.hendraanggrian.generating.r/java.io.-file/resource-bundle-name.html
 com.hendraanggrian.generating.r
