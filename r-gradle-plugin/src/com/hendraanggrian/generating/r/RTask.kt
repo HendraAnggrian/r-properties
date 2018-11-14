@@ -5,8 +5,6 @@ import com.hendraanggrian.generating.r.readers.PropertiesReader
 import com.hendraanggrian.generating.r.readers.Reader
 import com.hendraanggrian.generating.r.readers.ResourceBundlesReader
 import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.MethodSpec.constructorBuilder
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
@@ -21,9 +19,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
 import java.util.Properties
 import javax.lang.model.element.Modifier.FINAL
-import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
-import javax.lang.model.element.Modifier.STATIC
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -72,9 +68,9 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
 
-    @Input var readProperties: Boolean = false
+    @Input var readProperties: Boolean = true
 
-    @Input var readCssStyles: Boolean = false
+    @Input var readCssStyles: Boolean = true
 
     /** Generate R class given provided options. */
     @TaskAction
@@ -90,32 +86,32 @@ open class RTask : DefaultTask() {
         val rClassBuilder = TypeSpec.classBuilder(RPlugin.CLASS_NAME)
             .addModifiers(PUBLIC, FINAL)
             .addMethod(privateConstructor())
-        processDir(rClassBuilder, root)
+        processDir(rClassBuilder, root) { if (isLowercase) toLowerCase() else this }
         JavaFile.builder(packageName, rClassBuilder.build())
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
             .writeTo(outputDir)
     }
 
-    private fun processDir(typeBuilder: TypeSpec.Builder, dir: File): Unit = dir.walk().forEach {
-        val innerTypeBuilder = TypeSpec.classBuilder(dir.name)
-            .addModifiers(PUBLIC, STATIC, FINAL)
-            .addMethod(privateConstructor())
-        when {
-            it.isFile -> processFile(innerTypeBuilder, it)
-            it.isDirectory -> processDir(innerTypeBuilder, it)
-        }
-        typeBuilder.addType(innerTypeBuilder.build())
-    }
-
-    private fun processFile(typeBuilder: TypeSpec.Builder, file: File) {
-        when {
-            readProperties -> when {
-                file.extension == "properties" -> PropertiesReader.read(typeBuilder, file)
-                file.isResourceBundle() -> ResourceBundlesReader.read(typeBuilder, file)
+    private fun processDir(typeBuilder: TypeSpec.Builder, dir: File, convert: String.() -> String) {
+        dir.listFiles().forEach {
+            when {
+                it.isDirectory -> {
+                    val innerTypeBuilder = newInnerTypeBuilder(it.name.convert())
+                    processDir(innerTypeBuilder, it, convert)
+                    typeBuilder.addType(innerTypeBuilder.build())
+                }
+                it.isFile -> {
+                    when {
+                        readProperties && it.extension == "properties" -> when {
+                            it.isResourceBundle() -> ResourceBundlesReader.read(typeBuilder, it, convert)
+                            else -> PropertiesReader.read(typeBuilder, it, convert)
+                        }
+                        readCssStyles && it.extension == "css" -> CssReader.read(typeBuilder, it, convert)
+                        else -> Reader.read(typeBuilder, it, convert)
+                    }
+                }
             }
-            readCssStyles && file.extension == "css" -> CssReader.read(typeBuilder, file)
-            else -> Reader.read(typeBuilder, file)
         }
     }
 
@@ -145,7 +141,5 @@ open class RTask : DefaultTask() {
                 keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
             }
         }
-
-        private fun privateConstructor(): MethodSpec = constructorBuilder().addModifiers(PRIVATE).build()
     }
 }

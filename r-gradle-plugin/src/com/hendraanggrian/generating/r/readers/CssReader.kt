@@ -5,6 +5,6 @@ import java.io.File
 
 internal object CssReader : Reader() {
 
-    override fun read(typeBuilder: TypeSpec.Builder, file: File) {
+    override fun read(typeBuilder: TypeSpec.Builder, file: File, convert: String.() -> String) {
     }
 }
