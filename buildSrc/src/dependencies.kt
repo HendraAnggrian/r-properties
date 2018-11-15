@@ -15,6 +15,8 @@ inline val PluginDependenciesSpec.`bintray-release` get() = id("com.novoda.bintr
 fun DependencyHandler.gitPublish() = "org.ajoberstar:gradle-git-publish:$VERSION_GIT_PUBLISH"
 inline val PluginDependenciesSpec.`git-publish` get() = id("org.ajoberstar.git-publish")
 
+fun DependencyHandler.ktlint() = "com.github.shyiko:ktlint:$VERSION_KTLINT"
+
 fun DependencyHandler.junit() = "junit:junit:$VERSION_JUNIT"
 
 fun DependencyHandler.phCss() = "com.helger:ph-css:$VERSION_PH_CSS"

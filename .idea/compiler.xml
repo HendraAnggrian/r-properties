@@ -19,10 +19,14 @@
       <module name="com.example-simple_test" target="1.8" />
       <module name="com.hendraanggrian.r.json-json_main" target="1.8" />
       <module name="com.hendraanggrian.r.json-json_test" target="1.8" />
+      <module name="css_main" target="1.8" />
+      <module name="css_test" target="1.8" />
       <module name="custom-package_main" target="1.8" />
       <module name="custom-package_test" target="1.8" />
       <module name="custom-paths_main" target="1.8" />
       <module name="custom-paths_test" target="1.8" />
+      <module name="custom-reader_main" target="1.8" />
+      <module name="custom-reader_test" target="1.8" />
       <module name="custom-source-sets_main" target="1.8" />
       <module name="custom-source-sets_test" target="1.8" />
       <module name="exclusions_main" target="1.8" />
@@ -53,6 +57,8 @@
       <module name="reader-json_test" target="1.8" />
       <module name="readers-css_main" target="1.8" />
       <module name="readers-css_test" target="1.8" />
+      <module name="resource-bundle_main" target="1.8" />
+      <module name="resource-bundle_test" target="1.8" />
       <module name="resource-bundles_main" target="1.8" />
       <module name="resource-bundles_test" target="1.8" />
       <module name="simple_main" target="1.8" />

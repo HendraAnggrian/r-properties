@@ -1,3 +1,5 @@
+import com.squareup.javapoet.FieldSpec
+
 buildscript {
     repositories {
         mavenCentral()
@@ -22,7 +24,11 @@ dependencies {
 }
 
 tasks.getByName('generateR') {
-    css {
-        it.isJavaFx = true
+    custom { task, typeBuilder, file ->
+        if (file.extension == "file") {
+            typeBuilder.addField(FieldSpec.builder(String, file.name).build())
+            return "file"
+        }
+        return null
     }
 }

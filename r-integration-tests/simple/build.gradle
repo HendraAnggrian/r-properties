@@ -5,12 +5,14 @@ buildscript {
     dependencies {
         classpath files('../r-gradle-plugin-0.1-rc1.jar')
         classpath 'com.squareup:javapoet:1.11.1'
+        classpath 'com.helger:ph-css:6.1.1'
+        classpath 'com.googlecode.json-simple:json-simple:1.1.1'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'com.hendraanggrian.r'
+apply plugin: 'com.hendraanggrian.generating.r'
 
 group 'com.example'
 version '1.0'

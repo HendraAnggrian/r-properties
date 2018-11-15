@@ -19,7 +19,9 @@
             <option value="$PROJECT_DIR$/r-integration-tests/compileR" />
             <option value="$PROJECT_DIR$/r-integration-tests/compileTestJava" />
             <option value="$PROJECT_DIR$/r-integration-tests/css" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom" />
             <option value="$PROJECT_DIR$/r-integration-tests/custom-paths" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom-reader" />
             <option value="$PROJECT_DIR$/r-integration-tests/example" />
             <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
             <option value="$PROJECT_DIR$/r-integration-tests/folder" />
@@ -40,7 +42,7 @@
             <option value="$PROJECT_DIR$/r-integration-tests/r-integration-tests" />
             <option value="$PROJECT_DIR$/r-integration-tests/reports" />
             <option value="$PROJECT_DIR$/r-integration-tests/res" />
-            <option value="$PROJECT_DIR$/r-integration-tests/resource-bundles" />
+            <option value="$PROJECT_DIR$/r-integration-tests/resource-bundle" />
             <option value="$PROJECT_DIR$/r-integration-tests/resources" />
             <option value="$PROJECT_DIR$/r-integration-tests/simple" />
             <option value="$PROJECT_DIR$/r-integration-tests/src" />
@@ -50,36 +52,6 @@
             <option value="$PROJECT_DIR$/r-integration-tests/tests" />
             <option value="$PROJECT_DIR$/r-integration-tests/tmp" />
             <option value="$PROJECT_DIR$/r-integration-tests/values" />
-            <option value="$PROJECT_DIR$/r-readers" />
-            <option value="$PROJECT_DIR$/r-readers/META-INF" />
-            <option value="$PROJECT_DIR$/r-readers/binary" />
-            <option value="$PROJECT_DIR$/r-readers/build" />
-            <option value="$PROJECT_DIR$/r-readers/caches-jvm" />
-            <option value="$PROJECT_DIR$/r-readers/classes" />
-            <option value="$PROJECT_DIR$/r-readers/com" />
-            <option value="$PROJECT_DIR$/r-readers/compileKotlin" />
-            <option value="$PROJECT_DIR$/r-readers/compileTestKotlin" />
-            <option value="$PROJECT_DIR$/r-readers/css" />
-            <option value="$PROJECT_DIR$/r-readers/hendraanggrian" />
-            <option value="$PROJECT_DIR$/r-readers/inputs" />
-            <option value="$PROJECT_DIR$/r-readers/jar" />
-            <option value="$PROJECT_DIR$/r-readers/js" />
-            <option value="$PROJECT_DIR$/r-readers/json" />
-            <option value="$PROJECT_DIR$/r-readers/jvm" />
-            <option value="$PROJECT_DIR$/r-readers/kotlin" />
-            <option value="$PROJECT_DIR$/r-readers/libs" />
-            <option value="$PROJECT_DIR$/r-readers/lookups" />
-            <option value="$PROJECT_DIR$/r-readers/main" />
-            <option value="$PROJECT_DIR$/r-readers/packages" />
-            <option value="$PROJECT_DIR$/r-readers/r" />
-            <option value="$PROJECT_DIR$/r-readers/r-readers" />
-            <option value="$PROJECT_DIR$/r-readers/reader" />
-            <option value="$PROJECT_DIR$/r-readers/reports" />
-            <option value="$PROJECT_DIR$/r-readers/src" />
-            <option value="$PROJECT_DIR$/r-readers/test" />
-            <option value="$PROJECT_DIR$/r-readers/test-results" />
-            <option value="$PROJECT_DIR$/r-readers/tests" />
-            <option value="$PROJECT_DIR$/r-readers/tmp" />
           </set>
         </option>
       </GradleProjectSettings>

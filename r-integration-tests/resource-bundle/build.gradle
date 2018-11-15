@@ -19,10 +19,11 @@ version '1.0'
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+    testImplementation 'com.google.truth:truth:0.42'
 }
 
 tasks.getByName('generateR') {
-    css {
-        it.isJavaFx = true
+    properties {
+        it.supportResourceBundle = true
     }
 }

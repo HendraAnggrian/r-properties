@@ -18,24 +18,59 @@ sourceSets {
 gradlePlugin {
     (plugins) {
         register(RELEASE_ARTIFACT) {
-            id = RELEASE_GROUP
-            implementationClass = "$RELEASE_GROUP.RPlugin"
+            id = "$RELEASE_GROUP.r"
+            implementationClass = "$RELEASE_GROUP.r.RPlugin"
         }
     }
 }
 
+
+val ktlint by configurations.registering
+
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
-    compile(javapoet())
+    implementation(javapoet())
+    implementation(phCss())
+    implementation(jsonSimple())
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
     testImplementation(junit())
+
+    ktlint {
+        invoke(ktlint())
+    }
 }
 
-ktlint()
-deployable()
-
 tasks {
+    register("deploy") {
+        dependsOn("build")
+        projectDir.resolve("build/libs")?.listFiles()?.forEach {
+            it.renameTo(File(rootDir.resolve("r-integration-tests"), it.name))
+        }
+    }
+
+    val ktlint by registering(JavaExec::class) {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        inputs.dir("src")
+        outputs.dir("src")
+        description = "Check Kotlin code style."
+        classpath(configurations["ktlint"])
+        main = "com.github.shyiko.ktlint.Main"
+        args("src/**/*.kt")
+    }
+    "check" {
+        dependsOn(ktlint)
+    }
+    register("ktlintFormat", JavaExec::class) {
+        group = "formatting"
+        inputs.dir("src")
+        outputs.dir("src")
+        description = "Fix Kotlin code style deviations."
+        classpath(configurations["ktlint"])
+        main = "com.github.shyiko.ktlint.Main"
+        args("-F", "src/**/*.kt")
+    }
+
     val dokka by existing(org.jetbrains.dokka.gradle.DokkaTask::class) {
         get("gitPublishCopy").dependsOn(this)
         outputDirectory = "$buildDir/docs"
