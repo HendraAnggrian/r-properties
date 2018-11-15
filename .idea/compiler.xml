@@ -26,6 +26,14 @@
       <module name="r-gradle-plugin-r-gradle-plugin_test" target="1.8" />
       <module name="r-gradle-plugin_buildSrc_main" target="1.8" />
       <module name="r-gradle-plugin_buildSrc_test" target="1.8" />
+      <module name="r-reader-css_main" target="1.8" />
+      <module name="r-reader-css_test" target="1.8" />
+      <module name="r-reader-json_main" target="1.8" />
+      <module name="r-reader-json_test" target="1.8" />
+      <module name="r-writer-css_main" target="1.8" />
+      <module name="r-writer-css_test" target="1.8" />
+      <module name="r-writer-json_main" target="1.8" />
+      <module name="r-writer-json_test" target="1.8" />
       <module name="resource-bundles_main" target="1.8" />
       <module name="resource-bundles_test" target="1.8" />
       <module name="simple_main" target="1.8" />

@@ -18,3 +18,7 @@ inline val PluginDependenciesSpec.`git-publish` get() = id("org.ajoberstar.git-p
 fun DependencyHandler.ktlint() = "com.github.shyiko:ktlint:$VERSION_KTLINT"
 
 fun DependencyHandler.junit() = "junit:junit:$VERSION_JUNIT"
+
+fun DependencyHandler.phCss() = "com.helger:ph-css:$VERSION_PH_CSS"
+
+fun DependencyHandler.jsonSimple() = "com.googlecode.json-simple:json-simple:$VERSION_JSON_SIMPLE"

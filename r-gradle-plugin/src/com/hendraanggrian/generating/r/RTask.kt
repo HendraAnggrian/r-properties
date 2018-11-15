@@ -1,9 +1,5 @@
 package com.hendraanggrian.generating.r
 
-import com.hendraanggrian.generating.r.writer.CssWriter
-import com.hendraanggrian.generating.r.writer.PathWriter
-import com.hendraanggrian.generating.r.writer.PropertiesWriter
-import com.hendraanggrian.generating.r.writer.ResourceBundlesWriter
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.DefaultTask
@@ -68,11 +64,11 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
 
-    /** Set false to skip reading keys of properties files. */
-    @Input var readProperties: Boolean = true
+    @Input val readers: MutableCollection<RReader<String>> = mutableSetOf()
 
-    /** Set false to skip reading style class of css files. */
-    @Input var readCss: Boolean = true
+    @Input fun readers(vararg readers: RReader<String>) {
+        this.readers += readers
+    }
 
     /** Generate R class given provided options. */
     @TaskAction
@@ -99,33 +95,27 @@ open class RTask : DefaultTask() {
     private fun processDir(typeBuilder: TypeSpec.Builder, dir: File) {
         dir.listFiles()
             .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
-            .forEach {
+            .forEach { file ->
                 when {
-                    it.isDirectory -> {
-                        val innerTypeBuilder = newTypeBuilder(name(it.name))
-                        processDir(innerTypeBuilder, it)
+                    file.isDirectory -> {
+                        val innerTypeBuilder = newTypeBuilder(name(file.name))
+                        processDir(innerTypeBuilder, file)
                         typeBuilder.addType(innerTypeBuilder.build())
                     }
-                    it.isFile -> {
+                    file.isFile -> {
+                        val prefixes = readers.mapNotNull { it.read(this, typeBuilder, file) }
                         when {
-                            readProperties && it.extension == "properties" -> {
-                                when {
-                                    it.isResourceBundle() -> ResourceBundlesWriter.read(this, typeBuilder, it)
-                                    else -> PropertiesWriter.read(this, typeBuilder, it)
-                                }
-                                PathWriter.PROPERTIES.read(this, typeBuilder, it)
-                            }
-                            readCss && it.extension == "css" -> {
-                                CssWriter.read(this, typeBuilder, it)
-                                PathWriter.CSS.read(this, typeBuilder, it)
-                            }
-                            else -> PathWriter.read(this, typeBuilder, it)
-                        }
+                            prefixes.isNotEmpty() -> DefaultRReader(prefixes.first())
+                            else -> DefaultRReader
+                        }.read(this, typeBuilder, file)
                     }
                 }
             }
     }
 
     @Internal
-    internal fun name(name: String): String = (if (isLowercase) name.toLowerCase() else name).normalizeSymbols().trim()
+    fun name(name: String): String = (if (isLowercase) name.toLowerCase() else name)
+        .normalizeSymbols()
+        .replace("\\s+".toRegex(), " ")
+        .trim()
 }

@@ -1,6 +1,5 @@
 include(RELEASE_ARTIFACT)
+includeDir("r-readers")
+includeDir("r-integration-tests")
 
-File("r-integration-tests")
-    .walk()
-    .filter { it.isDirectory }
-    .forEach { include("r-integration-tests:${it.name}") }
+fun includeDir(dir: String) = File(dir).walk().filter { it.isDirectory }.forEach { include("$dir:${it.name}") }

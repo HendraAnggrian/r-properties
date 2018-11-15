@@ -1,13 +1,12 @@
 plugins {
-    `java-gradle-plugin`
-    `kotlin-dsl`
+    kotlin("jvm")
     dokka
     `git-publish`
     bintray
     `bintray-release`
 }
 
-group = RELEASE_GROUP
+group = "$RELEASE_GROUP.json"
 version = RELEASE_VERSION
 
 sourceSets {
@@ -15,20 +14,12 @@ sourceSets {
     get("test").java.srcDir("tests/src")
 }
 
-gradlePlugin {
-    (plugins) {
-        register(RELEASE_ARTIFACT) {
-            id = "$RELEASE_GROUP.r"
-            implementationClass = "$RELEASE_GROUP.r.RPlugin"
-        }
-    }
-}
-
 val ktlint by configurations.registering
 
 dependencies {
+    implementation(project(":r-gradle-plugin"))
     implementation(kotlin("stdlib", VERSION_KOTLIN))
-    compile(javapoet())
+    implementation(jsonSimple())
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
     testImplementation(junit())
@@ -86,7 +77,7 @@ publish {
 
     userOrg = RELEASE_USER
     groupId = RELEASE_GROUP
-    artifactId = RELEASE_ARTIFACT
+    artifactId = "r-writer-json"
     publishVersion = RELEASE_VERSION
     desc = RELEASE_DESC
     website = RELEASE_WEBSITE
