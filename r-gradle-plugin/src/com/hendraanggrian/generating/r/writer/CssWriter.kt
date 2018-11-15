@@ -1,11 +1,11 @@
-package com.hendraanggrian.generating.r.readers
+package com.hendraanggrian.generating.r.writer
 
 import com.hendraanggrian.generating.r.RTask
 import com.hendraanggrian.generating.r.newField
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 
-internal object CssReader : Reader() {
+internal object CssWriter : Writer {
 
     override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File) = file.forEachLine { line ->
         if (line.length > 2 && line.trimStart().startsWith('.')) {

@@ -1,4 +1,4 @@
-package com.hendraanggrian.generating.r.readers
+package com.hendraanggrian.generating.r.writer
 
 import com.hendraanggrian.generating.r.RTask
 import com.hendraanggrian.generating.r.newTypeBuilder
@@ -6,7 +6,7 @@ import com.hendraanggrian.generating.r.resourceBundleName
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 
-internal object ResourceBundlesReader : PropertiesReader() {
+internal object ResourceBundlesWriter : PropertiesWriter() {
 
     override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File) {
         val className = task.name(file.resourceBundleName)

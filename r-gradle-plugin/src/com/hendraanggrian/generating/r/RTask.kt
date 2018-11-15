@@ -1,10 +1,9 @@
 package com.hendraanggrian.generating.r
 
-import com.hendraanggrian.generating.r.readers.CssReader
-import com.hendraanggrian.generating.r.readers.PrefixedReader
-import com.hendraanggrian.generating.r.readers.PropertiesReader
-import com.hendraanggrian.generating.r.readers.Reader
-import com.hendraanggrian.generating.r.readers.ResourceBundlesReader
+import com.hendraanggrian.generating.r.writer.CssWriter
+import com.hendraanggrian.generating.r.writer.PathWriter
+import com.hendraanggrian.generating.r.writer.PropertiesWriter
+import com.hendraanggrian.generating.r.writer.ResourceBundlesWriter
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.DefaultTask
@@ -111,16 +110,16 @@ open class RTask : DefaultTask() {
                         when {
                             readProperties && it.extension == "properties" -> {
                                 when {
-                                    it.isResourceBundle() -> ResourceBundlesReader.read(this, typeBuilder, it)
-                                    else -> PropertiesReader.read(this, typeBuilder, it)
+                                    it.isResourceBundle() -> ResourceBundlesWriter.read(this, typeBuilder, it)
+                                    else -> PropertiesWriter.read(this, typeBuilder, it)
                                 }
-                                PrefixedReader("properties").read(this, typeBuilder, it)
+                                PathWriter.PROPERTIES.read(this, typeBuilder, it)
                             }
                             readCss && it.extension == "css" -> {
-                                CssReader.read(this, typeBuilder, it)
-                                PrefixedReader("css").read(this, typeBuilder, it)
+                                CssWriter.read(this, typeBuilder, it)
+                                PathWriter.CSS.read(this, typeBuilder, it)
                             }
-                            else -> Reader.read(this, typeBuilder, it)
+                            else -> PathWriter.read(this, typeBuilder, it)
                         }
                     }
                 }
