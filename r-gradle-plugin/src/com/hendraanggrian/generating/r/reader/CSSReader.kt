@@ -2,16 +2,15 @@ package com.hendraanggrian.generating.r.reader
 
 import com.helger.css.ECSSVersion.CSS30
 import com.helger.css.reader.CSSReader.readFromFile
-import com.hendraanggrian.generating.r.RTask
-import com.hendraanggrian.generating.r.newField
+import com.hendraanggrian.generating.r.addFieldIfNotExist
+import com.hendraanggrian.generating.r.configuration.CSSConfiguration
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
 
-@Suppress("Unused")
-internal object CSSReader : Reader {
+internal class CSSReader(private val configuration: CSSConfiguration) : Reader {
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean {
+    override fun read(typeBuilder: TypeSpec.Builder, file: File): Boolean {
         if (file.extension == "css") {
             val css = checkNotNull(readFromFile(file, UTF_8, CSS30)) {
                 "Error while reading css, please report"
@@ -20,15 +19,10 @@ internal object CSSReader : Reader {
                 rule.allSelectors.forEach { selector ->
                     selector.allMembers.forEach { member ->
                         var styleName = member.asCSSString
-                        if (task.css.isJavaFx) {
+                        if (configuration.isJavaFx) {
                             styleName = styleName.toFxCssName()
                         }
-                        typeBuilder.addFieldIfNotExist(
-                            newField(
-                                task.name(styleName),
-                                styleName
-                            )
-                        )
+                        typeBuilder.addFieldIfNotExist(styleName, styleName)
                     }
                 }
             }

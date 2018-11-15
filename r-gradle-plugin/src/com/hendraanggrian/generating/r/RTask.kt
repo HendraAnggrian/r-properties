@@ -5,7 +5,11 @@ import com.hendraanggrian.generating.r.configuration.ConfigurationDsl
 import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JSONConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
+import com.hendraanggrian.generating.r.reader.CSSReader
 import com.hendraanggrian.generating.r.reader.CustomReader
+import com.hendraanggrian.generating.r.reader.DefaultReader
+import com.hendraanggrian.generating.r.reader.JSONReader
+import com.hendraanggrian.generating.r.reader.PropertiesReader
 import com.hendraanggrian.generating.r.reader.Reader
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -27,14 +31,6 @@ import javax.lang.model.element.Modifier.PUBLIC
 /** R class generation task. */
 open class RTask : DefaultTask() {
 
-    /** Actual property of [isLowercase] since annotating [isLowercase] will result in Gradle warning. */
-    private var lowercase: Boolean = false
-
-    @Internal @JvmField internal val css: CSSConfiguration = CSSConfiguration()
-    @Internal @JvmField internal val properties: PropertiesConfiguration = PropertiesConfiguration()
-    @Internal @JvmField internal val json: JSONConfiguration = JSONConfiguration()
-    @Internal @JvmField internal val custom: CustomConfiguration = CustomConfiguration()
-
     /**
      * Package name of which R class will be generated to.
      * Default is project group.
@@ -46,16 +42,6 @@ open class RTask : DefaultTask() {
      * Default is resources folder in main module.
      */
     @InputDirectory lateinit var resourcesDir: File
-
-    /**
-     * Will lowercase name of all generated classes and fields in R class.
-     * Default is false.
-     */
-    var isLowercase: Boolean
-        @Input get() = lowercase
-        @Input set(value) {
-            lowercase = value
-        }
 
     /**
      * Collection of files (or directories) that are ignored from this task.
@@ -75,6 +61,11 @@ open class RTask : DefaultTask() {
 
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
+
+    @Internal @JvmField internal val css: CSSConfiguration = CSSConfiguration()
+    @Internal @JvmField internal val properties: PropertiesConfiguration = PropertiesConfiguration()
+    @Internal @JvmField internal val json: JSONConfiguration = JSONConfiguration()
+    @Internal @JvmField internal val custom: CustomConfiguration = CustomConfiguration()
 
     fun css(configure: (@ConfigurationDsl CSSConfiguration).() -> Unit) = css.configure()
 
@@ -102,11 +93,13 @@ open class RTask : DefaultTask() {
             .addMethod(privateConstructor())
 
         logger.log(LogLevel.INFO, "Reading resources")
+        val readers = arrayOf(CSSReader(css), JSONReader(json), PropertiesReader(properties))
         processDir(
-            when {
-                custom.action == null -> Reader.ALL
-                else -> Reader.ALL + CustomReader(custom.action!!)
-            }, rClassBuilder, root
+            custom.action?.let { readers + CustomReader(it) } ?: readers,
+            DefaultReader(resourcesDir.path),
+            DefaultReader(resourcesDir.path, true),
+            rClassBuilder,
+            root
         )
 
         logger.log(LogLevel.INFO, "Writing new R")
@@ -116,29 +109,30 @@ open class RTask : DefaultTask() {
             .writeTo(outputDir)
     }
 
-    private fun processDir(readers: Array<Reader>, typeBuilder: TypeSpec.Builder, dir: File) {
+    private fun processDir(
+        readers: Array<Reader>,
+        defaultReader: Reader,
+        prefixedReader: Reader,
+        typeBuilder: TypeSpec.Builder,
+        dir: File
+    ) {
         dir.listFiles()
             .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
             .forEach { file ->
                 when {
                     file.isDirectory -> {
-                        val innerTypeBuilder = newTypeBuilder(name(file.name))
-                        processDir(readers, innerTypeBuilder, file)
+                        val innerTypeBuilder = newTypeBuilder(file.name)
+                        processDir(readers, defaultReader, prefixedReader, innerTypeBuilder, file)
                         typeBuilder.addType(innerTypeBuilder.build())
                     }
                     file.isFile -> {
-                        val prefixes = readers.map { it.read(this@RTask, typeBuilder, file) }
+                        val prefixes = readers.map { it.read(typeBuilder, file) }
                         when {
-                            prefixes.any { it } -> Reader.PREFIXED
-                            else -> Reader.DEFAULT
-                        }.read(this@RTask, typeBuilder, file)
+                            prefixes.any { it } -> prefixedReader
+                            else -> defaultReader
+                        }.read(typeBuilder, file)
                     }
                 }
             }
     }
-
-    fun name(name: String): String = (if (isLowercase) name.toLowerCase() else name)
-        .normalizeSymbols()
-        .replace("\\s+".toRegex(), " ")
-        .trim()
 }

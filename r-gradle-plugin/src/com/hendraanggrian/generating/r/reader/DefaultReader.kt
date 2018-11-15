@@ -1,23 +1,21 @@
 package com.hendraanggrian.generating.r.reader
 
-import com.hendraanggrian.generating.r.RTask
-import com.hendraanggrian.generating.r.newField
+import com.hendraanggrian.generating.r.addFieldIfNotExist
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 
-internal class DefaultReader(private val usingPrefix: Boolean) : Reader {
+internal class DefaultReader(
+    private val resourcesPath: String,
+    private val usingPrefix: Boolean = false
+) : Reader {
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean {
+    override fun read(typeBuilder: TypeSpec.Builder, file: File): Boolean {
         typeBuilder.addFieldIfNotExist(
-            newField(
-                task.name(
-                    when {
-                        usingPrefix -> "${file.extension}_${file.nameWithoutExtension}"
-                        else -> file.nameWithoutExtension
-                    }
-                ),
-                file.path.substringAfter(task.resourcesDir.path)
-            )
+            when {
+                usingPrefix -> "${file.extension}_${file.nameWithoutExtension}"
+                else -> file.nameWithoutExtension
+            },
+            file.path.substringAfter(resourcesPath)
         )
         return true
     }

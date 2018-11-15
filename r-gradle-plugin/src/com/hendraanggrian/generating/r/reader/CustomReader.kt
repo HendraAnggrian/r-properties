@@ -1,6 +1,5 @@
 package com.hendraanggrian.generating.r.reader
 
-import com.hendraanggrian.generating.r.RTask
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 
@@ -8,6 +7,5 @@ internal class CustomReader(
     val action: (typeBuilder: TypeSpec.Builder, file: File) -> Boolean
 ) : Reader {
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean =
-        action(typeBuilder, file)
+    override fun read(typeBuilder: TypeSpec.Builder, file: File): Boolean = action(typeBuilder, file)
 }

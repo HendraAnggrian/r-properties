@@ -10,10 +10,7 @@ plugins {
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
-sourceSets {
-    get("main").java.srcDir("src")
-    get("test").java.srcDir("tests/src")
-}
+sourceSets["main"].java.srcDir("src")
 
 gradlePlugin {
     (plugins) {

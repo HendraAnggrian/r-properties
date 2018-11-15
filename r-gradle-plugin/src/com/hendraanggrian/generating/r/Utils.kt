@@ -4,31 +4,37 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import java.io.File
-import javax.lang.model.element.Modifier
-
-fun privateConstructor(): MethodSpec = MethodSpec.constructorBuilder().addModifiers(Modifier.PRIVATE).build()
-
-fun newTypeBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name)
-    .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-    .addMethod(privateConstructor())
-
-fun newField(name: String, value: String): FieldSpec =
-    FieldSpec.builder(String::class.java, name, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-        .initializer("\$S", value)
-        .build()
+import javax.lang.model.element.Modifier.FINAL
+import javax.lang.model.element.Modifier.PRIVATE
+import javax.lang.model.element.Modifier.PUBLIC
+import javax.lang.model.element.Modifier.STATIC
 
 private fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
 
-fun String.normalizeSymbols(): String {
+private fun String.normalizeSymbols(): String {
     var s = ""
     forEach { s += if (it.isSymbol()) "_" else it }
     return s
 }
 
-fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && name.first().isLetter()
+internal fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && name.first().isLetter()
 
-fun File.isResourceBundle(): Boolean = isValid() && extension == "properties" && nameWithoutExtension.let { name ->
-    name.contains("_") && name.substringAfterLast("_").length == 2
+internal fun String.normalize(): String = normalizeSymbols()
+    .replace("\\s+".toRegex(), " ")
+    .trim()
+
+internal fun privateConstructor(): MethodSpec = MethodSpec.constructorBuilder().addModifiers(PRIVATE).build()
+
+internal fun newTypeBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name.normalize())
+    .addModifiers(PUBLIC, STATIC, FINAL)
+    .addMethod(privateConstructor())
+
+internal fun TypeSpec.Builder.addFieldIfNotExist(name: String, value: String) {
+    if (name !in build().fieldSpecs.map { it.name }) {
+        addField(
+            FieldSpec.builder(String::class.java, name.normalize(), PUBLIC, STATIC, FINAL)
+                .initializer("\$S", value)
+                .build()
+        )
+    }
 }
-
-inline val File.resourceBundleName: String get() = nameWithoutExtension.substringBeforeLast("_")
