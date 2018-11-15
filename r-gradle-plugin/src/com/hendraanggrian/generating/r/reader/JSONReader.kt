@@ -10,11 +10,11 @@ import java.io.File
 import java.lang.ref.WeakReference
 
 @Suppress("Unused")
-internal object JSONReader : Reader<String> {
+internal object JSONReader : Reader {
 
     var parserRef = WeakReference<JSONParser>(null)
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): String? {
+    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean {
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()
@@ -25,10 +25,10 @@ internal object JSONReader : Reader<String> {
                 (parser.parse(reader) as JSONObject).forEachKey(task) { key ->
                     typeBuilder.addFieldIfNotExist(newField(task.name(key), key))
                 }
-                return "json"
+                return true
             }
         }
-        return null
+        return false
     }
 
     private fun JSONObject.forEachKey(task: RTask, action: (String) -> Unit) {

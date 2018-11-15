@@ -10,9 +10,9 @@ import java.io.File
 import java.util.Properties
 
 @Suppress("Unused")
-internal object PropertiesReader : Reader<String> {
+internal object PropertiesReader : Reader {
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): String? {
+    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean {
         if (file.extension == "properties") {
             when {
                 task.properties.supportResourceBundle && file.isResourceBundle() -> {
@@ -25,11 +25,11 @@ internal object PropertiesReader : Reader<String> {
                 }
                 else -> {
                     process(task, typeBuilder, file)
-                    return "properties"
+                    return true
                 }
             }
         }
-        return null
+        return false
     }
 
     private fun process(task: RTask, typeBuilder: TypeSpec.Builder, file: File) =

@@ -6,7 +6,6 @@ import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JSONConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.generating.r.reader.CustomReader
-import com.hendraanggrian.generating.r.reader.DefaultReader
 import com.hendraanggrian.generating.r.reader.Reader
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -83,7 +82,7 @@ open class RTask : DefaultTask() {
 
     fun json(configure: (@ConfigurationDsl JSONConfiguration).() -> Unit) = json.configure()
 
-    fun custom(configure: (task: RTask, typeBuilder: TypeSpec.Builder, file: File) -> String?) {
+    fun custom(configure: (typeBuilder: TypeSpec.Builder, file: File) -> Boolean) {
         custom.action = configure
     }
 
@@ -103,10 +102,12 @@ open class RTask : DefaultTask() {
             .addMethod(privateConstructor())
 
         logger.log(LogLevel.INFO, "Reading resources")
-        when {
-            custom.action == null -> Reader.ALL
-            else -> Reader.ALL + CustomReader(custom.action!!)
-        }.processDir(rClassBuilder, root)
+        processDir(
+            when {
+                custom.action == null -> Reader.ALL
+                else -> Reader.ALL + CustomReader(custom.action!!)
+            }, rClassBuilder, root
+        )
 
         logger.log(LogLevel.INFO, "Writing new R")
         JavaFile.builder(packageName, rClassBuilder.build())
@@ -115,20 +116,20 @@ open class RTask : DefaultTask() {
             .writeTo(outputDir)
     }
 
-    private fun Array<Reader<String>>.processDir(typeBuilder: TypeSpec.Builder, dir: File) {
+    private fun processDir(readers: Array<Reader>, typeBuilder: TypeSpec.Builder, dir: File) {
         dir.listFiles()
             .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
             .forEach { file ->
                 when {
                     file.isDirectory -> {
                         val innerTypeBuilder = newTypeBuilder(name(file.name))
-                        processDir(innerTypeBuilder, file)
+                        processDir(readers, innerTypeBuilder, file)
                         typeBuilder.addType(innerTypeBuilder.build())
                     }
                     file.isFile -> {
-                        val prefixes = Reader.ALL.mapNotNull { it.read(this@RTask, typeBuilder, file) }
+                        val prefixes = readers.map { it.read(this@RTask, typeBuilder, file) }
                         when {
-                            prefixes.isNotEmpty() -> DefaultReader(prefixes.first())
+                            prefixes.any { it } -> Reader.PREFIXED
                             else -> Reader.DEFAULT
                         }.read(this@RTask, typeBuilder, file)
                     }
@@ -136,7 +137,6 @@ open class RTask : DefaultTask() {
             }
     }
 
-    @Internal
     fun name(name: String): String = (if (isLowercase) name.toLowerCase() else name)
         .normalizeSymbols()
         .replace("\\s+".toRegex(), " ")

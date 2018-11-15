@@ -5,9 +5,9 @@ import com.squareup.javapoet.TypeSpec
 import java.io.File
 
 internal class CustomReader(
-    val action: (task: RTask, typeBuilder: TypeSpec.Builder, file: File) -> String?
-) : Reader<String> {
+    val action: (typeBuilder: TypeSpec.Builder, file: File) -> Boolean
+) : Reader {
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): String? =
-        action(task, typeBuilder, file)
+    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean =
+        action(typeBuilder, file)
 }

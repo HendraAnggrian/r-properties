@@ -19,9 +19,10 @@
             <option value="$PROJECT_DIR$/r-integration-tests/compileR" />
             <option value="$PROJECT_DIR$/r-integration-tests/compileTestJava" />
             <option value="$PROJECT_DIR$/r-integration-tests/css" />
+            <option value="$PROJECT_DIR$/r-integration-tests/css-configuration" />
             <option value="$PROJECT_DIR$/r-integration-tests/custom" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-paths" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-reader" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom-configuration" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom-package-and-source-sets" />
             <option value="$PROJECT_DIR$/r-integration-tests/example" />
             <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
             <option value="$PROJECT_DIR$/r-integration-tests/folder" />
@@ -38,11 +39,11 @@
             <option value="$PROJECT_DIR$/r-integration-tests/my" />
             <option value="$PROJECT_DIR$/r-integration-tests/note" />
             <option value="$PROJECT_DIR$/r-integration-tests/packages" />
+            <option value="$PROJECT_DIR$/r-integration-tests/properties-configuration" />
             <option value="$PROJECT_DIR$/r-integration-tests/r" />
             <option value="$PROJECT_DIR$/r-integration-tests/r-integration-tests" />
             <option value="$PROJECT_DIR$/r-integration-tests/reports" />
             <option value="$PROJECT_DIR$/r-integration-tests/res" />
-            <option value="$PROJECT_DIR$/r-integration-tests/resource-bundle" />
             <option value="$PROJECT_DIR$/r-integration-tests/resources" />
             <option value="$PROJECT_DIR$/r-integration-tests/simple" />
             <option value="$PROJECT_DIR$/r-integration-tests/src" />

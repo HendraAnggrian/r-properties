@@ -9,9 +9,9 @@ import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
 
 @Suppress("Unused")
-internal object CSSReader : Reader<String> {
+internal object CSSReader : Reader {
 
-    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): String? {
+    override fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean {
         if (file.extension == "css") {
             val css = checkNotNull(readFromFile(file, UTF_8, CSS30)) {
                 "Error while reading css, please report"
@@ -32,9 +32,9 @@ internal object CSSReader : Reader<String> {
                     }
                 }
             }
-            return "css"
+            return true
         }
-        return null
+        return false
     }
 
     private fun String.toFxCssName(): String = when {

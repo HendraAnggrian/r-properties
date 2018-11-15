@@ -24,11 +24,11 @@ dependencies {
 }
 
 tasks.getByName('generateR') {
-    custom { task, typeBuilder, file ->
-        if (file.extension == "file") {
-            typeBuilder.addField(FieldSpec.builder(String, file.name).build())
-            return "file"
+    custom { typeBuilder, file ->
+        if (file.name.endsWith('file')) {
+            typeBuilder.addField(FieldSpec.builder(String, name(file.name)).build())
+            return true
         }
-        return null
+        return false
     }
 }

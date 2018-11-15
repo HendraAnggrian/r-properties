@@ -19,8 +19,14 @@
       <module name="com.example-simple_test" target="1.8" />
       <module name="com.hendraanggrian.r.json-json_main" target="1.8" />
       <module name="com.hendraanggrian.r.json-json_test" target="1.8" />
+      <module name="css-configuration_main" target="1.8" />
+      <module name="css-configuration_test" target="1.8" />
       <module name="css_main" target="1.8" />
       <module name="css_test" target="1.8" />
+      <module name="custom-configuration_main" target="1.8" />
+      <module name="custom-configuration_test" target="1.8" />
+      <module name="custom-package-and-source-sets_main" target="1.8" />
+      <module name="custom-package-and-source-sets_test" target="1.8" />
       <module name="custom-package_main" target="1.8" />
       <module name="custom-package_test" target="1.8" />
       <module name="custom-paths_main" target="1.8" />
@@ -29,12 +35,16 @@
       <module name="custom-reader_test" target="1.8" />
       <module name="custom-source-sets_main" target="1.8" />
       <module name="custom-source-sets_test" target="1.8" />
+      <module name="custom_main" target="1.8" />
+      <module name="custom_test" target="1.8" />
       <module name="exclusions_main" target="1.8" />
       <module name="exclusions_test" target="1.8" />
       <module name="json_main" target="1.8" />
       <module name="json_test" target="1.8" />
       <module name="lowercase_main" target="1.8" />
       <module name="lowercase_test" target="1.8" />
+      <module name="properties-configuration_main" target="1.8" />
+      <module name="properties-configuration_test" target="1.8" />
       <module name="r-gradle-plugin-r-gradle-plugin_main" target="1.8" />
       <module name="r-gradle-plugin-r-gradle-plugin_test" target="1.8" />
       <module name="r-gradle-plugin_buildSrc_main" target="1.8" />

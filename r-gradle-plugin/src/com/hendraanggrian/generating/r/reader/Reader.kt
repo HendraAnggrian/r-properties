@@ -6,14 +6,15 @@ import com.squareup.javapoet.TypeSpec
 import java.io.File
 import java.io.Serializable
 
-internal interface Reader<T> : Serializable {
+internal interface Reader : Serializable {
 
     companion object {
-        val DEFAULT: Reader<Unit> = DefaultReader(null)
-        val ALL: Array<Reader<String>> = arrayOf(CSSReader, JSONReader, PropertiesReader)
+        val DEFAULT: Reader = DefaultReader(false)
+        val PREFIXED: Reader = DefaultReader(true)
+        val ALL: Array<Reader> = arrayOf(CSSReader, JSONReader, PropertiesReader)
     }
 
-    fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): T?
+    fun read(task: RTask, typeBuilder: TypeSpec.Builder, file: File): Boolean
 
     fun TypeSpec.Builder.addFieldIfNotExist(fieldSpec: FieldSpec) {
         if (fieldSpec.name !in build().fieldSpecs.map { it.name }) {
