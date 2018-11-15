@@ -15,6 +15,16 @@ apply plugin: 'com.hendraanggrian.r'
 group 'com.example'
 version '1.0'
 
+sourceSets {
+    main.resources.srcDir 'res'
+    test.java.srcDir 'tests/src'
+}
+
 dependencies {
     testImplementation 'junit:junit:4.12'
+}
+
+tasks.getByName('generateR') {
+    packageName 'my.app'
+    resourcesDir file('res')
 }

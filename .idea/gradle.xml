@@ -19,8 +19,7 @@
             <option value="$PROJECT_DIR$/r-integration-tests/compileR" />
             <option value="$PROJECT_DIR$/r-integration-tests/compileTestJava" />
             <option value="$PROJECT_DIR$/r-integration-tests/css" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-package" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-source-sets" />
+            <option value="$PROJECT_DIR$/r-integration-tests/custom-paths" />
             <option value="$PROJECT_DIR$/r-integration-tests/example" />
             <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
             <option value="$PROJECT_DIR$/r-integration-tests/folder" />
@@ -61,11 +60,11 @@
             <option value="$PROJECT_DIR$/r-readers/compileKotlin" />
             <option value="$PROJECT_DIR$/r-readers/compileTestKotlin" />
             <option value="$PROJECT_DIR$/r-readers/css" />
-            <option value="$PROJECT_DIR$/r-readers/generating" />
             <option value="$PROJECT_DIR$/r-readers/hendraanggrian" />
             <option value="$PROJECT_DIR$/r-readers/inputs" />
             <option value="$PROJECT_DIR$/r-readers/jar" />
             <option value="$PROJECT_DIR$/r-readers/js" />
+            <option value="$PROJECT_DIR$/r-readers/json" />
             <option value="$PROJECT_DIR$/r-readers/jvm" />
             <option value="$PROJECT_DIR$/r-readers/kotlin" />
             <option value="$PROJECT_DIR$/r-readers/libs" />
@@ -73,9 +72,8 @@
             <option value="$PROJECT_DIR$/r-readers/main" />
             <option value="$PROJECT_DIR$/r-readers/packages" />
             <option value="$PROJECT_DIR$/r-readers/r" />
-            <option value="$PROJECT_DIR$/r-readers/r-reader-css" />
-            <option value="$PROJECT_DIR$/r-readers/r-reader-json" />
             <option value="$PROJECT_DIR$/r-readers/r-readers" />
+            <option value="$PROJECT_DIR$/r-readers/reader" />
             <option value="$PROJECT_DIR$/r-readers/reports" />
             <option value="$PROJECT_DIR$/r-readers/src" />
             <option value="$PROJECT_DIR$/r-readers/test" />

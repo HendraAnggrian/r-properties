@@ -3,14 +3,14 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-gradle-plugin-0.6-rc1.jar')
+        classpath files('../r-gradle-plugin-0.1-rc1.jar')
         classpath 'com.squareup:javapoet:1.11.1'
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'com.hendraanggrian.generating.r'
+apply plugin: 'com.hendraanggrian.r'
 
 group 'com.example'
 version '1.0'

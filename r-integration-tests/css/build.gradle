@@ -4,7 +4,9 @@ buildscript {
     }
     dependencies {
         classpath files('../r-gradle-plugin-0.1-rc1.jar')
+        classpath files('../css-0.1-rc1.jar')
         classpath 'com.squareup:javapoet:1.11.1'
+        classpath 'com.helger:ph-css:6.1.1'
     }
 }
 
@@ -17,4 +19,8 @@ version '1.0'
 
 dependencies {
     testImplementation 'junit:junit:4.12'
+}
+
+tasks.getByName('generateR') {
+    readers new com.hendraanggrian.r.reader.CSSReader(true)
 }
