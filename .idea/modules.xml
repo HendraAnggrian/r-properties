@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/app/app.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/app/app.iml" group="r-integration-tests/app" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/binary/binary.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/binary/binary.iml" group="r-integration-tests/binary" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/build/build.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/build/build.iml" group="r-integration-tests/build" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/classes/classes.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/classes/classes.iml" group="r-integration-tests/classes" />
@@ -33,10 +34,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/libs/libs.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/libs/libs.iml" group="r-integration-tests/libs" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/main/main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/main/main.iml" group="r-integration-tests/main" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/multi/multi.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/multi/multi.iml" group="r-integration-tests/multi" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/my/my.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/my/my.iml" group="r-integration-tests/my" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/note/note.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/note/note.iml" group="r-integration-tests/note" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/out/out.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/out/out.iml" group="r-integration-tests/out" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/packages/packages.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/packages/packages.iml" group="r-integration-tests/packages" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/production/production.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/production/production.iml" group="r-integration-tests/production" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/properties-configuration/properties-configuration.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/properties-configuration/properties-configuration.iml" group="r-integration-tests/properties-configuration" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/properties-configuration/properties-configuration_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/properties-configuration/properties-configuration_main.iml" group="r-integration-tests/properties-configuration" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/properties-configuration/properties-configuration_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/properties-configuration/properties-configuration_test.iml" group="r-integration-tests/properties-configuration" />

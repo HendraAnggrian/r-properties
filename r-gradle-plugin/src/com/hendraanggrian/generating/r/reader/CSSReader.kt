@@ -2,7 +2,7 @@ package com.hendraanggrian.generating.r.reader
 
 import com.helger.css.ECSSVersion.CSS30
 import com.helger.css.reader.CSSReader.readFromFile
-import com.hendraanggrian.generating.r.addFieldIfNotExist
+import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.CSSConfiguration
 import com.squareup.javapoet.TypeSpec
 import java.io.File
@@ -17,13 +17,12 @@ internal class CSSReader(private val configuration: CSSConfiguration) : Reader {
             }
             css.allStyleRules.forEach { rule ->
                 rule.allSelectors.forEach { selector ->
-                    selector.allMembers.forEach { member ->
-                        var styleName = member.asCSSString
-                        if (configuration.isJavaFx) {
-                            styleName = styleName.toFxCssName()
-                        }
-                        typeBuilder.addFieldIfNotExist(styleName, styleName)
+                    val member = selector.getMemberAtIndex(0) ?: return false
+                    var styleName = member.asCSSString
+                    if (configuration.isJavaFx) {
+                        styleName = styleName.toFxCssName()
                     }
+                    typeBuilder.addStringField(styleName, styleName)
                 }
             }
             return true

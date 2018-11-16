@@ -1,6 +1,6 @@
 package com.hendraanggrian.generating.r.reader
 
-import com.hendraanggrian.generating.r.addFieldIfNotExist
+import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.generating.r.isValid
 import com.hendraanggrian.generating.r.newTypeBuilder
@@ -32,7 +32,7 @@ internal class PropertiesReader(private val configuration: PropertiesConfigurati
 
     private fun process(typeBuilder: TypeSpec.Builder, file: File) =
         file.forEachProperties { key, _ ->
-            typeBuilder.addFieldIfNotExist(key, key)
+            typeBuilder.addStringField(key, key)
         }
 
     private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->

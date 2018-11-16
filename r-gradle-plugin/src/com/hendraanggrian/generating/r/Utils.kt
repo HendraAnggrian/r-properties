@@ -29,10 +29,13 @@ internal fun newTypeBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuil
     .addModifiers(PUBLIC, STATIC, FINAL)
     .addMethod(privateConstructor())
 
-internal fun TypeSpec.Builder.addFieldIfNotExist(name: String, value: String) {
-    if (name !in build().fieldSpecs.map { it.name }) {
+internal fun TypeSpec.Builder.addStringField(name: String, value: String) {
+    val normalizedName = name.normalize()
+    if (normalizedName != "_" && // Java SE 9 no longer supports this field name
+        normalizedName !in build().fieldSpecs.map { it.name } // checks for duplicate
+    ) {
         addField(
-            FieldSpec.builder(String::class.java, name.normalize(), PUBLIC, STATIC, FINAL)
+            FieldSpec.builder(String::class.java, normalizedName, PUBLIC, STATIC, FINAL)
                 .initializer("\$S", value)
                 .build()
         )

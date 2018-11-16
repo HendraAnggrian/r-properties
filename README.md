@@ -52,7 +52,9 @@ buildscript {
 }
 ```
 
-Then apply it in your module, along with idea plugin:
+Usage
+-----
+Apply the plugin in your module, along with idea plugin:
 
 ```gradle
 apply plugin: 'idea'
@@ -61,22 +63,42 @@ apply plugin: 'com.hendraanggrian.generating.r'
 
 That's it, `R` are now automatically generated after compilation with default behavior.
 
-Usage
------
+Configuration
+-------------
 Modify `R` fields generation with task name `generateR`, or by type `RTask`.
 
 ```gradle
 group 'com.example' // project group
 
 tasks.getByName('generateR') {
-    packageName 'my.app'                  // package name of which R.class will be generated to, default is project group
-    resourceDirectory 'my/path/resources' // resources directory that will be scanned, default is "src/main/resources"
-    setLowercase(true)                    // will lowercase all fields generated in `R.class`
+    packageName 'my.app'
+    resourceDir 'my/path/resources'
+    exclude 'some_file', 'some_other_file'
 }
 ```
 
-Resource bundles
-----------------
+#### CSS files
+CSS style name in JavaFX usually starts with `.`,
+enabling `isJavaFx` will remove that prefix upon R generation.
+
+```gradle
+tasks.getByName('generateR') {
+    css {
+        it.isJavaFx = true
+    }
+}
+```
+
+#### Properties files
+
+```gradle
+tasks.getByName('generateR') {
+    properties {
+        it.supportResourceBundle = true
+    }
+}
+```
+
 If you are using `ResourceBundle` to handle internationalization, put those values files on root of resources directory.
 
 ```
@@ -96,7 +118,7 @@ R will generate keys of those values files instead of file paths.
 ```java
 public final class R {
     ...
-    
+
     public static final class String {
         public static final String im = "im";
         public static final String a = "a";
@@ -106,9 +128,15 @@ public final class R {
 }
 ```
 
-Values
-------
-Following `strings.xml` or `integers.xml` in `values` folder in Android, `r` supports these behavior with properties file.
+#### Custom implementation
+
+```gradle
+tasks.getByName('generateR') {
+    custom { typeBuilder, file ->
+        addField(typeBuilder, myFieldName, myFieldValue)
+    }
+}
+```
 
 License
 -------

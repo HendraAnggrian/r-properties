@@ -1,6 +1,6 @@
 package com.hendraanggrian.generating.r.reader
 
-import com.hendraanggrian.generating.r.addFieldIfNotExist
+import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.JSONConfiguration
 import com.squareup.javapoet.TypeSpec
 import org.json.simple.JSONArray
@@ -22,7 +22,7 @@ internal class JSONReader(private val configuration: JSONConfiguration) : Reader
                     parserRef = WeakReference(parser)
                 }
                 (parser.parse(reader) as JSONObject).forEachKey { key ->
-                    typeBuilder.addFieldIfNotExist(key, key)
+                    typeBuilder.addStringField(key, key)
                 }
                 return true
             }

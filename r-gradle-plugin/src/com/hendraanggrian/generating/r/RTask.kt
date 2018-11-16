@@ -135,4 +135,7 @@ open class RTask : DefaultTask() {
                 }
             }
     }
+
+    /** Only to be used within [custom] DSL. */
+    @Internal fun TypeSpec.Builder.addField(name: String, value: String) = addStringField(name, value)
 }

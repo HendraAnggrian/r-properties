@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/r-gradle-plugin" />
             <option value="$PROJECT_DIR$/r-integration-tests" />
+            <option value="$PROJECT_DIR$/r-integration-tests/app" />
             <option value="$PROJECT_DIR$/r-integration-tests/binary" />
             <option value="$PROJECT_DIR$/r-integration-tests/build" />
             <option value="$PROJECT_DIR$/r-integration-tests/classes" />
@@ -33,10 +34,9 @@
             <option value="$PROJECT_DIR$/r-integration-tests/libs" />
             <option value="$PROJECT_DIR$/r-integration-tests/main" />
             <option value="$PROJECT_DIR$/r-integration-tests/multi" />
+            <option value="$PROJECT_DIR$/r-integration-tests/my" />
             <option value="$PROJECT_DIR$/r-integration-tests/note" />
-            <option value="$PROJECT_DIR$/r-integration-tests/out" />
             <option value="$PROJECT_DIR$/r-integration-tests/packages" />
-            <option value="$PROJECT_DIR$/r-integration-tests/production" />
             <option value="$PROJECT_DIR$/r-integration-tests/properties-configuration" />
             <option value="$PROJECT_DIR$/r-integration-tests/r" />
             <option value="$PROJECT_DIR$/r-integration-tests/r-integration-tests" />
