@@ -1,7 +1,7 @@
 package com.hendraanggrian.generating.r.reader
 
 import com.hendraanggrian.generating.r.addStringField
-import com.hendraanggrian.generating.r.configuration.JSONConfiguration
+import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.squareup.javapoet.TypeSpec
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
@@ -9,7 +9,7 @@ import org.json.simple.parser.JSONParser
 import java.io.File
 import java.lang.ref.WeakReference
 
-internal class JSONReader(private val configuration: JSONConfiguration) : Reader {
+internal class JsonReader(private val configuration: JsonConfiguration) : Reader {
 
     var parserRef = WeakReference<JSONParser>(null)
 
@@ -33,7 +33,7 @@ internal class JSONReader(private val configuration: JSONConfiguration) : Reader
     private fun JSONObject.forEachKey(action: (String) -> Unit) {
         forEach { key, value ->
             action(key.toString())
-            if (value is JSONArray && configuration.isRecursive) {
+            if (value is JSONArray && configuration.readArray) {
                 value.forEachKey(action)
             }
         }
@@ -42,8 +42,8 @@ internal class JSONReader(private val configuration: JSONConfiguration) : Reader
     private fun JSONArray.forEachKey(action: (String) -> Unit) {
         forEach { json ->
             when {
-                json is JSONObject -> json.forEachKey(action)
-                json is JSONArray && configuration.isRecursive -> json.forEachKey(action)
+                configuration.isRecursive && json is JSONObject -> json.forEachKey(action)
+                configuration.readArray && json is JSONArray -> json.forEachKey(action)
             }
         }
     }

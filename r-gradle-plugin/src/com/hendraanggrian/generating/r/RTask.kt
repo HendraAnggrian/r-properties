@@ -1,14 +1,14 @@
 package com.hendraanggrian.generating.r
 
-import com.hendraanggrian.generating.r.configuration.CSSConfiguration
+import com.hendraanggrian.generating.r.configuration.CssConfiguration
 import com.hendraanggrian.generating.r.configuration.ConfigurationDsl
 import com.hendraanggrian.generating.r.configuration.CustomConfiguration
-import com.hendraanggrian.generating.r.configuration.JSONConfiguration
+import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
-import com.hendraanggrian.generating.r.reader.CSSReader
+import com.hendraanggrian.generating.r.reader.CssReader
 import com.hendraanggrian.generating.r.reader.CustomReader
 import com.hendraanggrian.generating.r.reader.DefaultReader
-import com.hendraanggrian.generating.r.reader.JSONReader
+import com.hendraanggrian.generating.r.reader.JsonReader
 import com.hendraanggrian.generating.r.reader.PropertiesReader
 import com.hendraanggrian.generating.r.reader.Reader
 import com.squareup.javapoet.JavaFile
@@ -62,16 +62,16 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDir: File
 
-    @Internal @JvmField internal val css: CSSConfiguration = CSSConfiguration()
+    @Internal @JvmField internal val css: CssConfiguration = CssConfiguration()
     @Internal @JvmField internal val properties: PropertiesConfiguration = PropertiesConfiguration()
-    @Internal @JvmField internal val json: JSONConfiguration = JSONConfiguration()
+    @Internal @JvmField internal val json: JsonConfiguration = JsonConfiguration()
     @Internal @JvmField internal val custom: CustomConfiguration = CustomConfiguration()
 
-    fun css(configure: (@ConfigurationDsl CSSConfiguration).() -> Unit) = css.configure()
+    fun css(configure: (@ConfigurationDsl CssConfiguration).() -> Unit) = css.configure()
 
     fun properties(configure: (@ConfigurationDsl PropertiesConfiguration).() -> Unit) = properties.configure()
 
-    fun json(configure: (@ConfigurationDsl JSONConfiguration).() -> Unit) = json.configure()
+    fun json(configure: (@ConfigurationDsl JsonConfiguration).() -> Unit) = json.configure()
 
     fun custom(configure: (typeBuilder: TypeSpec.Builder, file: File) -> Boolean) {
         custom.action = configure
@@ -93,7 +93,7 @@ open class RTask : DefaultTask() {
             .addMethod(privateConstructor())
 
         logger.log(LogLevel.INFO, "Reading resources")
-        val readers = arrayOf(CSSReader(css), JSONReader(json), PropertiesReader(properties))
+        val readers = arrayOf(CssReader(css), JsonReader(json), PropertiesReader(properties))
         processDir(
             custom.action?.let { readers + CustomReader(it) } ?: readers,
             DefaultReader(resourcesDir.path),

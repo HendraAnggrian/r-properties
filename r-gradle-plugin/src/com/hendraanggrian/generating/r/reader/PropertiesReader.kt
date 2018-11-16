@@ -13,7 +13,7 @@ internal class PropertiesReader(private val configuration: PropertiesConfigurati
     override fun read(typeBuilder: TypeSpec.Builder, file: File): Boolean {
         if (file.extension == "properties") {
             when {
-                configuration.supportResourceBundle && file.isResourceBundle() -> {
+                configuration.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in typeBuilder.build().typeSpecs.map { it.name }) {
                         val innerTypeBuilder = newTypeBuilder(className)
