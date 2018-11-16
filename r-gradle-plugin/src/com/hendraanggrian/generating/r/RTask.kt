@@ -1,7 +1,7 @@
 package com.hendraanggrian.generating.r
 
-import com.hendraanggrian.generating.r.configuration.CssConfiguration
 import com.hendraanggrian.generating.r.configuration.ConfigurationDsl
+import com.hendraanggrian.generating.r.configuration.CssConfiguration
 import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
@@ -67,14 +67,25 @@ open class RTask : DefaultTask() {
     @Internal @JvmField internal val json: JsonConfiguration = JsonConfiguration()
     @Internal @JvmField internal val custom: CustomConfiguration = CustomConfiguration()
 
+    /** Customize CSS files configuration with Kotlin DSL. */
     fun css(configure: (@ConfigurationDsl CssConfiguration).() -> Unit) = css.configure()
 
+    /** Customize properties files configuration with Kotlin DSL. */
     fun properties(configure: (@ConfigurationDsl PropertiesConfiguration).() -> Unit) = properties.configure()
 
+    /** Customize json files configuration with Kotlin DSL. */
     fun json(configure: (@ConfigurationDsl JsonConfiguration).() -> Unit) = json.configure()
 
-    fun custom(configure: (typeBuilder: TypeSpec.Builder, file: File) -> Boolean) {
-        custom.action = configure
+    /** Customize custom action with Kotlin DSL. */
+    fun custom(
+        configure: (@ConfigurationDsl CustomConfiguration).(
+            typeBuilder: TypeSpec.Builder,
+            file: File
+        ) -> Boolean
+    ) {
+        custom.action = { typeBuilder, file ->
+            custom.configure(typeBuilder, file)
+        }
     }
 
     /** Generate R class given provided options. */
@@ -135,7 +146,4 @@ open class RTask : DefaultTask() {
                 }
             }
     }
-
-    /** Only to be used within [custom] DSL. */
-    @Internal fun TypeSpec.Builder.addField(name: String, value: String) = addStringField(name, value)
 }

@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-gradle-plugin-0.1.jar')
+        classpath files('../r-gradle-plugin-0.2.jar')
         classpath 'com.squareup:javapoet:1.11.1'
         classpath 'com.helger:ph-css:6.1.1'
         classpath 'com.googlecode.json-simple:json-simple:1.1.1'
@@ -22,11 +22,7 @@ dependencies {
 }
 
 tasks.getByName('generateR') {
-    custom { typeBuilder, file ->
-        if (file.name.endsWith('file')) {
-            addField(typeBuilder, file.name.replace('.', '_'), file.name)
-            return true
-        }
-        return false
+    css {
+        it.javaFx true
     }
 }

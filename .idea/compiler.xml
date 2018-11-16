@@ -19,6 +19,12 @@
       <module name="com.example-simple_test" target="1.8" />
       <module name="com.hendraanggrian.r.json-json_main" target="1.8" />
       <module name="com.hendraanggrian.r.json-json_test" target="1.8" />
+      <module name="configuration-css_main" target="1.8" />
+      <module name="configuration-css_test" target="1.8" />
+      <module name="configuration-custom_main" target="1.8" />
+      <module name="configuration-custom_test" target="1.8" />
+      <module name="configuration-properties_main" target="1.8" />
+      <module name="configuration-properties_test" target="1.8" />
       <module name="css-configuration_main" target="1.8" />
       <module name="css-configuration_test" target="1.8" />
       <module name="css_main" target="1.8" />

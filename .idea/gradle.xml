@@ -18,10 +18,11 @@
             <option value="$PROJECT_DIR$/r-integration-tests/com" />
             <option value="$PROJECT_DIR$/r-integration-tests/compileR" />
             <option value="$PROJECT_DIR$/r-integration-tests/compileTestJava" />
+            <option value="$PROJECT_DIR$/r-integration-tests/configuration-css" />
+            <option value="$PROJECT_DIR$/r-integration-tests/configuration-custom" />
+            <option value="$PROJECT_DIR$/r-integration-tests/configuration-properties" />
             <option value="$PROJECT_DIR$/r-integration-tests/css" />
-            <option value="$PROJECT_DIR$/r-integration-tests/css-configuration" />
             <option value="$PROJECT_DIR$/r-integration-tests/custom" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-configuration" />
             <option value="$PROJECT_DIR$/r-integration-tests/custom-package-and-source-sets" />
             <option value="$PROJECT_DIR$/r-integration-tests/example" />
             <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
@@ -30,6 +31,7 @@
             <option value="$PROJECT_DIR$/r-integration-tests/jar" />
             <option value="$PROJECT_DIR$/r-integration-tests/java" />
             <option value="$PROJECT_DIR$/r-integration-tests/js" />
+            <option value="$PROJECT_DIR$/r-integration-tests/json" />
             <option value="$PROJECT_DIR$/r-integration-tests/layout" />
             <option value="$PROJECT_DIR$/r-integration-tests/libs" />
             <option value="$PROJECT_DIR$/r-integration-tests/main" />
@@ -37,7 +39,6 @@
             <option value="$PROJECT_DIR$/r-integration-tests/my" />
             <option value="$PROJECT_DIR$/r-integration-tests/note" />
             <option value="$PROJECT_DIR$/r-integration-tests/packages" />
-            <option value="$PROJECT_DIR$/r-integration-tests/properties-configuration" />
             <option value="$PROJECT_DIR$/r-integration-tests/r" />
             <option value="$PROJECT_DIR$/r-integration-tests/r-integration-tests" />
             <option value="$PROJECT_DIR$/r-integration-tests/reports" />
