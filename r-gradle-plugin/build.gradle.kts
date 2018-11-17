@@ -25,10 +25,10 @@ gradlePlugin {
 val ktlint by configurations.registering
 
 dependencies {
-    implementation(kotlin("stdlib", VERSION_KOTLIN))
-    implementation(javapoet())
-    implementation(phCss())
-    implementation(jsonSimple())
+    compile(kotlin("stdlib", VERSION_KOTLIN))
+    compile(javapoet())
+    compile(phCss())
+    compile(jsonSimple())
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
     testImplementation(junit())
