@@ -14,12 +14,8 @@
             <option value="$PROJECT_DIR$/r-integration-tests/configuration-css" />
             <option value="$PROJECT_DIR$/r-integration-tests/configuration-custom" />
             <option value="$PROJECT_DIR$/r-integration-tests/configuration-properties" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-package" />
             <option value="$PROJECT_DIR$/r-integration-tests/custom-package-and-source-sets" />
-            <option value="$PROJECT_DIR$/r-integration-tests/custom-source-sets" />
             <option value="$PROJECT_DIR$/r-integration-tests/exclusions" />
-            <option value="$PROJECT_DIR$/r-integration-tests/lowercase" />
-            <option value="$PROJECT_DIR$/r-integration-tests/resource-bundles" />
             <option value="$PROJECT_DIR$/r-integration-tests/simple" />
             <option value="$PROJECT_DIR$/website" />
           </set>

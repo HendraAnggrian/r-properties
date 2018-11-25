@@ -20,7 +20,6 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions.iml" group="r-integration-tests/exclusions" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_main.iml" group="r-integration-tests/exclusions" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/exclusions/exclusions_test.iml" group="r-integration-tests/exclusions" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/lowercase/lowercase.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/lowercase/lowercase.iml" group="r-integration-tests/lowercase" />
       <module fileurl="file://$PROJECT_DIR$/.idea/r-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/r-gradle-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin.iml" group="r-gradle-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" group="r-gradle-plugin" />
@@ -29,12 +28,14 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_main.iml" group="r-gradle-plugin_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_test.iml" group="r-gradle-plugin_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/r-integration-tests.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/r-integration-tests.iml" group="r-integration-tests" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/r-integration-tests.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/r-integration-tests.iml" group="r-integration-tests" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/css/r-integration-tests-css_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/css/r-integration-tests-css_main.iml" group="r-integration-tests/css" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/css/r-integration-tests-css_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/css/r-integration-tests-css_test.iml" group="r-integration-tests/css" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/resource-bundles/resource-bundles.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/resource-bundles/resource-bundles.iml" group="r-integration-tests/resource-bundles" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/simple/simple.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/simple/simple.iml" group="r-integration-tests/simple" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/simple/simple_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/simple/simple_main.iml" group="r-integration-tests/simple" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-integration-tests/simple/simple_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-integration-tests/simple/simple_test.iml" group="r-integration-tests/simple" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/website/website.iml" filepath="$PROJECT_DIR$/.idea/modules/website/website.iml" group="website" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/website/website.iml" filepath="$PROJECT_DIR$/.idea/modules/website/website.iml" group="website" />
     </modules>
   </component>
