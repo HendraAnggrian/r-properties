@@ -15,7 +15,7 @@ internal class DefaultReader(
                 usingPrefix -> "${file.extension}_${file.nameWithoutExtension}"
                 else -> file.nameWithoutExtension
             },
-            file.path.substringAfter(resourcesPath)
+            file.path.substringAfter(resourcesPath).replace('\\', '/')
         )
         return true
     }
