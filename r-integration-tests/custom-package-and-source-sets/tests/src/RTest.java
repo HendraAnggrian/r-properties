@@ -1,4 +1,4 @@
-import my.app.R;
+import my.app.Resources;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -7,6 +7,6 @@ public class RTest {
 
     @Test
     public void test() {
-        assertEquals(R.layout.layout_a, "/layout/layout_a.fxml");
+        assertEquals(Resources.layout.layout_a, "/layout/layout_a.fxml");
     }
 }

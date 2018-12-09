@@ -6,14 +6,13 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.compile.JavaCompile
-import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.getPlugin
-import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.registering
-import org.gradle.kotlin.dsl.provideDelegate // ktlint-disable
 import org.gradle.plugins.ide.idea.model.IdeaModel
+import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.provideDelegate // ktlint-disable
 
 /** Generate Android-like R class with this plugin. */
 @Suppress("Unused")
@@ -26,8 +25,8 @@ class RPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val generateR by project.tasks.registering(RTask::class) {
             group = GROUP_NAME
-            resourcesDir = project.projectDir.resolve("src/main/resources")
-            outputDir = project.buildDir.resolve("generated/r/src/main")
+            resourcesDirectory = project.projectDir.resolve("src/main/resources")
+            outputDirectory = project.buildDir.resolve("generated/r/src/main")
         }
         // project group will return correct name after evaluated
         project.afterEvaluate {
@@ -45,7 +44,7 @@ class RPlugin : Plugin<Project> {
 
             val generateRTask = generateR.get()
             dependsOn(generateRTask)
-            source(generateRTask.outputDir)
+            source(generateRTask.outputDirectory)
         }
 
         val compileRTask = compileR.get()

@@ -38,10 +38,15 @@ open class RTask : DefaultTask() {
     @Input var packageName: String = ""
 
     /**
+     * Class name of R.
+     */
+    @Input var className: String = "R"
+
+    /**
      * Path of resources that will be read.
      * Default is resources folder in main module.
      */
-    @InputDirectory lateinit var resourcesDir: File
+    @InputDirectory lateinit var resourcesDirectory: File
 
     /**
      * Collection of files (or directories) that are ignored from this task.
@@ -51,16 +56,16 @@ open class RTask : DefaultTask() {
 
     /** Exclude certain files and directories from generated R class. */
     @InputFiles fun exclude(vararg files: File) {
-        exclusions += files.map { resourcesDir.resolve(it) }
+        exclusions += files.map { resourcesDirectory.resolve(it) }
     }
 
     /** Exclude certain files and directories from generated R class. */
     @InputFiles fun exclude(vararg files: String) {
-        exclusions += files.map { resourcesDir.resolve(it) }
+        exclusions += files.map { resourcesDirectory.resolve(it) }
     }
 
     /** Path that R class will be generated to. */
-    @OutputDirectory lateinit var outputDir: File
+    @OutputDirectory lateinit var outputDirectory: File
 
     @Internal @JvmField internal val css: CssConfiguration = CssConfiguration()
     @Internal @JvmField internal val properties: PropertiesConfiguration = PropertiesConfiguration()
@@ -92,14 +97,14 @@ open class RTask : DefaultTask() {
     @TaskAction
     @Throws(IOException::class)
     fun generate() {
-        val root = project.projectDir.resolve(resourcesDir)
+        val root = project.projectDir.resolve(resourcesDirectory)
         requireNotNull(root) { "Resources folder not found" }
 
-        logger.log(LogLevel.INFO, "Deleting old R")
-        outputDir.deleteRecursively()
-        outputDir.mkdirs()
+        logger.log(LogLevel.INFO, "Deleting old $className")
+        outputDirectory.deleteRecursively()
+        outputDirectory.mkdirs()
 
-        val rClassBuilder = TypeSpec.classBuilder("R")
+        val rClassBuilder = TypeSpec.classBuilder(className)
             .addModifiers(PUBLIC, FINAL)
             .addMethod(privateConstructor())
 
@@ -107,17 +112,17 @@ open class RTask : DefaultTask() {
         val readers = arrayOf(CssReader(css), JsonReader(json), PropertiesReader(properties))
         processDir(
             custom.action?.let { readers + CustomReader(it) } ?: readers,
-            DefaultReader(resourcesDir.path),
-            DefaultReader(resourcesDir.path, true),
+            DefaultReader(resourcesDirectory.path),
+            DefaultReader(resourcesDirectory.path, true),
             rClassBuilder,
             root
         )
 
-        logger.log(LogLevel.INFO, "Writing new R")
+        logger.log(LogLevel.INFO, "Writing new $className")
         JavaFile.builder(packageName, rClassBuilder.build())
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
-            .writeTo(outputDir)
+            .writeTo(outputDirectory)
     }
 
     private fun processDir(

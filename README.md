@@ -72,6 +72,7 @@ group 'com.example' // project group
 
 tasks.getByName('generateR') {
     packageName 'my.app'
+    className 'MyR'
     resourceDir 'my/path/resources'
     exclude 'some_file', 'some_other_file'
 }
