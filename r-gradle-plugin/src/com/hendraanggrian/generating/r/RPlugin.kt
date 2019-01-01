@@ -1,4 +1,4 @@
-@file:Suppress("UnusedImport")
+@file:Suppress("UnusedImport", "unused", "UNUSED_VARIABLE")
 
 package com.hendraanggrian.generating.r
 
@@ -15,7 +15,6 @@ import org.gradle.kotlin.dsl.getValue
 import org.gradle.kotlin.dsl.provideDelegate // ktlint-disable
 
 /** Generate Android-like R class with this plugin. */
-@Suppress("Unused")
 class RPlugin : Plugin<Project> {
 
     companion object {
@@ -28,6 +27,7 @@ class RPlugin : Plugin<Project> {
             resourcesDirectory = project.projectDir.resolve("src/main/resources")
             outputDirectory = project.buildDir.resolve("generated/r/src/main")
         }
+        val generateRTask by generateR
         // project group will return correct name after evaluated
         project.afterEvaluate {
             generateR {
@@ -36,20 +36,19 @@ class RPlugin : Plugin<Project> {
                 }
             }
         }
+
         val compileR by project.tasks.registering(JavaCompile::class) {
-            dependsOn(generateR.get())
+            dependsOn(generateRTask)
             group = GROUP_NAME
             classpath = project.files()
             destinationDir = project.buildDir.resolve("generated/r/classes/main")
-
-            val generateRTask = generateR.get()
-            dependsOn(generateRTask)
             source(generateRTask.outputDirectory)
         }
+        val compileRTask by compileR
+        val compiledClasses = project
+            .files(compileRTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
+            .builtBy(compileRTask)
 
-        val compileRTask = compileR.get()
-        val compiledClasses = project.files(compileRTask.outputs.files.filter { !it.name.endsWith("dependency-cache") })
-        compiledClasses.builtBy(compileRTask)
         project.convention.getPlugin<JavaPluginConvention>().sourceSets {
             "main" {
                 compileClasspath += compiledClasses
@@ -57,10 +56,9 @@ class RPlugin : Plugin<Project> {
             }
         }
 
-        require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied." }
+        require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied" }
 
-        val providedR by project.configurations.registering
-        providedR {
+        val providedR by project.configurations.registering {
             dependencies += project.dependencies.create(compiledClasses)
             project.extensions
                 .getByName<IdeaModel>("idea")

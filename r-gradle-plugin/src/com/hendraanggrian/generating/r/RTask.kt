@@ -96,6 +96,7 @@ open class RTask : DefaultTask() {
     /** Generate R class given provided options. */
     @TaskAction
     @Throws(IOException::class)
+    @Suppress("unused")
     fun generate() {
         val root = project.projectDir.resolve(resourcesDirectory)
         requireNotNull(root) { "Resources folder not found" }
