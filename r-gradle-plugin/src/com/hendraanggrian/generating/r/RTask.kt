@@ -1,6 +1,5 @@
 package com.hendraanggrian.generating.r
 
-import com.hendraanggrian.generating.r.configuration.ConfigurationDsl
 import com.hendraanggrian.generating.r.configuration.CssConfiguration
 import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
@@ -13,6 +12,7 @@ import com.hendraanggrian.generating.r.reader.PropertiesReader
 import com.hendraanggrian.generating.r.reader.Reader
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
+import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
@@ -21,6 +21,7 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.invoke
 import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
@@ -73,17 +74,17 @@ open class RTask : DefaultTask() {
     @Internal @JvmField internal val custom: CustomConfiguration = CustomConfiguration()
 
     /** Customize CSS files configuration with Kotlin DSL. */
-    fun css(configure: (@ConfigurationDsl CssConfiguration).() -> Unit) = css.configure()
+    fun configureCss(action: Action<CssConfiguration>) = action(css)
 
     /** Customize properties files configuration with Kotlin DSL. */
-    fun properties(configure: (@ConfigurationDsl PropertiesConfiguration).() -> Unit) = properties.configure()
+    fun configureProperties(action: Action<PropertiesConfiguration>) = action(properties)
 
     /** Customize json files configuration with Kotlin DSL. */
-    fun json(configure: (@ConfigurationDsl JsonConfiguration).() -> Unit) = json.configure()
+    fun configureJson(action: Action<JsonConfiguration>) = action(json)
 
     /** Customize custom action with Kotlin DSL. */
-    fun custom(
-        configure: (@ConfigurationDsl CustomConfiguration).(
+    fun configureCustom(
+        configure: (CustomConfiguration).(
             typeBuilder: TypeSpec.Builder,
             file: File
         ) -> Boolean

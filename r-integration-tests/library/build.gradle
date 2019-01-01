@@ -3,7 +3,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath files('../r-gradle-plugin-0.4.jar')
+        classpath files('../r-gradle-plugin-0.5.jar')
         classpath 'com.squareup:javapoet:1.11.1'
         classpath 'com.helger:ph-css:6.1.1'
         classpath 'com.googlecode.json-simple:json-simple:1.1.1'
