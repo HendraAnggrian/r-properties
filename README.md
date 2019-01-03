@@ -85,7 +85,7 @@ enabling `isJavaFx` will remove that prefix upon R generation.
 ```gradle
 tasks.getByName('generateR') {
     css {
-        it.isJavaFx = true
+        isJavaFx = true
     }
 }
 ```
@@ -95,7 +95,7 @@ tasks.getByName('generateR') {
 ```gradle
 tasks.getByName('generateR') {
     properties {
-        it.supportResourceBundle = true
+        supportResourceBundle = true
     }
 }
 ```
