@@ -1,4 +1,4 @@
-package com.hendraanggrian.generating.r.converters
+package com.hendraanggrian.generating.r.adapters
 
 import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
@@ -9,11 +9,11 @@ import org.json.simple.parser.JSONParser
 import java.io.File
 import java.lang.ref.WeakReference
 
-internal class JsonConverter(private val configuration: JsonConfiguration) : Converter {
+internal class JsonAdapter(private val configuration: JsonConfiguration) : Adapter {
 
     var parserRef = WeakReference<JSONParser>(null)
 
-    override fun convert(typeBuilder: TypeSpec.Builder, file: File): Boolean {
+    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()

@@ -34,6 +34,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_main.iml" group="r-gradle-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin/r-gradle-plugin-r-gradle-plugin_test.iml" group="r-gradle-plugin" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_main.iml" group="r-gradle-plugin_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/r-gradle-plugin_buildSrc_test.iml" group="r-gradle-plugin_buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/r-integration-tests/r-integration-tests.iml" filepath="$PROJECT_DIR$/r-integration-tests/r-integration-tests.iml" />

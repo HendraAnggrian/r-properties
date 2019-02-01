@@ -1,15 +1,15 @@
 package com.hendraanggrian.generating.r
 
+import com.hendraanggrian.generating.r.adapters.Adapter
+import com.hendraanggrian.generating.r.adapters.CssAdapter
+import com.hendraanggrian.generating.r.adapters.CustomAdapter
+import com.hendraanggrian.generating.r.adapters.DefaultAdapter
+import com.hendraanggrian.generating.r.adapters.JsonAdapter
+import com.hendraanggrian.generating.r.adapters.PropertiesAdapter
 import com.hendraanggrian.generating.r.configuration.CssConfiguration
 import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
-import com.hendraanggrian.generating.r.converters.Converter
-import com.hendraanggrian.generating.r.converters.CssConverter
-import com.hendraanggrian.generating.r.converters.CustomConverter
-import com.hendraanggrian.generating.r.converters.DefaultConverter
-import com.hendraanggrian.generating.r.converters.JsonConverter
-import com.hendraanggrian.generating.r.converters.PropertiesConverter
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.Action
@@ -18,7 +18,6 @@ import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
-import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
@@ -70,29 +69,55 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDirectory: File
 
-    @Internal @JvmField internal val css: CssConfiguration = CssConfiguration()
-    @Internal @JvmField internal val properties: PropertiesConfiguration = PropertiesConfiguration()
-    @Internal @JvmField internal val json: JsonConfiguration = JsonConfiguration()
-    @Internal @JvmField internal val custom: CustomConfiguration = CustomConfiguration()
+    private var css: CssConfiguration? = null
+    private var properties: PropertiesConfiguration? = null
+    private var json: JsonConfiguration? = null
+    private var custom: CustomConfiguration? = null
 
     /** Customize CSS files configuration with Kotlin DSL. */
-    fun configureCss(action: Action<CssConfiguration>) = action(css)
+    fun useCss(action: (Action<CssConfiguration>)? = null) {
+        var config = css
+        if (config == null) {
+            config = CssConfiguration()
+            css = config
+        }
+        action?.invoke(config)
+    }
 
     /** Customize properties files configuration with Kotlin DSL. */
-    fun configureProperties(action: Action<PropertiesConfiguration>) = action(properties)
+    fun useProperties(action: (Action<PropertiesConfiguration>)? = null) {
+        var config = properties
+        if (config == null) {
+            config = PropertiesConfiguration()
+            properties = config
+        }
+        action?.invoke(config)
+    }
 
     /** Customize json files configuration with Kotlin DSL. */
-    fun configureJson(action: Action<JsonConfiguration>) = action(json)
+    fun useJson(action: (Action<JsonConfiguration>)? = null) {
+        var config = json
+        if (config == null) {
+            config = JsonConfiguration()
+            json = config
+        }
+        action?.invoke(config)
+    }
 
     /** Customize custom action with Kotlin DSL. */
-    fun configureCustom(
+    fun useCustom(
         configure: (CustomConfiguration).(
-            typeBuilder: TypeSpec.Builder,
-            file: File
+            file: File,
+            typeBuilder: TypeSpec.Builder
         ) -> Boolean
     ) {
-        custom.action = { typeBuilder, file ->
-            custom.configure(typeBuilder, file)
+        var config = custom
+        if (config == null) {
+            config = CustomConfiguration()
+            custom = config
+        }
+        config.action = { file, typeBuilder ->
+            config.configure(file, typeBuilder)
         }
     }
 
@@ -113,12 +138,15 @@ open class RTask : DefaultTask() {
             .addMethod(privateConstructor())
 
         logger.log(LogLevel.INFO, "Reading resources")
-        val readers =
-            arrayOf(CssConverter(css), JsonConverter(json), PropertiesConverter(properties))
+        val readers = listOfNotNull(
+            css?.let { CssAdapter(it) },
+            json?.let { JsonAdapter(it) },
+            properties?.let { PropertiesAdapter(it) }
+        ).toTypedArray()
         processDir(
-            custom.action?.let { readers + CustomConverter(it) } ?: readers,
-            DefaultConverter(resourcesDirectory.path),
-            DefaultConverter(resourcesDirectory.path, true),
+            custom?.action?.let { readers + CustomAdapter(it) } ?: readers,
+            DefaultAdapter(resourcesDirectory.path),
+            DefaultAdapter(resourcesDirectory.path, true),
             rClassBuilder,
             root
         )
@@ -131,9 +159,9 @@ open class RTask : DefaultTask() {
     }
 
     private fun processDir(
-        converters: Array<Converter>,
-        defaultConverter: Converter,
-        prefixedConverter: Converter,
+        adapters: Array<Adapter>,
+        defaultAdapter: Adapter,
+        prefixedAdapter: Adapter,
         typeBuilder: TypeSpec.Builder,
         dir: File
     ) {
@@ -144,20 +172,20 @@ open class RTask : DefaultTask() {
                     file.isDirectory -> {
                         val innerTypeBuilder = newTypeBuilder(file.name)
                         processDir(
-                            converters,
-                            defaultConverter,
-                            prefixedConverter,
+                            adapters,
+                            defaultAdapter,
+                            prefixedAdapter,
                             innerTypeBuilder,
                             file
                         )
                         typeBuilder.addType(innerTypeBuilder.build())
                     }
                     file.isFile -> {
-                        val prefixes = converters.map { it.convert(typeBuilder, file) }
+                        val prefixes = adapters.map { it.adapt(file, typeBuilder) }
                         when {
-                            prefixes.any { it } -> prefixedConverter
-                            else -> defaultConverter
-                        }.convert(typeBuilder, file)
+                            prefixes.any { it } -> prefixedAdapter
+                            else -> defaultAdapter
+                        }.adapt(file, typeBuilder)
                     }
                 }
             }

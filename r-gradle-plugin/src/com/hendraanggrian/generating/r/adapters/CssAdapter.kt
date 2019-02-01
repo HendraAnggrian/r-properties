@@ -1,4 +1,4 @@
-package com.hendraanggrian.generating.r.converters
+package com.hendraanggrian.generating.r.adapters
 
 import com.helger.css.ECSSVersion.CSS30
 import com.helger.css.reader.CSSReader.readFromFile
@@ -8,9 +8,9 @@ import com.squareup.javapoet.TypeSpec
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
 
-internal class CssConverter(private val configuration: CssConfiguration) : Converter {
+internal class CssAdapter(private val configuration: CssConfiguration) : Adapter {
 
-    override fun convert(typeBuilder: TypeSpec.Builder, file: File): Boolean {
+    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
         if (file.extension == "css") {
             val css = checkNotNull(readFromFile(file, UTF_8, CSS30)) {
                 "Error while reading css, please report"

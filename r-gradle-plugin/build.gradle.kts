@@ -20,7 +20,6 @@ gradlePlugin {
     }
 }
 
-
 val ktlint by configurations.registering
 
 dependencies {
@@ -41,7 +40,9 @@ tasks {
     register("deploy") {
         dependsOn("build")
         projectDir.resolve("build/libs")?.listFiles()?.forEach {
-            it.renameTo(File(rootDir.resolve("r-integration-tests"), it.name))
+            val outputFile = File(rootDir.resolve("r-integration-tests"), it.name)
+            if (outputFile.exists()) outputFile.delete()
+            it.renameTo(outputFile)
         }
     }
 

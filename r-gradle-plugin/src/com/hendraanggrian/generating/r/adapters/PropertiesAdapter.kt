@@ -1,4 +1,4 @@
-package com.hendraanggrian.generating.r.converters
+package com.hendraanggrian.generating.r.adapters
 
 import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
@@ -8,9 +8,9 @@ import com.squareup.javapoet.TypeSpec
 import java.io.File
 import java.util.Properties
 
-internal class PropertiesConverter(private val configuration: PropertiesConfiguration) : Converter {
+internal class PropertiesAdapter(private val configuration: PropertiesConfiguration) : Adapter {
 
-    override fun convert(typeBuilder: TypeSpec.Builder, file: File): Boolean {
+    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
         if (file.extension == "properties") {
             when {
                 configuration.readResourceBundle && file.isResourceBundle() -> {
