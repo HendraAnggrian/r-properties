@@ -2,11 +2,11 @@ package com.hendraanggrian.generating.r.configuration
 
 data class JsonConfiguration(
 
-    /** When set to true, will read child json and so on. */
+    /** When set to true, will convert child json and so on. */
     var isRecursive: Boolean = false,
 
     /**
-     * When set to true, will also read json array keys,
+     * When set to true, will also convert json array keys,
      * has no effect if not recursive.
      */
     var readArray: Boolean = true

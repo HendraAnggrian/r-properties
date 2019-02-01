@@ -1,15 +1,15 @@
-package com.hendraanggrian.generating.r.reader
+package com.hendraanggrian.generating.r.converters
 
 import com.hendraanggrian.generating.r.addStringField
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 
-internal class DefaultReader(
+internal class DefaultConverter(
     private val resourcesPath: String,
     private val usingPrefix: Boolean = false
-) : Reader {
+) : Converter {
 
-    override fun read(typeBuilder: TypeSpec.Builder, file: File): Boolean {
+    override fun convert(typeBuilder: TypeSpec.Builder, file: File): Boolean {
         typeBuilder.addStringField(
             when {
                 usingPrefix -> "${file.extension}_${file.nameWithoutExtension}"

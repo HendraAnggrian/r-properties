@@ -1,5 +1,5 @@
-const val VERSION_GRADLE = "5.1-rc-3"
-const val VERSION_KOTLIN = "1.3.11"
+const val VERSION_GRADLE = "5.1.1"
+const val VERSION_KOTLIN = "1.3.20"
 
 internal const val VERSION_PH_CSS = "6.1.1"
 internal const val VERSION_JSON_SIMPLE = "1.1.1"

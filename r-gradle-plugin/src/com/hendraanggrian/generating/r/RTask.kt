@@ -4,12 +4,12 @@ import com.hendraanggrian.generating.r.configuration.CssConfiguration
 import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
-import com.hendraanggrian.generating.r.reader.CssReader
-import com.hendraanggrian.generating.r.reader.CustomReader
-import com.hendraanggrian.generating.r.reader.DefaultReader
-import com.hendraanggrian.generating.r.reader.JsonReader
-import com.hendraanggrian.generating.r.reader.PropertiesReader
-import com.hendraanggrian.generating.r.reader.Reader
+import com.hendraanggrian.generating.r.converters.Converter
+import com.hendraanggrian.generating.r.converters.CssConverter
+import com.hendraanggrian.generating.r.converters.CustomConverter
+import com.hendraanggrian.generating.r.converters.DefaultConverter
+import com.hendraanggrian.generating.r.converters.JsonConverter
+import com.hendraanggrian.generating.r.converters.PropertiesConverter
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import org.gradle.api.Action
@@ -44,7 +44,7 @@ open class RTask : DefaultTask() {
     @Input var className: String = "R"
 
     /**
-     * Path of resources that will be read.
+     * Path of resources that will be convert.
      * Default is resources folder in main module.
      */
     @InputDirectory lateinit var resourcesDirectory: File
@@ -56,12 +56,14 @@ open class RTask : DefaultTask() {
     @InputFiles val exclusions: MutableCollection<File> = mutableSetOf()
 
     /** Exclude certain files and directories from generated R class. */
-    @InputFiles fun exclude(vararg files: File) {
+    @InputFiles
+    fun exclude(vararg files: File) {
         exclusions += files.map { resourcesDirectory.resolve(it) }
     }
 
     /** Exclude certain files and directories from generated R class. */
-    @InputFiles fun exclude(vararg files: String) {
+    @InputFiles
+    fun exclude(vararg files: String) {
         exclusions += files.map { resourcesDirectory.resolve(it) }
     }
 
@@ -111,11 +113,12 @@ open class RTask : DefaultTask() {
             .addMethod(privateConstructor())
 
         logger.log(LogLevel.INFO, "Reading resources")
-        val readers = arrayOf(CssReader(css), JsonReader(json), PropertiesReader(properties))
+        val readers =
+            arrayOf(CssConverter(css), JsonConverter(json), PropertiesConverter(properties))
         processDir(
-            custom.action?.let { readers + CustomReader(it) } ?: readers,
-            DefaultReader(resourcesDirectory.path),
-            DefaultReader(resourcesDirectory.path, true),
+            custom.action?.let { readers + CustomConverter(it) } ?: readers,
+            DefaultConverter(resourcesDirectory.path),
+            DefaultConverter(resourcesDirectory.path, true),
             rClassBuilder,
             root
         )
@@ -128,9 +131,9 @@ open class RTask : DefaultTask() {
     }
 
     private fun processDir(
-        readers: Array<Reader>,
-        defaultReader: Reader,
-        prefixedReader: Reader,
+        converters: Array<Converter>,
+        defaultConverter: Converter,
+        prefixedConverter: Converter,
         typeBuilder: TypeSpec.Builder,
         dir: File
     ) {
@@ -140,15 +143,21 @@ open class RTask : DefaultTask() {
                 when {
                     file.isDirectory -> {
                         val innerTypeBuilder = newTypeBuilder(file.name)
-                        processDir(readers, defaultReader, prefixedReader, innerTypeBuilder, file)
+                        processDir(
+                            converters,
+                            defaultConverter,
+                            prefixedConverter,
+                            innerTypeBuilder,
+                            file
+                        )
                         typeBuilder.addType(innerTypeBuilder.build())
                     }
                     file.isFile -> {
-                        val prefixes = readers.map { it.read(typeBuilder, file) }
+                        val prefixes = converters.map { it.convert(typeBuilder, file) }
                         when {
-                            prefixes.any { it } -> prefixedReader
-                            else -> defaultReader
-                        }.read(typeBuilder, file)
+                            prefixes.any { it } -> prefixedConverter
+                            else -> defaultConverter
+                        }.convert(typeBuilder, file)
                     }
                 }
             }
