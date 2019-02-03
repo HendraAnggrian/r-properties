@@ -61,9 +61,10 @@ class RPlugin : Plugin<Project> {
         val providedR by project.configurations.registering {
             dependencies += project.dependencies.create(compiledClasses)
         }
+        val providedRConfig by providedR
         project.extensions
             .getByName<IdeaModel>("idea")
             .module
-            .scopes["PROVIDED"]!!["plus"]!! += providedR.get()
+            .scopes["PROVIDED"]!!["plus"]!! += arrayOf(providedRConfig)
     }
 }

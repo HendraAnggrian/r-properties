@@ -75,6 +75,7 @@ open class RTask : DefaultTask() {
     private var custom: CustomConfiguration? = null
 
     /** Customize CSS files configuration with Kotlin DSL. */
+    @JvmOverloads
     fun useCss(action: (Action<CssConfiguration>)? = null) {
         var config = css
         if (config == null) {
@@ -85,6 +86,7 @@ open class RTask : DefaultTask() {
     }
 
     /** Customize properties files configuration with Kotlin DSL. */
+    @JvmOverloads
     fun useProperties(action: (Action<PropertiesConfiguration>)? = null) {
         var config = properties
         if (config == null) {
@@ -95,6 +97,7 @@ open class RTask : DefaultTask() {
     }
 
     /** Customize json files configuration with Kotlin DSL. */
+    @JvmOverloads
     fun useJson(action: (Action<JsonConfiguration>)? = null) {
         var config = json
         if (config == null) {
