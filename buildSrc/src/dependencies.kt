@@ -4,7 +4,7 @@ import org.gradle.plugin.use.PluginDependenciesSpec
 fun DependencyHandler.javapoet() = "com.squareup:javapoet:$VERSION_JAVAPOET"
 
 fun DependencyHandler.dokka() = "org.jetbrains.dokka:dokka-gradle-plugin:$VERSION_DOKKA"
-inline val PluginDependenciesSpec.dokka get() = id("org.jetbrains.dokka")
+fun PluginDependenciesSpec.dokka() = id("org.jetbrains.dokka")
 
 fun DependencyHandler.bintray() = "com.jfrog.bintray.gradle:gradle-bintray-plugin:$VERSION_BINTRAY"
 inline val PluginDependenciesSpec.bintray get() = id("com.jfrog.bintray")

@@ -5,8 +5,7 @@
 
 R Gradle Plugin
 ===============
-Generate Android-like `R` class on any JVM projects.
-Currently only supported with <b>IntelliJ IDEA</b>.
+Generate Android-like `R` class on any JVM projects. Currently only supported with <b>IntelliJ IDEA</b>.
 
 ```java
 /**

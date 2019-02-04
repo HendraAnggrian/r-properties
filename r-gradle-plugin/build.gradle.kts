@@ -1,7 +1,7 @@
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
-    dokka
+    dokka()
     bintray
     `bintray-release`
 }
@@ -40,7 +40,7 @@ tasks {
     register("deploy") {
         dependsOn("build")
         projectDir.resolve("build/libs")?.listFiles()?.forEach {
-            val outputFile = File(rootDir.resolve("r-integration-tests"), it.name)
+            val outputFile = File(rootDir.resolve("integration-tests"), it.name)
             if (outputFile.exists()) outputFile.delete()
             it.renameTo(outputFile)
         }

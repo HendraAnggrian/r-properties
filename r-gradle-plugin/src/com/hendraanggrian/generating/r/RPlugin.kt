@@ -4,7 +4,6 @@ package com.hendraanggrian.generating.r
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.Configuration
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.getByName
@@ -60,7 +59,6 @@ class RPlugin : Plugin<Project> {
         require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied" }
 
         val providedR by project.configurations.registering {
-            val a: Configuration = this
             dependencies += project.dependencies.create(compiledClasses)
         }
         val providedRConfig by providedR

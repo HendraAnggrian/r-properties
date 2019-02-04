@@ -33,17 +33,18 @@ open class RTask : DefaultTask() {
 
     /**
      * Package name of which R class will be generated to.
-     * Default is project group.
+     * Default is project group, may be modified but cannot be null.
      */
     @Input var packageName: String = ""
 
     /**
      * Class name of R.
+     * Default is `R`, may be modified but cannot be null.
      */
     @Input var className: String = "R"
 
     /**
-     * Path of resources that will be convert.
+     * Main resources directory.
      * Default is resources folder in main module.
      */
     @InputDirectory lateinit var resourcesDirectory: File
@@ -129,14 +130,17 @@ open class RTask : DefaultTask() {
     @Throws(IOException::class)
     @Suppress("unused")
     fun generate() {
+        logger.log(LogLevel.INFO, "Checking requirements")
+        require(packageName.isNotBlank()) { "Package name cannot be null" }
+        require(className.isNotBlank()) { "Class name cannot be null" }
         val resourcesDir = project.projectDir.resolve(resourcesDirectory)
-        requireNotNull(resourcesDir) { "Resources folder not found" }
+        require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
 
         logger.log(LogLevel.INFO, "Deleting old $className")
         outputDirectory.deleteRecursively()
         outputDirectory.mkdirs()
 
-        val rClassBuilder = TypeSpec.classBuilder(className)
+        val classBuilder = TypeSpec.classBuilder(className)
             .addModifiers(PUBLIC, FINAL)
             .addMethod(privateConstructor())
 
@@ -150,12 +154,12 @@ open class RTask : DefaultTask() {
             custom?.action?.let { readers + CustomAdapter(it) } ?: readers,
             DefaultAdapter(resourcesDirectory.path),
             DefaultAdapter(resourcesDirectory.path, true),
-            rClassBuilder,
+            classBuilder,
             resourcesDir
         )
 
         logger.log(LogLevel.INFO, "Writing new $className")
-        JavaFile.builder(packageName, rClassBuilder.build())
+        JavaFile.builder(packageName, classBuilder.build())
             .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             .build()
             .writeTo(outputDirectory)
@@ -166,9 +170,9 @@ open class RTask : DefaultTask() {
         defaultAdapter: Adapter,
         prefixedAdapter: Adapter,
         typeBuilder: TypeSpec.Builder,
-        dir: File
+        resourcesDir:File
     ) {
-        dir.listFiles()
+        resourcesDir.listFiles()
             .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
             .forEach { file ->
                 when {
