@@ -4,6 +4,7 @@ package com.hendraanggrian.generating.r
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.artifacts.Configuration
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.getByName
@@ -17,23 +18,23 @@ import org.gradle.plugins.ide.idea.model.IdeaModel
 /** Generate Android-like R class with this plugin. */
 class RPlugin : Plugin<Project> {
 
-    companion object {
+    private companion object {
         const val GROUP_NAME = "r"
+        const val GENERATED_DIR = "generated/r"
     }
 
     override fun apply(project: Project) {
         val generateR by project.tasks.registering(RTask::class) {
             group = GROUP_NAME
             resourcesDirectory = project.projectDir.resolve("src/main/resources")
-            outputDirectory = project.buildDir.resolve("generated/r/src/main")
+            outputDirectory = project.buildDir.resolve("$GENERATED_DIR/src/main")
         }
         val generateRTask by generateR
+
         // project group will return correct name after evaluated
         project.afterEvaluate {
-            generateR {
-                if (packageName.isEmpty()) {
-                    packageName = project.group.toString()
-                }
+            if (generateRTask.packageName.isEmpty()) {
+                generateRTask.packageName = project.group.toString()
             }
         }
 
@@ -41,7 +42,7 @@ class RPlugin : Plugin<Project> {
             dependsOn(generateRTask)
             group = GROUP_NAME
             classpath = project.files()
-            destinationDir = project.buildDir.resolve("generated/r/classes/main")
+            destinationDir = project.buildDir.resolve("$GENERATED_DIR/classes/main")
             source(generateRTask.outputDirectory)
         }
         val compileRTask by compileR
@@ -59,12 +60,14 @@ class RPlugin : Plugin<Project> {
         require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied" }
 
         val providedR by project.configurations.registering {
+            val a: Configuration = this
             dependencies += project.dependencies.create(compiledClasses)
         }
         val providedRConfig by providedR
+
         project.extensions
             .getByName<IdeaModel>("idea")
             .module
-            .scopes["PROVIDED"]!!["plus"]!! += arrayOf(providedRConfig)
+            .scopes["PROVIDED"]!!["plus"]!! += providedRConfig
     }
 }

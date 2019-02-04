@@ -129,8 +129,8 @@ open class RTask : DefaultTask() {
     @Throws(IOException::class)
     @Suppress("unused")
     fun generate() {
-        val root = project.projectDir.resolve(resourcesDirectory)
-        requireNotNull(root) { "Resources folder not found" }
+        val resourcesDir = project.projectDir.resolve(resourcesDirectory)
+        requireNotNull(resourcesDir) { "Resources folder not found" }
 
         logger.log(LogLevel.INFO, "Deleting old $className")
         outputDirectory.deleteRecursively()
@@ -151,7 +151,7 @@ open class RTask : DefaultTask() {
             DefaultAdapter(resourcesDirectory.path),
             DefaultAdapter(resourcesDirectory.path, true),
             rClassBuilder,
-            root
+            resourcesDir
         )
 
         logger.log(LogLevel.INFO, "Writing new $className")

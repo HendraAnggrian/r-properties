@@ -7,8 +7,8 @@ public class RTest {
 
     @Test
     public void test() {
-        assertEquals("my.file", R.custom.my_file);
+        assertEquals("my.file", R.custom.my);
 
-        assertEquals("/custom/my.file", R.custom.file_my);
+        assertEquals("/custom/my.file", R.custom.my);
     }
 }
