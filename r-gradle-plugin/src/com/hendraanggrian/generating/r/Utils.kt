@@ -1,11 +1,10 @@
 package com.hendraanggrian.generating.r
 
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.buildTypeSpec
 import java.io.File
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.Modifier.FINAL
-import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.Modifier.STATIC
 
@@ -23,21 +22,21 @@ internal fun String.normalize(): String = normalizeSymbols()
     .replace("\\s+".toRegex(), " ")
     .trim()
 
-internal fun privateConstructor(): MethodSpec = MethodSpec.constructorBuilder().addModifiers(PRIVATE).build()
+internal fun buildInnerTypeSpec(name: String): TypeSpecBuilder = buildTypeSpec(name) {
+    modifiers(PUBLIC, STATIC, FINAL)
+    constructor {
+        modifiers(Modifier.PRIVATE)
+    }
+}
 
-internal fun newTypeBuilder(name: String): TypeSpec.Builder = TypeSpec.classBuilder(name.normalize())
-    .addModifiers(PUBLIC, STATIC, FINAL)
-    .addMethod(privateConstructor())
-
-internal fun TypeSpec.Builder.addStringField(name: String, value: String) {
+internal fun TypeSpecBuilder.stringField(name: String, value: String) {
     val normalizedName = name.normalize()
     if (normalizedName != "_" && // Java SE 9 no longer supports this field name
         normalizedName !in build().fieldSpecs.map { it.name } // checks for duplicate
     ) {
-        addField(
-            FieldSpec.builder(String::class.java, normalizedName, PUBLIC, STATIC, FINAL)
-                .initializer("\$S", value)
-                .build()
-        )
+        field(String::class.java, normalizedName) {
+            modifiers(PUBLIC, STATIC, FINAL)
+            initializer("\$S", value)
+        }
     }
 }

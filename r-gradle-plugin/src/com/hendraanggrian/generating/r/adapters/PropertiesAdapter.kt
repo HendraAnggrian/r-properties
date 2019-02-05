@@ -1,28 +1,28 @@
 package com.hendraanggrian.generating.r.adapters
 
-import com.hendraanggrian.generating.r.addStringField
+import com.hendraanggrian.generating.r.buildInnerTypeSpec
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.generating.r.isValid
-import com.hendraanggrian.generating.r.newTypeBuilder
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 import java.util.Properties
 
 internal class PropertiesAdapter(private val configuration: PropertiesConfiguration) : Adapter {
 
-    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
+    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
         if (file.extension == "properties") {
             when {
                 configuration.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
-                    if (className !in typeBuilder.build().typeSpecs.map { it.name }) {
-                        val innerTypeBuilder = newTypeBuilder(className)
+                    if (className !in builder.build().typeSpecs.map { it.name }) {
+                        val innerTypeBuilder = buildInnerTypeSpec(file.name)
                         process(innerTypeBuilder, file)
-                        typeBuilder.addType(innerTypeBuilder.build())
+                        builder.nativeBuilder.addType(innerTypeBuilder.build())
                     }
                 }
                 else -> {
-                    process(typeBuilder, file)
+                    process(builder, file)
                     return true
                 }
             }
@@ -30,9 +30,9 @@ internal class PropertiesAdapter(private val configuration: PropertiesConfigurat
         return false
     }
 
-    private fun process(typeBuilder: TypeSpec.Builder, file: File) =
+    private fun process(builder: TypeSpecBuilder, file: File) =
         file.forEachProperties { key, _ ->
-            typeBuilder.addStringField(key, key)
+            builder.stringField(key, key)
         }
 
     private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->

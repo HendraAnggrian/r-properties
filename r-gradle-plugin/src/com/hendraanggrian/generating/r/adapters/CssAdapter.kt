@@ -2,15 +2,15 @@ package com.hendraanggrian.generating.r.adapters
 
 import com.helger.css.ECSSVersion.CSS30
 import com.helger.css.reader.CSSReader.readFromFile
-import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.CssConfiguration
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
 
 internal class CssAdapter(private val configuration: CssConfiguration) : Adapter {
 
-    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
+    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
         if (file.extension == "css") {
             val css = checkNotNull(readFromFile(file, UTF_8, CSS30)) {
                 "Error while reading css, please report"
@@ -22,7 +22,7 @@ internal class CssAdapter(private val configuration: CssConfiguration) : Adapter
                     if (configuration.isJavaFx) {
                         styleName = styleName.toFxCssName()
                     }
-                    typeBuilder.addStringField(styleName, styleName)
+                    builder.stringField(styleName, styleName)
                 }
             }
             return true

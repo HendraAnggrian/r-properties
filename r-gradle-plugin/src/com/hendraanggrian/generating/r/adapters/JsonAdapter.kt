@@ -1,8 +1,8 @@
 package com.hendraanggrian.generating.r.adapters
 
-import com.hendraanggrian.generating.r.addStringField
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
@@ -13,7 +13,7 @@ internal class JsonAdapter(private val configuration: JsonConfiguration) : Adapt
 
     var parserRef = WeakReference<JSONParser>(null)
 
-    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
+    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()
@@ -22,7 +22,7 @@ internal class JsonAdapter(private val configuration: JsonConfiguration) : Adapt
                     parserRef = WeakReference(parser)
                 }
                 (parser.parse(reader) as JSONObject).forEachKey { key ->
-                    typeBuilder.addStringField(key, key)
+                    builder.stringField(key, key)
                 }
                 return true
             }

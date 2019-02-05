@@ -1,7 +1,7 @@
 package com.hendraanggrian.generating.r.adapters
 
-import com.hendraanggrian.generating.r.addStringField
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 
 internal class DefaultAdapter(
@@ -9,8 +9,8 @@ internal class DefaultAdapter(
     private val usingPrefix: Boolean = false
 ) : Adapter {
 
-    override fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean {
-        typeBuilder.addStringField(
+    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
+        builder.stringField(
             when {
                 usingPrefix -> "${file.extension}_${file.nameWithoutExtension}"
                 else -> file.nameWithoutExtension

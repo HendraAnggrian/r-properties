@@ -2,16 +2,15 @@ package com.hendraanggrian.generating.r
 
 import com.hendraanggrian.generating.r.adapters.Adapter
 import com.hendraanggrian.generating.r.adapters.CssAdapter
-import com.hendraanggrian.generating.r.adapters.CustomAdapter
 import com.hendraanggrian.generating.r.adapters.DefaultAdapter
 import com.hendraanggrian.generating.r.adapters.JsonAdapter
 import com.hendraanggrian.generating.r.adapters.PropertiesAdapter
 import com.hendraanggrian.generating.r.configuration.CssConfiguration
-import com.hendraanggrian.generating.r.configuration.CustomConfiguration
 import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
-import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.javapoet.buildTypeSpec
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
@@ -26,6 +25,7 @@ import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
 import javax.lang.model.element.Modifier.FINAL
+import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
 
 /** R class generation task. */
@@ -73,7 +73,6 @@ open class RTask : DefaultTask() {
     private var css: CssConfiguration? = null
     private var properties: PropertiesConfiguration? = null
     private var json: JsonConfiguration? = null
-    private var custom: CustomConfiguration? = null
 
     /** Customize CSS files configuration with Kotlin DSL. */
     @JvmOverloads
@@ -108,23 +107,6 @@ open class RTask : DefaultTask() {
         action?.invoke(config)
     }
 
-    /** Customize custom action with Kotlin DSL. */
-    fun useCustom(
-        configure: (CustomConfiguration).(
-            file: File,
-            typeBuilder: TypeSpec.Builder
-        ) -> Boolean
-    ) {
-        var config = custom
-        if (config == null) {
-            config = CustomConfiguration()
-            custom = config
-        }
-        config.action = { file, typeBuilder ->
-            config.configure(file, typeBuilder)
-        }
-    }
-
     /** Generate R class given provided options. */
     @TaskAction
     @Throws(IOException::class)
@@ -140,55 +122,62 @@ open class RTask : DefaultTask() {
         outputDirectory.deleteRecursively()
         outputDirectory.mkdirs()
 
-        val classBuilder = TypeSpec.classBuilder(className)
-            .addModifiers(PUBLIC, FINAL)
-            .addMethod(privateConstructor())
+        val typeBuilder = buildTypeSpec(className) {
+            modifiers(PUBLIC, FINAL)
+            constructor {
+                modifiers(PRIVATE)
+            }
+        }
 
         logger.log(LogLevel.INFO, "Reading resources")
-        val readers = listOfNotNull(
-            css?.let { CssAdapter(it) },
-            json?.let { JsonAdapter(it) },
-            properties?.let { PropertiesAdapter(it) }
-        ).toTypedArray()
         processDir(
-            custom?.action?.let { readers + CustomAdapter(it) } ?: readers,
+            listOfNotNull(
+                css?.let { CssAdapter(it) },
+                json?.let { JsonAdapter(it) },
+                properties?.let { PropertiesAdapter(it) }
+            ).toTypedArray(),
             DefaultAdapter(resourcesDirectory.path),
             DefaultAdapter(resourcesDirectory.path, true),
-            classBuilder,
+            typeBuilder,
             resourcesDir
         )
 
         logger.log(LogLevel.INFO, "Writing new $className")
-        JavaFile.builder(packageName, classBuilder.build())
-            .addFileComment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
-            .build()
-            .writeTo(outputDirectory)
+        buildJavaFile(packageName) {
+            comment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
+            type(className) {
+                modifiers(PUBLIC, FINAL)
+                constructor {
+                    modifiers(PRIVATE)
+                }
+            }
+        }.writeTo(outputDirectory)
     }
 
     private fun processDir(
-        adapters: Array<Adapter>,
+        optionalAdapters: Array<Adapter>,
         defaultAdapter: Adapter,
         prefixedAdapter: Adapter,
-        typeBuilder: TypeSpec.Builder,
-        resourcesDir:File
+        typeBuilder: TypeSpecBuilder,
+        resourcesDir: File
     ) {
         resourcesDir.listFiles()
             .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
             .forEach { file ->
                 when {
                     file.isDirectory -> {
-                        val innerTypeBuilder = newTypeBuilder(file.name)
+                        val innerTypeBuilder = buildInnerTypeSpec(file.name)
                         processDir(
-                            adapters,
+                            optionalAdapters,
                             defaultAdapter,
                             prefixedAdapter,
                             innerTypeBuilder,
                             file
                         )
-                        typeBuilder.addType(innerTypeBuilder.build())
+                        typeBuilder.nativeBuilder.addType(innerTypeBuilder.build())
                     }
                     file.isFile -> {
-                        val prefixes = adapters.map { it.adapt(file, typeBuilder) }
+                        val prefixes = optionalAdapters.map { it.adapt(file, typeBuilder) }
                         when {
                             prefixes.any { it } -> prefixedAdapter
                             else -> defaultAdapter

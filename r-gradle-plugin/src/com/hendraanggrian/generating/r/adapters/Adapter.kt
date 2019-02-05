@@ -1,9 +1,9 @@
 package com.hendraanggrian.generating.r.adapters
 
-import com.squareup.javapoet.TypeSpec
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 
 internal interface Adapter {
 
-    fun adapt(file: File, typeBuilder: TypeSpec.Builder): Boolean
+    fun adapt(file: File, builder: TypeSpecBuilder): Boolean
 }

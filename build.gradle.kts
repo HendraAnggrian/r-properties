@@ -14,6 +14,7 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+        maven("https://dl.bintray.com/hendraanggrian/maven")
     }
     tasks.withType<Delete> {
         delete(projectDir.resolve("out"))

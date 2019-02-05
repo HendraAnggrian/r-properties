@@ -24,7 +24,7 @@ val ktlint by configurations.registering
 
 dependencies {
     compile(kotlin("stdlib", VERSION_KOTLIN))
-    compile(javapoet())
+    compile(hendraanggrian("javapoet-dsl", "0.1"))
     compile(phCss())
     compile(jsonSimple())
 
