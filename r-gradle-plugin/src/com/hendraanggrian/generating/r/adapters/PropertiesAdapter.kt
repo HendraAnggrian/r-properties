@@ -1,12 +1,13 @@
 package com.hendraanggrian.generating.r.adapters
 
-import com.hendraanggrian.generating.r.buildInnerTypeSpec
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.generating.r.isValid
 import com.hendraanggrian.generating.r.stringField
 import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.buildTypeSpec
 import java.io.File
 import java.util.Properties
+import javax.lang.model.element.Modifier
 
 internal class PropertiesAdapter(private val configuration: PropertiesConfiguration) : Adapter {
 
@@ -16,7 +17,12 @@ internal class PropertiesAdapter(private val configuration: PropertiesConfigurat
                 configuration.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in builder.build().typeSpecs.map { it.name }) {
-                        val innerTypeBuilder = buildInnerTypeSpec(file.name)
+                        val innerTypeBuilder = buildTypeSpec(file.name) {
+                            modifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            constructor {
+                                modifiers(Modifier.PRIVATE)
+                            }
+                        }
                         process(innerTypeBuilder, file)
                         builder.nativeBuilder.addType(innerTypeBuilder.build())
                     }

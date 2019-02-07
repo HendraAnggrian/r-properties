@@ -1,9 +1,7 @@
 package com.hendraanggrian.generating.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.javapoet.buildTypeSpec
 import java.io.File
-import javax.lang.model.element.Modifier
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PUBLIC
 import javax.lang.model.element.Modifier.STATIC
@@ -21,13 +19,6 @@ internal fun File.isValid(): Boolean = !isHidden && name.isNotEmpty() && name.fi
 internal fun String.normalize(): String = normalizeSymbols()
     .replace("\\s+".toRegex(), " ")
     .trim()
-
-internal fun buildInnerTypeSpec(name: String): TypeSpecBuilder = buildTypeSpec(name) {
-    modifiers(PUBLIC, STATIC, FINAL)
-    constructor {
-        modifiers(Modifier.PRIVATE)
-    }
-}
 
 internal fun TypeSpecBuilder.stringField(name: String, value: String) {
     val normalizedName = name.normalize()

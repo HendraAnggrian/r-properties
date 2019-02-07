@@ -10,7 +10,6 @@ import com.hendraanggrian.generating.r.configuration.JsonConfiguration
 import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.buildTypeSpec
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
@@ -24,6 +23,7 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
+import javax.lang.model.element.Modifier
 import javax.lang.model.element.Modifier.FINAL
 import javax.lang.model.element.Modifier.PRIVATE
 import javax.lang.model.element.Modifier.PUBLIC
@@ -122,43 +122,34 @@ open class RTask : DefaultTask() {
         outputDirectory.deleteRecursively()
         outputDirectory.mkdirs()
 
-        val typeBuilder = buildTypeSpec(className) {
-            modifiers(PUBLIC, FINAL)
-            constructor {
-                modifiers(PRIVATE)
-            }
-        }
-
-        logger.log(LogLevel.INFO, "Reading resources")
-        processDir(
-            listOfNotNull(
-                css?.let { CssAdapter(it) },
-                json?.let { JsonAdapter(it) },
-                properties?.let { PropertiesAdapter(it) }
-            ).toTypedArray(),
-            DefaultAdapter(resourcesDirectory.path),
-            DefaultAdapter(resourcesDirectory.path, true),
-            typeBuilder,
-            resourcesDir
-        )
-
-        logger.log(LogLevel.INFO, "Writing new $className")
-        buildJavaFile(packageName) {
+        val javaFile = buildJavaFile(packageName) {
             comment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             type(className) {
                 modifiers(PUBLIC, FINAL)
                 constructor {
                     modifiers(PRIVATE)
                 }
+                logger.log(LogLevel.INFO, "Reading resources")
+                processDir(
+                    listOfNotNull(
+                        css?.let { CssAdapter(it) },
+                        json?.let { JsonAdapter(it) },
+                        properties?.let { PropertiesAdapter(it) }
+                    ).toTypedArray(),
+                    DefaultAdapter(resourcesDirectory.path),
+                    DefaultAdapter(resourcesDirectory.path, true),
+                    resourcesDir
+                )
             }
-        }.writeTo(outputDirectory)
+        }
+        logger.log(LogLevel.INFO, "Writing new $className")
+        javaFile.writeTo(outputDirectory)
     }
 
-    private fun processDir(
+    private fun TypeSpecBuilder.processDir(
         optionalAdapters: Array<Adapter>,
         defaultAdapter: Adapter,
         prefixedAdapter: Adapter,
-        typeBuilder: TypeSpecBuilder,
         resourcesDir: File
     ) {
         resourcesDir.listFiles()
@@ -166,22 +157,25 @@ open class RTask : DefaultTask() {
             .forEach { file ->
                 when {
                     file.isDirectory -> {
-                        val innerTypeBuilder = buildInnerTypeSpec(file.name)
-                        processDir(
-                            optionalAdapters,
-                            defaultAdapter,
-                            prefixedAdapter,
-                            innerTypeBuilder,
-                            file
-                        )
-                        typeBuilder.nativeBuilder.addType(innerTypeBuilder.build())
+                        type(file.name) {
+                            modifiers(Modifier.PUBLIC, Modifier.STATIC, FINAL)
+                            constructor {
+                                modifiers(Modifier.PRIVATE)
+                            }
+                            processDir(
+                                optionalAdapters,
+                                defaultAdapter,
+                                prefixedAdapter,
+                                file
+                            )
+                        }
                     }
                     file.isFile -> {
-                        val prefixes = optionalAdapters.map { it.adapt(file, typeBuilder) }
+                        val prefixes = optionalAdapters.map { it.adapt(file, this) }
                         when {
                             prefixes.any { it } -> prefixedAdapter
                             else -> defaultAdapter
-                        }.adapt(file, typeBuilder)
+                        }.adapt(file, this)
                     }
                 }
             }
