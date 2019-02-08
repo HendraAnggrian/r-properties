@@ -4,7 +4,6 @@ import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.generating.r.isValid
 import com.hendraanggrian.generating.r.stringField
 import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.javapoet.buildTypeSpec
 import java.io.File
 import java.util.Properties
 import javax.lang.model.element.Modifier
@@ -17,18 +16,17 @@ internal class PropertiesAdapter(private val configuration: PropertiesConfigurat
                 configuration.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in builder.build().typeSpecs.map { it.name }) {
-                        val innerTypeBuilder = buildTypeSpec(file.name) {
+                        builder.type(file.name) {
                             modifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             constructor {
                                 modifiers(Modifier.PRIVATE)
                             }
+                            process(file)
                         }
-                        process(innerTypeBuilder, file)
-                        builder.nativeBuilder.addType(innerTypeBuilder.build())
                     }
                 }
                 else -> {
-                    process(builder, file)
+                    builder.process(file)
                     return true
                 }
             }
@@ -36,10 +34,7 @@ internal class PropertiesAdapter(private val configuration: PropertiesConfigurat
         return false
     }
 
-    private fun process(builder: TypeSpecBuilder, file: File) =
-        file.forEachProperties { key, _ ->
-            builder.stringField(key, key)
-        }
+    private fun TypeSpecBuilder.process(file: File) = file.forEachProperties { key, _ -> stringField(key, key) }
 
     private fun File.forEachProperties(action: (key: String, value: String) -> Unit) = inputStream().use { stream ->
         Properties().run {

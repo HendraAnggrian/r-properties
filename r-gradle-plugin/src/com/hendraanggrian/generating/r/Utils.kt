@@ -2,9 +2,7 @@ package com.hendraanggrian.generating.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
-import javax.lang.model.element.Modifier.FINAL
-import javax.lang.model.element.Modifier.PUBLIC
-import javax.lang.model.element.Modifier.STATIC
+import javax.lang.model.element.Modifier
 
 private fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
 
@@ -25,8 +23,8 @@ internal fun TypeSpecBuilder.stringField(name: String, value: String) {
     if (normalizedName != "_" && // Java SE 9 no longer supports this field name
         normalizedName !in build().fieldSpecs.map { it.name } // checks for duplicate
     ) {
-        field(String::class.java, normalizedName) {
-            modifiers(PUBLIC, STATIC, FINAL)
+        field<String>(normalizedName) {
+            modifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
             initializer("\$S", value)
         }
     }
