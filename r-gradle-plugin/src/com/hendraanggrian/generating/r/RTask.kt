@@ -157,7 +157,7 @@ open class RTask : DefaultTask() {
             .forEach { file ->
                 when {
                     file.isDirectory -> {
-                        type(file.name) {
+                        type(file.name.normalize()) {
                             modifiers(Modifier.PUBLIC, Modifier.STATIC, FINAL)
                             constructor {
                                 modifiers(Modifier.PRIVATE)

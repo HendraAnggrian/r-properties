@@ -4,7 +4,7 @@ import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 import javax.lang.model.element.Modifier
 
-private fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
+internal fun Char.isSymbol(): Boolean = !isDigit() && !isLetter() && !isWhitespace()
 
 private fun String.normalizeSymbols(): String {
     var s = ""

@@ -16,7 +16,7 @@ internal class PropertiesAdapter(private val configuration: PropertiesConfigurat
                 configuration.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in builder.build().typeSpecs.map { it.name }) {
-                        builder.type(file.name) {
+                        builder.type(className) {
                             modifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             constructor {
                                 modifiers(Modifier.PRIVATE)

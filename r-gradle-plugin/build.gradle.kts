@@ -9,7 +9,14 @@ plugins {
 group = RELEASE_GROUP
 version = RELEASE_VERSION
 
-sourceSets["main"].java.srcDir("src")
+sourceSets {
+    getByName("main") {
+        java.srcDir("src")
+    }
+    getByName("test") {
+        java.srcDir("tests/src")
+    }
+}
 
 gradlePlugin {
     (plugins) {
@@ -23,10 +30,10 @@ gradlePlugin {
 val ktlint by configurations.registering
 
 dependencies {
-    compile(kotlin("stdlib", VERSION_KOTLIN))
-    compile(hendraanggrian("javapoet-dsl", "0.2-rc1"))
-    compile(phCss())
-    compile(jsonSimple())
+    implementation(kotlin("stdlib", VERSION_KOTLIN))
+    implementation(hendraanggrian("javapoet-dsl", "0.2-rc1"))
+    implementation(phCss())
+    implementation(jsonSimple())
 
     testImplementation(kotlin("test", VERSION_KOTLIN))
     testImplementation(junit())
