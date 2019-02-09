@@ -8,7 +8,7 @@
 <a href="../../index.html">r-gradle-plugin</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.generating.r.configuration</a>&nbsp;/&nbsp;<a href="./index.html">JsonConfiguration</a><br/>
 <br/>
 <h1>JsonConfiguration</h1>
-<code><span class="keyword">data</span> <span class="keyword">class </span><span class="identifier">JsonConfiguration</span></code>
+<code><span class="keyword">class </span><span class="identifier">JsonConfiguration</span></code>
 <h3>Constructors</h3>
 <table>
 <tbody>
@@ -17,7 +17,7 @@
 <p><a href="-init-.html">&lt;init&gt;</a></p>
 </td>
 <td>
-<code><span class="identifier">JsonConfiguration</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.configuration.JsonConfiguration$<init>(kotlin.Boolean, kotlin.Boolean)/isRecursive">isRecursive</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;false<span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.generating.r.configuration.JsonConfiguration$<init>(kotlin.Boolean, kotlin.Boolean)/readArray">readArray</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a>&nbsp;<span class="symbol">=</span>&nbsp;true<span class="symbol">)</span></code></td>
+<code><span class="identifier">JsonConfiguration</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -30,7 +30,7 @@
 </td>
 <td>
 <code><span class="keyword">var </span><span class="identifier">isRecursive</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
-<p>When set to true, will read child json and so on.</p>
+<p>When set to true, will convert child json and so on.</p>
 </td>
 </tr>
 <tr>
@@ -39,7 +39,7 @@
 </td>
 <td>
 <code><span class="keyword">var </span><span class="identifier">readArray</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
-<p>When set to true, will also read json array keys,
+<p>When set to true, will also convert json array keys,
 has no effect if not recursive.</p>
 </td>
 </tr>

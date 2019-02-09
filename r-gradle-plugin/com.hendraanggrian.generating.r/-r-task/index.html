@@ -33,7 +33,8 @@
 </td>
 <td>
 <code><span class="keyword">var </span><span class="identifier">className</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
-<p>Class name of R.</p>
+<p>Class name of R.
+Default is <code>R</code>, may be modified but cannot be null.</p>
 </td>
 </tr>
 <tr>
@@ -62,7 +63,7 @@ Default is empty.</p>
 <td>
 <code><span class="keyword">var </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
 <p>Package name of which R class will be generated to.
-Default is project group.</p>
+Default is project group, may be modified but cannot be null.</p>
 </td>
 </tr>
 <tr>
@@ -71,7 +72,7 @@ Default is project group.</p>
 </td>
 <td>
 <code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">resourcesDirectory</span><span class="symbol">: </span><a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
-<p>Path of resources that will be read.
+<p>Main resources directory.
 Default is resources folder in main module.</p>
 </td>
 </tr>
@@ -80,42 +81,6 @@ Default is resources folder in main module.</p>
 <h3>Functions</h3>
 <table>
 <tbody>
-<tr>
-<td>
-<p><a href="configure-css.html">configureCss</a></p>
-</td>
-<td>
-<code><span class="keyword">fun </span><span class="identifier">configureCss</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$configureCss(org.gradle.api.Action((com.hendraanggrian.generating.r.configuration.CssConfiguration)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.generating.r.configuration/-css-configuration/index.html"><span class="identifier">CssConfiguration</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Customize CSS files configuration with Kotlin DSL.</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="configure-custom.html">configureCustom</a></p>
-</td>
-<td>
-<code><span class="keyword">fun </span><span class="identifier">configureCustom</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$configureCustom(kotlin.Function3((com.hendraanggrian.generating.r.configuration.CustomConfiguration, com.squareup.javapoet.TypeSpec.Builder, java.io.File, kotlin.Boolean)))/configure">configure</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.generating.r.configuration/-custom-configuration/index.html"><span class="identifier">CustomConfiguration</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="identifier">typeBuilder</span><span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">,</span>&nbsp;<span class="identifier">file</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Customize custom action with Kotlin DSL.</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="configure-json.html">configureJson</a></p>
-</td>
-<td>
-<code><span class="keyword">fun </span><span class="identifier">configureJson</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$configureJson(org.gradle.api.Action((com.hendraanggrian.generating.r.configuration.JsonConfiguration)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.generating.r.configuration/-json-configuration/index.html"><span class="identifier">JsonConfiguration</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Customize json files configuration with Kotlin DSL.</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="configure-properties.html">configureProperties</a></p>
-</td>
-<td>
-<code><span class="keyword">fun </span><span class="identifier">configureProperties</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$configureProperties(org.gradle.api.Action((com.hendraanggrian.generating.r.configuration.PropertiesConfiguration)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.generating.r.configuration/-properties-configuration/index.html"><span class="identifier">PropertiesConfiguration</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Customize properties files configuration with Kotlin DSL.</p>
-</td>
-</tr>
 <tr>
 <td>
 <p><a href="exclude.html">exclude</a></p>
@@ -133,6 +98,33 @@ Default is resources folder in main module.</p>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">generate</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Generate R class given provided options.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="use-css.html">useCss</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">useCss</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$useCss(org.gradle.api.Action((com.hendraanggrian.generating.r.configuration.CssConfiguration)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.generating.r.configuration/-css-configuration/index.html"><span class="identifier">CssConfiguration</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Customize CSS files configuration with Kotlin DSL.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="use-json.html">useJson</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">useJson</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$useJson(org.gradle.api.Action((com.hendraanggrian.generating.r.configuration.JsonConfiguration)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.generating.r.configuration/-json-configuration/index.html"><span class="identifier">JsonConfiguration</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Customize json files configuration with Kotlin DSL.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="use-properties.html">useProperties</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">useProperties</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.generating.r.RTask$useProperties(org.gradle.api.Action((com.hendraanggrian.generating.r.configuration.PropertiesConfiguration)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.generating.r.configuration/-properties-configuration/index.html"><span class="identifier">PropertiesConfiguration</span></a><span class="symbol">&gt;</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Customize properties files configuration with Kotlin DSL.</p>
 </td>
 </tr>
 </tbody>
