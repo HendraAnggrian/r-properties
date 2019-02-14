@@ -1,6 +1,6 @@
-package com.hendraanggrian.generating.r.configuration
+package com.hendraanggrian.r.options
 
-class CssConfiguration {
+class CssOptions {
 
     /** When set to true, will remove `.` prefix in JavaFX CSS style classes. */
     var isJavaFx: Boolean = false

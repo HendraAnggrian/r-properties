@@ -1,6 +1,6 @@
-package com.hendraanggrian.generating.r.configuration
+package com.hendraanggrian.r.options
 
-class PropertiesConfiguration {
+class PropertiesOptions {
 
     /**
      * When set to true, will convert properties files that are resource bundle.

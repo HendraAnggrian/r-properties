@@ -1,15 +1,15 @@
-package com.hendraanggrian.generating.r
+package com.hendraanggrian.r
 
-import com.hendraanggrian.generating.r.adapters.Adapter
-import com.hendraanggrian.generating.r.adapters.CssAdapter
-import com.hendraanggrian.generating.r.adapters.DefaultAdapter
-import com.hendraanggrian.generating.r.adapters.JsonAdapter
-import com.hendraanggrian.generating.r.adapters.PropertiesAdapter
-import com.hendraanggrian.generating.r.configuration.CssConfiguration
-import com.hendraanggrian.generating.r.configuration.JsonConfiguration
-import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.r.adapters.Adapter
+import com.hendraanggrian.r.adapters.CssAdapter
+import com.hendraanggrian.r.adapters.DefaultAdapter
+import com.hendraanggrian.r.adapters.JsonAdapter
+import com.hendraanggrian.r.adapters.PropertiesAdapter
+import com.hendraanggrian.r.options.CssOptions
+import com.hendraanggrian.r.options.JsonOptions
+import com.hendraanggrian.r.options.PropertiesOptions
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.logging.LogLevel
@@ -70,38 +70,38 @@ open class RTask : DefaultTask() {
     /** Path that R class will be generated to. */
     @OutputDirectory lateinit var outputDirectory: File
 
-    private var css: CssConfiguration? = null
-    private var properties: PropertiesConfiguration? = null
-    private var json: JsonConfiguration? = null
+    private var css: CssOptions? = null
+    private var properties: PropertiesOptions? = null
+    private var json: JsonOptions? = null
 
-    /** Customize CSS files configuration with Kotlin DSL. */
+    /** Customize CSS files options with Kotlin DSL. */
     @JvmOverloads
-    fun useCss(action: (Action<CssConfiguration>)? = null) {
+    fun useCss(action: (Action<CssOptions>)? = null) {
         var config = css
         if (config == null) {
-            config = CssConfiguration()
+            config = CssOptions()
             css = config
         }
         action?.invoke(config)
     }
 
-    /** Customize properties files configuration with Kotlin DSL. */
+    /** Customize properties files options with Kotlin DSL. */
     @JvmOverloads
-    fun useProperties(action: (Action<PropertiesConfiguration>)? = null) {
+    fun useProperties(action: (Action<PropertiesOptions>)? = null) {
         var config = properties
         if (config == null) {
-            config = PropertiesConfiguration()
+            config = PropertiesOptions()
             properties = config
         }
         action?.invoke(config)
     }
 
-    /** Customize json files configuration with Kotlin DSL. */
+    /** Customize json files options with Kotlin DSL. */
     @JvmOverloads
-    fun useJson(action: (Action<JsonConfiguration>)? = null) {
+    fun useJson(action: (Action<JsonOptions>)? = null) {
         var config = json
         if (config == null) {
-            config = JsonConfiguration()
+            config = JsonOptions()
             json = config
         }
         action?.invoke(config)

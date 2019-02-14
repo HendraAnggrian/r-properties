@@ -1,7 +1,6 @@
-package com.hendraanggrian.generating.r.adapters
+package com.hendraanggrian.r.adapters
 
-import com.hendraanggrian.generating.r.configuration.JsonConfiguration
-import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.r.options.JsonOptions
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
@@ -9,9 +8,9 @@ import org.json.simple.parser.JSONParser
 import java.io.File
 import java.lang.ref.WeakReference
 
-internal class JsonAdapter(private val configuration: JsonConfiguration) : Adapter {
+internal class JsonAdapter(options: JsonOptions) : ConfigurableAdapter<JsonOptions>(options) {
 
-    var parserRef = WeakReference<JSONParser>(null)
+    private var parserRef = WeakReference<JSONParser>(null)
 
     override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
         if (file.extension == "json") {
@@ -33,7 +32,7 @@ internal class JsonAdapter(private val configuration: JsonConfiguration) : Adapt
     private fun JSONObject.forEachKey(action: (String) -> Unit) {
         forEach { key, value ->
             action(key.toString())
-            if (value is JSONArray && configuration.readArray) {
+            if (value is JSONArray && options.readArray) {
                 value.forEachKey(action)
             }
         }
@@ -42,8 +41,8 @@ internal class JsonAdapter(private val configuration: JsonConfiguration) : Adapt
     private fun JSONArray.forEachKey(action: (String) -> Unit) {
         forEach { json ->
             when {
-                configuration.isRecursive && json is JSONObject -> json.forEachKey(action)
-                configuration.readArray && json is JSONArray -> json.forEachKey(action)
+                options.isRecursive && json is JSONObject -> json.forEachKey(action)
+                options.readArray && json is JSONArray -> json.forEachKey(action)
             }
         }
     }

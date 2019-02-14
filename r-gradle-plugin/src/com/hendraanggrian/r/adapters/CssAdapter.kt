@@ -1,14 +1,13 @@
-package com.hendraanggrian.generating.r.adapters
+package com.hendraanggrian.r.adapters
 
 import com.helger.css.ECSSVersion.CSS30
 import com.helger.css.reader.CSSReader.readFromFile
-import com.hendraanggrian.generating.r.configuration.CssConfiguration
-import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.r.options.CssOptions
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
 
-internal class CssAdapter(private val configuration: CssConfiguration) : Adapter {
+internal class CssAdapter(options: CssOptions) : ConfigurableAdapter<CssOptions>(options) {
 
     override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
         if (file.extension == "css") {
@@ -19,7 +18,7 @@ internal class CssAdapter(private val configuration: CssConfiguration) : Adapter
                 rule.allSelectors.forEach { selector ->
                     val member = selector.getMemberAtIndex(0) ?: return false
                     var styleName = member.asCSSString
-                    if (configuration.isJavaFx) {
+                    if (options.isJavaFx) {
                         styleName = styleName.toFxCssName()
                     }
                     builder.stringField(styleName, styleName)

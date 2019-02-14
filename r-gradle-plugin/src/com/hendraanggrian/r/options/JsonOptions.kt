@@ -1,6 +1,6 @@
-package com.hendraanggrian.generating.r.configuration
+package com.hendraanggrian.r.options
 
-class JsonConfiguration {
+class JsonOptions {
 
     /** When set to true, will convert child json and so on. */
     var isRecursive: Boolean = false

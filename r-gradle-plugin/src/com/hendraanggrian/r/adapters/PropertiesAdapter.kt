@@ -1,19 +1,18 @@
-package com.hendraanggrian.generating.r.adapters
+package com.hendraanggrian.r.adapters
 
-import com.hendraanggrian.generating.r.configuration.PropertiesConfiguration
-import com.hendraanggrian.generating.r.isValid
-import com.hendraanggrian.generating.r.stringField
+import com.hendraanggrian.r.isValid
+import com.hendraanggrian.r.options.PropertiesOptions
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 import java.util.Properties
 import javax.lang.model.element.Modifier
 
-internal class PropertiesAdapter(private val configuration: PropertiesConfiguration) : Adapter {
+internal class PropertiesAdapter(options: PropertiesOptions) : ConfigurableAdapter<PropertiesOptions>(options) {
 
     override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
         if (file.extension == "properties") {
             when {
-                configuration.readResourceBundle && file.isResourceBundle() -> {
+                options.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in builder.build().typeSpecs.map { it.name }) {
                         builder.type(className) {
@@ -47,7 +46,5 @@ internal class PropertiesAdapter(private val configuration: PropertiesConfigurat
 
     private fun File.isResourceBundle(): Boolean = isValid() &&
         extension == "properties" &&
-        nameWithoutExtension.let { name ->
-            name.contains("_") && name.substringAfterLast("_").length == 2
-        }
+        nameWithoutExtension.let { name -> '_' in name && name.substringAfterLast("_").length == 2 }
 }

@@ -1,4 +1,4 @@
-package com.hendraanggrian.generating.r
+package com.hendraanggrian.r
 
 import org.junit.Test
 import kotlin.test.assertEquals

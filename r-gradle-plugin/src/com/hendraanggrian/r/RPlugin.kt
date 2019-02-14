@@ -1,6 +1,6 @@
 @file:Suppress("UnusedImport", "unused", "UNUSED_VARIABLE")
 
-package com.hendraanggrian.generating.r
+package com.hendraanggrian.r
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
