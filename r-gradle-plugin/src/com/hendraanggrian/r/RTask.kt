@@ -47,28 +47,22 @@ open class RTask : DefaultTask() {
      * Main resources directory.
      * Default is resources folder in main module.
      */
-    @InputDirectory lateinit var resourcesDirectory: File
+    @InputDirectory lateinit var resourcesDir: File
+
+    var resourcesDirectory: String
+        get() = resourcesDir.absolutePath
+        set(value) {
+            resourcesDir = project.projectDir.resolve(value)
+        }
 
     /**
      * Collection of files (or directories) that are ignored from this task.
      * Default is empty.
      */
-    @InputFiles val exclusions: MutableCollection<File> = mutableSetOf()
-
-    /** Exclude certain files and directories from generated R class. */
-    @InputFiles
-    fun exclude(vararg files: File) {
-        exclusions += files.map { resourcesDirectory.resolve(it) }
-    }
-
-    /** Exclude certain files and directories from generated R class. */
-    @InputFiles
-    fun exclude(vararg files: String) {
-        exclusions += files.map { resourcesDirectory.resolve(it) }
-    }
+    @InputFiles var exclusions: Iterable<File> = emptyList()
 
     /** Path that R class will be generated to. */
-    @OutputDirectory lateinit var outputDirectory: File
+    lateinit var outputDirectory: String
 
     private var css: CssOptions? = null
     private var properties: PropertiesOptions? = null
@@ -115,13 +109,14 @@ open class RTask : DefaultTask() {
         logger.log(LogLevel.INFO, "Checking requirements")
         require(packageName.isNotBlank()) { "Package name cannot be null" }
         require(className.isNotBlank()) { "Class name cannot be null" }
-        val resourcesDir = project.projectDir.resolve(resourcesDirectory)
         require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
 
         logger.log(LogLevel.INFO, "Deleting old $className")
-        outputDirectory.deleteRecursively()
-        outputDirectory.mkdirs()
+        val outputDir = outputDir
+        outputDir.deleteRecursively()
+        outputDir.mkdirs()
 
+        logger.log(LogLevel.INFO, "Reading resources")
         val javaFile = buildJavaFile(packageName) {
             comment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             type(className) {
@@ -129,22 +124,24 @@ open class RTask : DefaultTask() {
                 constructor {
                     modifiers(PRIVATE)
                 }
-                logger.log(LogLevel.INFO, "Reading resources")
                 processDir(
                     listOfNotNull(
                         css?.let { CssAdapter(it) },
                         json?.let { JsonAdapter(it) },
                         properties?.let { PropertiesAdapter(it) }
                     ).toTypedArray(),
-                    DefaultAdapter(resourcesDirectory.path),
-                    DefaultAdapter(resourcesDirectory.path, true),
+                    DefaultAdapter(resourcesDir.path),
+                    DefaultAdapter(resourcesDir.path, true),
                     resourcesDir
                 )
             }
         }
+
         logger.log(LogLevel.INFO, "Writing new $className")
-        javaFile.writeTo(outputDirectory)
+        javaFile.writeTo(outputDir)
     }
+
+    val outputDir: File @OutputDirectory get() = project.projectDir.resolve(outputDirectory)
 
     private fun TypeSpecBuilder.processDir(
         optionalAdapters: Array<Adapter>,

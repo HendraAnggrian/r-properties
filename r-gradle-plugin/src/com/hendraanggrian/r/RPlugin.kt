@@ -25,8 +25,8 @@ class RPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val generateR by project.tasks.registering(RTask::class) {
             group = GROUP_NAME
-            resourcesDirectory = project.projectDir.resolve("src/main/resources")
-            outputDirectory = project.buildDir.resolve("$GENERATED_DIR/src/main")
+            resourcesDir = project.projectDir.resolve("src/main/resources")
+            outputDirectory = project.buildDir.resolve("$GENERATED_DIR/src/main").absolutePath
         }
         val generateRTask by generateR
 
