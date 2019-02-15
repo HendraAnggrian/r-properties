@@ -1,5 +1,5 @@
 $dokka.format:html
 $dokka.linkExtension:html
 
-com.hendraanggrian.generating.r
-com.hendraanggrian.generating.r.configuration
+com.hendraanggrian.r
+com.hendraanggrian.r.options
