@@ -51,7 +51,7 @@ open class RTask : DefaultTask() {
 
     var resourcesDirectory: String
         @Input get() = resourcesDir.absolutePath
-        @Input set(value) {
+        set(value) {
             resourcesDir = project.projectDir.resolve(value)
         }
 

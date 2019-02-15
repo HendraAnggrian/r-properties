@@ -16,10 +16,9 @@ import org.gradle.plugins.ide.idea.model.IdeaModel
 
 /** Generate Android-like R class with this plugin. */
 class RPlugin : Plugin<Project> {
-
     private companion object {
         const val GROUP_NAME = "r"
-        const val GENERATED_DIR = "generated/r"
+        const val GENERATED_DIR = "generated/$GROUP_NAME"
     }
 
     override fun apply(project: Project) {

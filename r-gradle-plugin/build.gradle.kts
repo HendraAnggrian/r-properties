@@ -10,12 +10,8 @@ group = RELEASE_GROUP
 version = RELEASE_VERSION
 
 sourceSets {
-    getByName("main") {
-        java.srcDir("src")
-    }
-    getByName("test") {
-        java.srcDir("tests/src")
-    }
+    getByName("main").java.srcDir("src")
+    getByName("test").java.srcDir("tests/src")
 }
 
 gradlePlugin {
