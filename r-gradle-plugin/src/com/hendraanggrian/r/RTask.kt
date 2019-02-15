@@ -50,8 +50,8 @@ open class RTask : DefaultTask() {
     @InputDirectory lateinit var resourcesDir: File
 
     var resourcesDirectory: String
-        get() = resourcesDir.absolutePath
-        set(value) {
+        @Input get() = resourcesDir.absolutePath
+        @Input set(value) {
             resourcesDir = project.projectDir.resolve(value)
         }
 
@@ -62,7 +62,9 @@ open class RTask : DefaultTask() {
     @InputFiles var exclusions: Iterable<File> = emptyList()
 
     /** Path that R class will be generated to. */
-    lateinit var outputDirectory: String
+    @Input lateinit var outputDirectory: String
+
+    val outputDir: File @OutputDirectory get() = project.projectDir.resolve(outputDirectory)
 
     private var css: CssOptions? = null
     private var properties: PropertiesOptions? = null
@@ -140,8 +142,6 @@ open class RTask : DefaultTask() {
         logger.log(LogLevel.INFO, "Writing new $className")
         javaFile.writeTo(outputDir)
     }
-
-    val outputDir: File @OutputDirectory get() = project.projectDir.resolve(outputDirectory)
 
     private fun TypeSpecBuilder.processDir(
         optionalAdapters: Array<Adapter>,
