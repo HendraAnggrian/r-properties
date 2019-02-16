@@ -1,4 +1,4 @@
-[![bintray](https://img.shields.io/badge/bintray-generating-brightgreen.svg)](https://bintray.com/hendraanggrian/generating)
+[![bintray](https://img.shields.io/badge/bintray-maven-brightgreen.svg)](https://bintray.com/hendraanggrian/maven)
 [![download](https://api.bintray.com/packages/hendraanggrian/generating/r-gradle-plugin/images/download.svg)](https://bintray.com/hendraanggrian/generating/r-gradle-plugin/_latestVersion)
 [![build](https://travis-ci.com/hendraanggrian/r-gradle-plugin.svg)](https://travis-ci.com/hendraanggrian/r-gradle-plugin)
 [![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)

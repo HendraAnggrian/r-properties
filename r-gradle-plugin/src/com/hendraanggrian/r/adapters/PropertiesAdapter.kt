@@ -1,11 +1,10 @@
 package com.hendraanggrian.r.adapters
 
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.r.isValid
 import com.hendraanggrian.r.options.PropertiesOptions
-import com.hendraanggrian.javapoet.TypeSpecBuilder
 import java.io.File
 import java.util.Properties
-import javax.lang.model.element.Modifier
 
 internal class PropertiesAdapter(options: PropertiesOptions) : ConfigurableAdapter<PropertiesOptions>(options) {
 
@@ -16,9 +15,9 @@ internal class PropertiesAdapter(options: PropertiesOptions) : ConfigurableAdapt
                     val className = file.resourceBundleName
                     if (className !in builder.build().typeSpecs.map { it.name }) {
                         builder.type(className) {
-                            modifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            modifiers = public + static + final
                             constructor {
-                                modifiers(Modifier.PRIVATE)
+                                modifiers = private
                             }
                             process(file)
                         }

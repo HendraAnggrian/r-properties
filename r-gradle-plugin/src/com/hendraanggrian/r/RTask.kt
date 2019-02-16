@@ -23,10 +23,6 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
-import javax.lang.model.element.Modifier
-import javax.lang.model.element.Modifier.FINAL
-import javax.lang.model.element.Modifier.PRIVATE
-import javax.lang.model.element.Modifier.PUBLIC
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -122,9 +118,9 @@ open class RTask : DefaultTask() {
         val javaFile = buildJavaFile(packageName) {
             comment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
             type(className) {
-                modifiers(PUBLIC, FINAL)
+                modifiers = public + final
                 constructor {
-                    modifiers(PRIVATE)
+                    modifiers = private
                 }
                 processDir(
                     listOfNotNull(
@@ -155,9 +151,9 @@ open class RTask : DefaultTask() {
                 when {
                     file.isDirectory -> {
                         type(file.name.normalize()) {
-                            modifiers(Modifier.PUBLIC, Modifier.STATIC, FINAL)
+                            modifiers = public + static + final
                             constructor {
-                                modifiers(Modifier.PRIVATE)
+                                modifiers = private
                             }
                             processDir(
                                 optionalAdapters,

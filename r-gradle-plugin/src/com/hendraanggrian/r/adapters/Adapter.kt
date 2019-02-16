@@ -1,9 +1,8 @@
 package com.hendraanggrian.r.adapters
 
-import com.hendraanggrian.r.normalize
 import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.r.normalize
 import java.io.File
-import javax.lang.model.element.Modifier
 
 internal abstract class Adapter {
 
@@ -15,7 +14,7 @@ internal abstract class Adapter {
             normalizedName !in build().fieldSpecs.map { it.name } // checks for duplicate
         ) {
             field<String>(normalizedName) {
-                modifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                modifiers = public + static + final
                 initializer("\$S", value)
             }
         }

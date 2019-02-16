@@ -27,12 +27,11 @@ val ktlint by configurations.registering
 
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
-    implementation(hendraanggrian("javapoet-dsl", "0.2-rc1"))
+    implementation(hendraanggrian("javapoet-dsl", "0.2"))
     implementation(phCss())
     implementation(jsonSimple())
-
-    testImplementation(kotlin("test", VERSION_KOTLIN))
-    testImplementation(junit())
+    
+    testImplementation(kotlin("test-junit", VERSION_KOTLIN))
 
     ktlint {
         invoke(ktlint())
