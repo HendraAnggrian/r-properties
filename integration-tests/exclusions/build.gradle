@@ -23,9 +23,5 @@ dependencies {
 }
 
 tasks.getByName('generateR') {
-    exclusions = files(
-            'src/main/resources/layout',
-            'no_file',
-            'src/main/resources/note/hihi.txt'
-    )
+    exclude 'src/main/resources/layout', 'no_file', 'src/main/resources/note/hihi.txt'
 }

@@ -45,6 +45,7 @@ open class RTask : DefaultTask() {
      */
     @InputDirectory lateinit var resourcesDir: File
 
+    /** Convenient method to set resources directory from file path, relative to project directory. */
     var resourcesDirectory: String
         @Input get() = resourcesDir.absolutePath
         set(value) {
@@ -57,10 +58,20 @@ open class RTask : DefaultTask() {
      */
     @InputFiles var exclusions: Iterable<File> = emptyList()
 
-    /** Path that R class will be generated to. */
-    @Input lateinit var outputDirectory: String
+    /** Convenient method to set exclusions from file path, relative to project directory. */
+    fun exclude(vararg exclusions: String) {
+        this.exclusions = exclusions.map { project.projectDir.resolve(it) }
+    }
 
-    val outputDir: File @OutputDirectory get() = project.projectDir.resolve(outputDirectory)
+    /** Path that R class will be generated to. */
+    @OutputDirectory lateinit var outputDir: File
+
+    /** Convenient method to set output directory from file path, relative to project directory. */
+    var outputDirectory: String
+        @OutputDirectory get() = outputDir.absolutePath
+        set(value) {
+            outputDir = project.projectDir.resolve(value)
+        }
 
     private var css: CssOptions? = null
     private var properties: PropertiesOptions? = null

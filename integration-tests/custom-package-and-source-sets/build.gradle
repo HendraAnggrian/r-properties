@@ -29,6 +29,6 @@ dependencies {
 
 tasks.getByName('generateR') {
     packageName 'my.app'
-    resourcesDir file('res')
+    resourcesDirectory 'res'
     className 'Resources'
 }
