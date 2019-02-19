@@ -19,7 +19,7 @@ class RPlugin : Plugin<Project> {
 
     companion object {
         const val GROUP_NAME = "generate"
-        private const val GENERATED_DIR = "generated/$GROUP_NAME"
+        private const val GENERATED_DIR = "generated/r"
     }
 
     override fun apply(project: Project) {
