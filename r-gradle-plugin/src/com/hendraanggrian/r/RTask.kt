@@ -2,6 +2,10 @@ package com.hendraanggrian.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.javapoet.final
+import com.hendraanggrian.javapoet.private
+import com.hendraanggrian.javapoet.public
+import com.hendraanggrian.javapoet.static
 import com.hendraanggrian.r.adapters.Adapter
 import com.hendraanggrian.r.adapters.CssAdapter
 import com.hendraanggrian.r.adapters.DefaultAdapter
@@ -12,7 +16,6 @@ import com.hendraanggrian.r.options.JsonOptions
 import com.hendraanggrian.r.options.PropertiesOptions
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
-import org.gradle.api.logging.LogLevel
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
@@ -20,7 +23,6 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
 import java.io.File
-import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
 import javax.lang.model.element.Modifier
@@ -60,7 +62,7 @@ open class RTask : DefaultTask() {
 
     /** Convenient method to set resources directory from file path, relative to project directory. */
     var resourcesDirectory: String
-        @Input get() = resourcesDir.absolutePath
+        @InputDirectory get() = resourcesDir.absolutePath
         set(value) {
             resourcesDir = project.projectDir.resolve(value)
         }
@@ -86,71 +88,93 @@ open class RTask : DefaultTask() {
             outputDir = project.projectDir.resolve(value)
         }
 
-    private var css: CssOptions? = null
-    private var properties: PropertiesOptions? = null
-    private var json: JsonOptions? = null
+    private var cssOptions: CssOptions? = null
+    private var propertiesOptions: PropertiesOptions? = null
+    private var jsonOptions: JsonOptions? = null
 
-    /** Customize CSS files options with Kotlin DSL. */
-    @JvmOverloads
-    fun useCss(action: (Action<CssOptions>)? = null) {
-        var config = css
-        if (config == null) {
-            config = CssOptions()
-            css = config
+    /** Activates CSS files support. */
+    fun configureCss() {
+        var options = cssOptions
+        if (options == null) {
+            options = CssOptions()
+            cssOptions = options
         }
-        action?.invoke(config)
     }
 
-    /** Customize properties files options with Kotlin DSL. */
-    @JvmOverloads
-    fun useProperties(action: (Action<PropertiesOptions>)? = null) {
-        var config = properties
-        if (config == null) {
-            config = PropertiesOptions()
-            properties = config
-        }
-        action?.invoke(config)
+    /** Activates CSS files support with Groovy closure. */
+    fun configureCss(action: Action<CssOptions>) {
+        configureCss()
+        action(cssOptions!!)
     }
 
-    /** Customize json files options with Kotlin DSL. */
-    @JvmOverloads
-    fun useJson(action: (Action<JsonOptions>)? = null) {
-        var config = json
-        if (config == null) {
-            config = JsonOptions()
-            json = config
+    /** Activates CSS files support with Kotlin DSL. */
+    fun css(action: CssOptions.() -> Unit) =
+        configureCss(action)
+
+    /** Activates properties files support. */
+    fun configureProperties() {
+        var options = propertiesOptions
+        if (options == null) {
+            options = PropertiesOptions()
+            propertiesOptions = options
         }
-        action?.invoke(config)
     }
+
+    /** Activates properties files support with Groovy closure. */
+    fun configureProperties(action: Action<PropertiesOptions>) {
+        configureProperties()
+        action(propertiesOptions!!)
+    }
+
+    /** Activates properties files support with Kotlin DSL. */
+    fun properties(action: PropertiesOptions.() -> Unit) =
+        configureProperties(action)
+
+    /** Activates JSON files support. */
+    fun configureJson() {
+        var options = jsonOptions
+        if (options == null) {
+            options = JsonOptions()
+            jsonOptions = options
+        }
+    }
+
+    /** Activates JSON files support with Groovy closure. */
+    fun configureJson(action: Action<JsonOptions>) {
+        configureJson()
+        action(jsonOptions!!)
+    }
+
+    /** Activates JSON files support with Kotlin DSL. */
+    fun json(action: JsonOptions.() -> Unit) =
+        configureJson(action)
 
     /** Generate R class given provided options. */
     @TaskAction
-    @Throws(IOException::class)
-    @Suppress("unused")
     fun generate() {
-        logger.log(LogLevel.INFO, "Checking requirements")
+        logger.info("Checking requirements")
         require(packageName.isNotBlank()) { "Package name cannot be null" }
         require(className.isNotBlank()) { "Class name cannot be null" }
         require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
 
-        logger.log(LogLevel.INFO, "Deleting old $className")
+        logger.info("Deleting old $className")
         val outputDir = outputDir
         outputDir.deleteRecursively()
         outputDir.mkdirs()
 
-        logger.log(LogLevel.INFO, "Reading resources")
+        logger.info("Reading resources")
         val javaFile = buildJavaFile(packageName) {
             comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
             addClass(className) {
-                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                addModifiers(public, final)
                 methods.addConstructor {
-                    addModifiers(Modifier.PRIVATE)
+                    addModifiers(private)
                 }
                 processDir(
                     listOfNotNull(
-                        css?.let { CssAdapter(it) },
-                        json?.let { JsonAdapter(it) },
-                        properties?.let { PropertiesAdapter(it) }
+                        cssOptions?.let { CssAdapter(it) },
+                        jsonOptions?.let { JsonAdapter(it) },
+                        propertiesOptions?.let { PropertiesAdapter(it) }
                     ).toTypedArray(),
                     DefaultAdapter(resourcesDir.path),
                     DefaultAdapter(resourcesDir.path, true),
@@ -159,7 +183,7 @@ open class RTask : DefaultTask() {
             }
         }
 
-        logger.log(LogLevel.INFO, "Writing new $className")
+        logger.info("Writing new $className")
         javaFile.writeTo(outputDir)
     }
 
@@ -175,7 +199,7 @@ open class RTask : DefaultTask() {
                 when {
                     file.isDirectory -> {
                         types.addClass(file.name.normalize()) {
-                            addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            addModifiers(public, static, final)
                             methods.addConstructor {
                                 addModifiers(Modifier.PRIVATE)
                             }

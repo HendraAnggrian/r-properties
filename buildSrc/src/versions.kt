@@ -1,7 +1,7 @@
 const val VERSION_GRADLE = "5.6.2"
 const val VERSION_KOTLIN = "1.3.50"
 
-const val VERSION_JAVAPOETKTX = "0.1"
+const val VERSION_JAVAPOETKTX = "0.2"
 
 internal const val VERSION_PH_CSS = "6.2.0"
 internal const val VERSION_JSON_SIMPLE = "1.1.1"
