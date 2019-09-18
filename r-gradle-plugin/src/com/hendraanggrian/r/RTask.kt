@@ -6,17 +6,6 @@ import com.hendraanggrian.javapoet.final
 import com.hendraanggrian.javapoet.private
 import com.hendraanggrian.javapoet.public
 import com.hendraanggrian.javapoet.static
-import com.hendraanggrian.r.adapters.Adapter
-import com.hendraanggrian.r.adapters.CssAdapter
-import com.hendraanggrian.r.adapters.DefaultAdapter
-import com.hendraanggrian.r.adapters.JsonAdapter
-import com.hendraanggrian.r.adapters.PropertiesAdapter
-import com.hendraanggrian.r.options.CssOptions
-import com.hendraanggrian.r.options.JsonOptions
-import com.hendraanggrian.r.options.PropertiesOptions
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofPattern
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -25,6 +14,9 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter.ofPattern
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -51,7 +43,7 @@ open class RTask : DefaultTask() {
      * When activated, it will automatically fix invalid field names. Otherwise, it will skip the field.
      * Default is false.
      */
-    @Input var fixFieldName: Boolean = true
+    @Input var fixFieldName: Boolean = false
 
     /**
      * Main resources directory.
@@ -176,12 +168,12 @@ open class RTask : DefaultTask() {
                 }
                 processDir(
                     listOfNotNull(
-                        cssOptions?.let { CssAdapter(it) },
-                        jsonOptions?.let { JsonAdapter(it) },
-                        propertiesOptions?.let { PropertiesAdapter(it) }
-                    ).toTypedArray(),
-                    DefaultAdapter(resourcesDir.path),
-                    DefaultAdapter(resourcesDir.path, true),
+                        cssOptions?.let { CssAdapter(uppercaseFieldName, fixFieldName, it) },
+                        jsonOptions?.let { JsonAdapter(uppercaseFieldName, fixFieldName, it) },
+                        propertiesOptions?.let { PropertiesAdapter(uppercaseFieldName, fixFieldName, it) }
+                    ),
+                    DefaultAdapter(uppercaseFieldName, fixFieldName, resourcesDir.path),
+                    DefaultAdapter(uppercaseFieldName, fixFieldName, resourcesDir.path, true),
                     resourcesDir
                 )
             }
@@ -192,7 +184,7 @@ open class RTask : DefaultTask() {
     }
 
     private fun TypeSpecBuilder.processDir(
-        optionalAdapters: Array<Adapter>,
+        adapters: Iterable<Adapter>,
         defaultAdapter: Adapter,
         prefixedAdapter: Adapter,
         resourcesDir: File
@@ -206,11 +198,11 @@ open class RTask : DefaultTask() {
                         methods.addConstructor {
                             addModifiers(private)
                         }
-                        processDir(optionalAdapters, defaultAdapter, prefixedAdapter, file)
+                        processDir(adapters, defaultAdapter, prefixedAdapter, file)
                     }
                 }
                 file.isFile -> {
-                    val prefixes = optionalAdapters.map { it.adapt(file, this) }
+                    val prefixes = adapters.map { it.adapt(file, this) }
                     when {
                         prefixes.any { it } -> prefixedAdapter
                         else -> defaultAdapter
