@@ -5,6 +5,7 @@ import com.hendraanggrian.r.isValid
 import com.hendraanggrian.r.options.PropertiesOptions
 import java.io.File
 import java.util.Properties
+import javax.lang.model.element.Modifier
 
 internal class PropertiesAdapter(options: PropertiesOptions) : ConfigurableAdapter<PropertiesOptions>(options) {
 
@@ -14,10 +15,10 @@ internal class PropertiesAdapter(options: PropertiesOptions) : ConfigurableAdapt
                 options.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in builder.build().typeSpecs.map { it.name }) {
-                        builder.type(className) {
-                            modifiers = public + static + final
-                            constructor {
-                                modifiers = private
+                        builder.types.addClass(className) {
+                            addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            methods.addConstructor {
+                                addModifiers(Modifier.PRIVATE)
                             }
                             process(file)
                         }

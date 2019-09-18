@@ -23,6 +23,7 @@ import java.io.File
 import java.io.IOException
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
+import javax.lang.model.element.Modifier
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -38,6 +39,18 @@ open class RTask : DefaultTask() {
      * Default is `R`, may be modified but cannot be null.
      */
     @Input var className: String = "R"
+
+    /**
+     * When activated, automatically make all field names uppercase.
+     * Default is false.
+     */
+    @Input var isFieldNameUppercase: Boolean = false
+
+    /**
+     * When activated, it will skip the invalid field names. Otherwise, those names will be automatically fixed.
+     * Default is true.
+     */
+    @Input var isSkipInvalidFieldName: Boolean = true
 
     /**
      * Main resources directory.
@@ -127,11 +140,11 @@ open class RTask : DefaultTask() {
 
         logger.log(LogLevel.INFO, "Reading resources")
         val javaFile = buildJavaFile(packageName) {
-            comment("Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}")
-            type(className) {
-                modifiers = public + final
-                constructor {
-                    modifiers = private
+            comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
+            addClass(className) {
+                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                methods.addConstructor {
+                    addModifiers(Modifier.PRIVATE)
                 }
                 processDir(
                     listOfNotNull(
@@ -156,15 +169,15 @@ open class RTask : DefaultTask() {
         prefixedAdapter: Adapter,
         resourcesDir: File
     ) {
-        resourcesDir.listFiles()
+        resourcesDir.listFiles()!!
             .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
             .forEach { file ->
                 when {
                     file.isDirectory -> {
-                        type(file.name.normalize()) {
-                            modifiers = public + static + final
-                            constructor {
-                                modifiers = private
+                        types.addClass(file.name.normalize()) {
+                            addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                            methods.addConstructor {
+                                addModifiers(Modifier.PRIVATE)
                             }
                             processDir(
                                 optionalAdapters,
