@@ -1,11 +1,12 @@
 [![bintray](https://img.shields.io/badge/bintray-maven-brightgreen.svg)](https://bintray.com/hendraanggrian/maven)
 [![download](https://api.bintray.com/packages/hendraanggrian/maven/r-gradle-plugin/images/download.svg)](https://bintray.com/hendraanggrian/maven/r-gradle-plugin/_latestVersion)
 [![build](https://travis-ci.com/hendraanggrian/r-gradle-plugin.svg)](https://travis-ci.com/hendraanggrian/r-gradle-plugin)
-[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 R Gradle Plugin
 ===============
-Generate Android-like `R` class on any JVM projects. Currently only supported with <b>IntelliJ IDEA</b>.
+Generate Android-like `R` class on any JVM projects.
+Currently only supported with **IntelliJ IDEA**.
 
 ```java
 /**
@@ -83,7 +84,7 @@ enabling `isJavaFx` will remove that prefix upon R generation.
 
 ```gradle
 tasks.getByName('generateR') {
-    css {
+    configureCss {
         isJavaFx = true
     }
 }
@@ -93,7 +94,7 @@ tasks.getByName('generateR') {
 
 ```gradle
 tasks.getByName('generateR') {
-    properties {
+    configureProperties {
         supportResourceBundle = true
     }
 }
@@ -124,16 +125,6 @@ public final class R {
         public static final String a = "a";
         public static final String little = "little";
         public static final String piggy = "piggy";
-    }
-}
-```
-
-#### Custom implementation
-
-```gradle
-tasks.getByName('generateR') {
-    custom { typeBuilder, file ->
-        addField(typeBuilder, myFieldName, myFieldValue)
     }
 }
 ```

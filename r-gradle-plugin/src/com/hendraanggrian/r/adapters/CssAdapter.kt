@@ -2,8 +2,8 @@ package com.hendraanggrian.r.adapters
 
 import com.helger.css.ECSSVersion.CSS30
 import com.helger.css.reader.CSSReader.readFromFile
-import com.hendraanggrian.r.options.CssOptions
 import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.r.options.CssOptions
 import java.io.File
 import java.nio.charset.StandardCharsets.UTF_8
 

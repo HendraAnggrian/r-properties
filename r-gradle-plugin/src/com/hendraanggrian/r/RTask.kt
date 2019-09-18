@@ -14,6 +14,9 @@ import com.hendraanggrian.r.adapters.PropertiesAdapter
 import com.hendraanggrian.r.options.CssOptions
 import com.hendraanggrian.r.options.JsonOptions
 import com.hendraanggrian.r.options.PropertiesOptions
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter.ofPattern
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -22,10 +25,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofPattern
-import javax.lang.model.element.Modifier
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -46,13 +45,13 @@ open class RTask : DefaultTask() {
      * When activated, automatically make all field names uppercase.
      * Default is false.
      */
-    @Input var isFieldNameUppercase: Boolean = false
+    @Input var uppercaseFieldName: Boolean = false
 
     /**
-     * When activated, it will skip the invalid field names. Otherwise, those names will be automatically fixed.
-     * Default is true.
+     * When activated, it will automatically fix invalid field names. Otherwise, it will skip the field.
+     * Default is false.
      */
-    @Input var isSkipInvalidFieldName: Boolean = true
+    @Input var fixFieldName: Boolean = true
 
     /**
      * Main resources directory.
@@ -91,6 +90,11 @@ open class RTask : DefaultTask() {
     private var cssOptions: CssOptions? = null
     private var propertiesOptions: PropertiesOptions? = null
     private var jsonOptions: JsonOptions? = null
+
+    init {
+        // always consider this task out of date
+        outputs.upToDateWhen { false }
+    }
 
     /** Activates CSS files support. */
     fun configureCss() {
@@ -192,33 +196,26 @@ open class RTask : DefaultTask() {
         defaultAdapter: Adapter,
         prefixedAdapter: Adapter,
         resourcesDir: File
-    ) {
-        resourcesDir.listFiles()!!
-            .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
-            .forEach { file ->
-                when {
-                    file.isDirectory -> {
-                        types.addClass(file.name.normalize()) {
-                            addModifiers(public, static, final)
-                            methods.addConstructor {
-                                addModifiers(Modifier.PRIVATE)
-                            }
-                            processDir(
-                                optionalAdapters,
-                                defaultAdapter,
-                                prefixedAdapter,
-                                file
-                            )
+    ): Unit = resourcesDir.listFiles()!!
+        .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
+        .forEach { file ->
+            when {
+                file.isDirectory -> {
+                    types.addClass(file.name.normalize()) {
+                        addModifiers(public, static, final)
+                        methods.addConstructor {
+                            addModifiers(private)
                         }
-                    }
-                    file.isFile -> {
-                        val prefixes = optionalAdapters.map { it.adapt(file, this) }
-                        when {
-                            prefixes.any { it } -> prefixedAdapter
-                            else -> defaultAdapter
-                        }.adapt(file, this)
+                        processDir(optionalAdapters, defaultAdapter, prefixedAdapter, file)
                     }
                 }
+                file.isFile -> {
+                    val prefixes = optionalAdapters.map { it.adapt(file, this) }
+                    when {
+                        prefixes.any { it } -> prefixedAdapter
+                        else -> defaultAdapter
+                    }.adapt(file, this)
+                }
             }
-    }
+        }
 }

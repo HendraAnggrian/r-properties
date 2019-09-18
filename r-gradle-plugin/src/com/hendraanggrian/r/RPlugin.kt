@@ -6,10 +6,10 @@ import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.tasks.compile.JavaCompile
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.getPlugin
-import org.gradle.kotlin.dsl.invoke
-import org.gradle.kotlin.dsl.registering
 import org.gradle.kotlin.dsl.getValue
+import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.provideDelegate // ktlint-disable
+import org.gradle.kotlin.dsl.registering
 import org.gradle.plugins.ide.idea.model.IdeaModel
 
 /** Generate Android-like R class with this plugin. */
