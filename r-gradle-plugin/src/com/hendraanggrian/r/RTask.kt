@@ -188,26 +188,29 @@ open class RTask : DefaultTask() {
         defaultAdapter: Adapter,
         prefixedAdapter: Adapter,
         resourcesDir: File
-    ): Unit = resourcesDir.listFiles()!!
-        .filter { file -> file.isValid() && file.path !in exclusions.map { it.path } }
-        .forEach { file ->
-            when {
-                file.isDirectory -> {
-                    types.addClass(file.name.normalize()) {
-                        addModifiers(public, static, final)
-                        methods.addConstructor {
-                            addModifiers(private)
+    ) {
+        val exclusionPaths = exclusions.map { it.path }
+        resourcesDir.listFiles()!!
+            .filter { file -> file.isValid() && file.path !in exclusionPaths }
+            .forEach { file ->
+                when {
+                    file.isDirectory -> {
+                        types.addClass(file.name.normalize()) {
+                            addModifiers(public, static, final)
+                            methods.addConstructor {
+                                addModifiers(private)
+                            }
+                            processDir(adapters, defaultAdapter, prefixedAdapter, file)
                         }
-                        processDir(adapters, defaultAdapter, prefixedAdapter, file)
+                    }
+                    file.isFile -> {
+                        val prefixes = adapters.map { it.adapt(file, this) }
+                        when {
+                            prefixes.any { it } -> prefixedAdapter
+                            else -> defaultAdapter
+                        }.adapt(file, this)
                     }
                 }
-                file.isFile -> {
-                    val prefixes = adapters.map { it.adapt(file, this) }
-                    when {
-                        prefixes.any { it } -> prefixedAdapter
-                        else -> defaultAdapter
-                    }.adapt(file, this)
-                }
             }
-        }
+    }
 }
