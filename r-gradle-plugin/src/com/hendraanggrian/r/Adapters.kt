@@ -7,52 +7,35 @@ import com.hendraanggrian.javapoet.final
 import com.hendraanggrian.javapoet.private
 import com.hendraanggrian.javapoet.public
 import com.hendraanggrian.javapoet.static
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
-import org.json.simple.parser.JSONParser
 import java.io.File
 import java.lang.ref.WeakReference
 import java.nio.charset.StandardCharsets
 import java.util.Properties
-import javax.lang.model.SourceVersion
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 
 internal sealed class Adapter(
     private val isUppercase: Boolean,
     private val isFix: Boolean
 ) {
 
-    abstract fun adapt(file: File, builder: TypeSpecBuilder): Boolean
+    abstract fun TypeSpecBuilder.adapt(file: File): Boolean
 
     protected fun TypeSpecBuilder.addStringField(name: String, value: String) {
-        var fieldName: String? = name.normalize()
+        var fieldName: String? = name
         if (isUppercase) {
             fieldName = fieldName!!.toUpperCase()
         }
-        if (!SourceVersion.isName(fieldName)) {
+        if (!fieldName!!.isFieldName()) {
             fieldName = when {
-                isFix -> buildString {
-                    value.forEachIndexed { index, c ->
-                        if (index == 0 && !Character.isJavaIdentifierStart(c)) {
-                            append('_')
-                        }
-                        append(
-                            when {
-                                Character.isJavaIdentifierPart(c) -> c
-                                else -> '_'
-                            }
-                        )
-                    }
-                }
+                isFix -> fieldName.toFieldName()
                 else -> null
             }
         }
-        if (fieldName == "_" || // Java SE 9 no longer supports this field name
-            fieldName in build().fieldSpecs.map { it.name } // checks for duplicate
-        ) {
-            return
-        }
-        fieldName?.let {
-            fields.add<String>(it) {
+        // checks for duplicate
+        if (fieldName != null && fieldName !in build().fieldSpecs.map { it.name }) {
+            fields.add<String>(fieldName) {
                 addModifiers(public, static, final)
                 initializer("%S", value)
             }
@@ -67,8 +50,8 @@ internal class DefaultAdapter(
     private val usePrefix: Boolean = false
 ) : Adapter(isUppercase, isFix) {
 
-    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
-        builder.addStringField(
+    override fun TypeSpecBuilder.adapt(file: File): Boolean {
+        addStringField(
             when {
                 usePrefix -> "${file.extension}_${file.nameWithoutExtension}"
                 else -> file.nameWithoutExtension
@@ -85,15 +68,11 @@ internal class CssAdapter(
     private val options: CssOptions
 ) : Adapter(isUppercase, isFix) {
 
-    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
+    override fun TypeSpecBuilder.adapt(file: File): Boolean {
         if (file.extension == "css") {
-            val css = checkNotNull(
-                CSSReader.readFromFile(
-                    file,
-                    StandardCharsets.UTF_8,
-                    ECSSVersion.CSS30
-                )
-            ) { "Error while reading css, please report" }
+            val css = checkNotNull(CSSReader.readFromFile(file, StandardCharsets.UTF_8, ECSSVersion.CSS30)) {
+                "Error while reading css, please report"
+            }
             css.allStyleRules.forEach { rule ->
                 rule.allSelectors.forEach { selector ->
                     val member = selector.getMemberAtIndex(0) ?: return false
@@ -101,7 +80,7 @@ internal class CssAdapter(
                     if (options.isJavaFx) {
                         styleName = styleName.toFxCssName()
                     }
-                    builder.addStringField(styleName, styleName)
+                    addStringField(styleName, styleName)
                 }
             }
             return true
@@ -121,13 +100,13 @@ internal class PropertiesAdapter(
     private val options: PropertiesOptions
 ) : Adapter(isUppercase, isFix) {
 
-    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
+    override fun TypeSpecBuilder.adapt(file: File): Boolean {
         if (file.extension == "properties") {
             when {
                 options.readResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
-                    if (className !in builder.build().typeSpecs.map { it.name }) {
-                        builder.types.addClass(className) {
+                    if (className !in build().typeSpecs.map { it.name }) {
+                        types.addClass(className) {
                             addModifiers(public, static, final)
                             methods.addConstructor {
                                 addModifiers(private)
@@ -137,7 +116,7 @@ internal class PropertiesAdapter(
                     }
                 }
                 else -> {
-                    builder.process(file)
+                    process(file)
                     return true
                 }
             }
@@ -172,7 +151,7 @@ internal class JsonAdapter(
 
     private var parserRef = WeakReference<JSONParser>(null)
 
-    override fun adapt(file: File, builder: TypeSpecBuilder): Boolean {
+    override fun TypeSpecBuilder.adapt(file: File): Boolean {
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()
@@ -181,7 +160,7 @@ internal class JsonAdapter(
                     parserRef = WeakReference(parser)
                 }
                 (parser.parse(reader) as JSONObject).forEachKey { key ->
-                    builder.addStringField(key, key)
+                    addStringField(key, key)
                 }
                 return true
             }

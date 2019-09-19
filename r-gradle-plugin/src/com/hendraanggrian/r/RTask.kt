@@ -6,6 +6,9 @@ import com.hendraanggrian.javapoet.final
 import com.hendraanggrian.javapoet.private
 import com.hendraanggrian.javapoet.public
 import com.hendraanggrian.javapoet.static
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter.ofPattern
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -14,9 +17,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofPattern
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -194,8 +194,8 @@ open class RTask : DefaultTask() {
             .filter { file -> file.isValid() && file.path !in exclusionPaths }
             .forEach { file ->
                 when {
-                    file.isDirectory -> {
-                        types.addClass(file.name.normalize()) {
+                    file.isDirectory -> file.name.toFieldName()?.let {
+                        types.addClass(it) {
                             addModifiers(public, static, final)
                             methods.addConstructor {
                                 addModifiers(private)
@@ -204,11 +204,11 @@ open class RTask : DefaultTask() {
                         }
                     }
                     file.isFile -> {
-                        val prefixes = adapters.map { it.adapt(file, this) }
+                        val prefixes = adapters.map { it.run { adapt(file) } }
                         when {
                             prefixes.any { it } -> prefixedAdapter
                             else -> defaultAdapter
-                        }.adapt(file, this)
+                        }.run { adapt(file) }
                     }
                 }
             }
