@@ -3,14 +3,11 @@ package com.hendraanggrian.r
 import com.helger.css.ECSSVersion
 import com.helger.css.reader.CSSReader
 import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.javapoet.final
-import com.hendraanggrian.javapoet.private
-import com.hendraanggrian.javapoet.public
-import com.hendraanggrian.javapoet.static
 import java.io.File
 import java.lang.ref.WeakReference
 import java.nio.charset.StandardCharsets
 import java.util.Properties
+import javax.lang.model.element.Modifier
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
@@ -36,7 +33,7 @@ internal sealed class Adapter(
         // checks for duplicate
         if (fieldName != null && fieldName !in build().fieldSpecs.map { it.name }) {
             fields.add<String>(fieldName) {
-                addModifiers(public, static, final)
+                addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                 initializer("%S", value)
             }
         }
@@ -107,9 +104,9 @@ internal class PropertiesAdapter(
                     val className = file.resourceBundleName
                     if (className !in build().typeSpecs.map { it.name }) {
                         types.addClass(className) {
-                            addModifiers(public, static, final)
+                            addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             methods.addConstructor {
-                                addModifiers(private)
+                                addModifiers(Modifier.PRIVATE)
                             }
                             process(file)
                         }
