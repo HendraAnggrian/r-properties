@@ -23,6 +23,7 @@ class RPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         val generateR by project.tasks.registering(RTask::class) {
             group = GROUP_NAME
+            description = "Generate Android-like R class."
             resourcesDir = project.projectDir.resolve("src/main/resources")
             outputDirectory = project.buildDir.resolve("$GENERATED_DIR/src/main").absolutePath
         }
@@ -37,6 +38,7 @@ class RPlugin : Plugin<Project> {
 
         val compileR by project.tasks.registering(JavaCompile::class) {
             dependsOn(generateRTask)
+            description = "Compiles R source file."
             group = GROUP_NAME
             classpath = project.files()
             destinationDir = project.buildDir.resolve("$GENERATED_DIR/classes/main")
