@@ -15,12 +15,11 @@
 <tbody>
 <tr>
 <td>
-<p><a href="-init-.html">&lt;init&gt;</a></p>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
 </td>
 <td>
-<code><span class="identifier">RTask</span><span class="symbol">(</span><span class="symbol">)</span></code>
 <p>R class generation task.</p>
-</td>
+<code><span class="identifier">RTask</span><span class="symbol">(</span><span class="symbol">)</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -29,90 +28,81 @@
 <tbody>
 <tr>
 <td>
-<p><a href="class-name.html">className</a></p>
+<h4><a href="class-name.html">className</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">className</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
 <p>Class name of R.
 Default is <code>R</code>, may be modified but cannot be null.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">className</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="exclusions.html">exclusions</a></p>
+<h4><a href="exclusions.html">exclusions</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">exclusions</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><span class="identifier">Iterable</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a><span class="symbol">&gt;</span></code>
 <p>Collection of files (or directories) that are ignored from this task.
 Default is empty.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">exclusions</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><span class="identifier">Iterable</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="fix-field-name.html">fixFieldName</a></p>
+<h4><a href="fix-field-name.html">fixFieldName</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">fixFieldName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
 <p>When activated, it will automatically fix invalid field names. Otherwise, it will skip the field.
 Default is false.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">fixFieldName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="output-dir.html">outputDir</a></p>
+<h4><a href="output-dir.html">outputDir</a></h4>
 </td>
 <td>
-<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">outputDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
 <p>Path that R class will be generated to.</p>
-</td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">outputDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="output-directory.html">outputDirectory</a></p>
+<h4><a href="output-directory.html">outputDirectory</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">outputDirectory</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
 <p>Convenient method to set output directory from file path, relative to project directory.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">outputDirectory</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="package-name.html">packageName</a></p>
+<h4><a href="package-name.html">packageName</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
 <p>Package name of which R class will be generated to.
 Default is project group, may be modified but cannot be null.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">packageName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="resources-dir.html">resourcesDir</a></p>
+<h4><a href="resources-dir.html">resourcesDir</a></h4>
 </td>
 <td>
-<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">resourcesDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code>
 <p>Main resources directory.
 Default is resources folder in main module.</p>
-</td>
+<code><span class="keyword">lateinit</span> <span class="keyword">var </span><span class="identifier">resourcesDir</span><span class="symbol">: </span><a href="https://docs.oracle.com/javase/6/docs/api/java/io/File.html"><span class="identifier">File</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="resources-directory.html">resourcesDirectory</a></p>
+<h4><a href="resources-directory.html">resourcesDirectory</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">resourcesDirectory</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
 <p>Convenient method to set resources directory from file path, relative to project directory.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">resourcesDirectory</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="uppercase-field-name.html">uppercaseFieldName</a></p>
+<h4><a href="uppercase-field-name.html">uppercaseFieldName</a></h4>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">uppercaseFieldName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
 <p>When activated, automatically make all field names uppercase.
 Default is false.</p>
-</td>
+<code><span class="keyword">var </span><span class="identifier">uppercaseFieldName</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
 </tr>
 </tbody>
 </table>
@@ -121,81 +111,73 @@ Default is false.</p>
 <tbody>
 <tr>
 <td>
-<p><a href="configure-css.html">configureCss</a></p>
+<h4><a href="configure-css.html">configureCss</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">configureCss</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates CSS files support.</p>
-<code><span class="keyword">fun </span><span class="identifier">configureCss</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$configureCss(org.gradle.api.Action((com.hendraanggrian.r.options.CssOptions)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.r.options/-css-options/index.html"><span class="identifier">CssOptions</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">configureCss</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates CSS files support with Groovy closure.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">configureCss</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$configureCss(org.gradle.api.Action((com.hendraanggrian.r.CssOptions)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../-css-options/index.html"><span class="identifier">CssOptions</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="configure-json.html">configureJson</a></p>
+<h4><a href="configure-json.html">configureJson</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">configureJson</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates JSON files support.</p>
-<code><span class="keyword">fun </span><span class="identifier">configureJson</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$configureJson(org.gradle.api.Action((com.hendraanggrian.r.options.JsonOptions)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.r.options/-json-options/index.html"><span class="identifier">JsonOptions</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">configureJson</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates JSON files support with Groovy closure.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">configureJson</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$configureJson(org.gradle.api.Action((com.hendraanggrian.r.JsonOptions)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../-json-options/index.html"><span class="identifier">JsonOptions</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="configure-properties.html">configureProperties</a></p>
+<h4><a href="configure-properties.html">configureProperties</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">configureProperties</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates properties files support.</p>
-<code><span class="keyword">fun </span><span class="identifier">configureProperties</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$configureProperties(org.gradle.api.Action((com.hendraanggrian.r.options.PropertiesOptions)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../../com.hendraanggrian.r.options/-properties-options/index.html"><span class="identifier">PropertiesOptions</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">configureProperties</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates properties files support with Groovy closure.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">configureProperties</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$configureProperties(org.gradle.api.Action((com.hendraanggrian.r.PropertiesOptions)))/action">action</span><span class="symbol">:</span>&nbsp;<span class="identifier">Action</span><span class="symbol">&lt;</span><a href="../-properties-options/index.html"><span class="identifier">PropertiesOptions</span></a><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="css.html">css</a></p>
+<h4><a href="css.html">css</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">css</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$css(kotlin.Function1((com.hendraanggrian.r.options.CssOptions, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.r.options/-css-options/index.html"><span class="identifier">CssOptions</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates CSS files support with Kotlin DSL.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">css</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$css(kotlin.Function1((com.hendraanggrian.r.CssOptions, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="../-css-options/index.html"><span class="identifier">CssOptions</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="exclude.html">exclude</a></p>
+<h4><a href="exclude.html">exclude</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">exclude</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.r.RTask$exclude(kotlin.Array((kotlin.String)))/exclusions">exclusions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Convenient method to set exclusions from file path, relative to project directory.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">exclude</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.r.RTask$exclude(kotlin.Array((kotlin.String)))/exclusions">exclusions</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="generate.html">generate</a></p>
+<h4><a href="generate.html">generate</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">generate</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Generate R class given provided options.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">generate</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="json.html">json</a></p>
+<h4><a href="json.html">json</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">json</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$json(kotlin.Function1((com.hendraanggrian.r.options.JsonOptions, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.r.options/-json-options/index.html"><span class="identifier">JsonOptions</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates JSON files support with Kotlin DSL.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">json</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$json(kotlin.Function1((com.hendraanggrian.r.JsonOptions, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="../-json-options/index.html"><span class="identifier">JsonOptions</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="properties.html">properties</a></p>
+<h4><a href="properties.html">properties</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">properties</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$properties(kotlin.Function1((com.hendraanggrian.r.options.PropertiesOptions, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.r.options/-properties-options/index.html"><span class="identifier">PropertiesOptions</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Activates properties files support with Kotlin DSL.</p>
-</td>
+<code><span class="keyword">fun </span><span class="identifier">properties</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.r.RTask$properties(kotlin.Function1((com.hendraanggrian.r.PropertiesOptions, kotlin.Unit)))/action">action</span><span class="symbol">:</span>&nbsp;<a href="../-properties-options/index.html"><span class="identifier">PropertiesOptions</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 </tbody>
 </table>
