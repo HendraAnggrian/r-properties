@@ -4,6 +4,10 @@ package com.hendraanggrian.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter.ofPattern
+import javax.lang.model.element.Modifier
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -12,10 +16,6 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofPattern
-import javax.lang.model.element.Modifier
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -87,7 +87,7 @@ open class RTask : DefaultTask() {
         outputs.upToDateWhen { false }
     }
 
-    /** Activates CSS files support. */
+    /** Enable CSS files support with default configuration. */
     fun configureCss() {
         var options = cssOptions
         if (options == null) {
@@ -96,16 +96,16 @@ open class RTask : DefaultTask() {
         }
     }
 
-    /** Activates CSS files support with Groovy closure. */
-    fun configureCss(action: Action<CssOptions>) {
+    /** Enable CSS files support with customized [configuration]. */
+    fun configureCss(configuration: Action<CssOptions>) {
         configureCss()
-        action(cssOptions!!)
+        configuration(cssOptions!!)
     }
 
-    /** Activates CSS files support with Kotlin DSL. */
-    inline fun css(noinline action: CssOptions.() -> Unit) = configureCss(action)
+    /** Enable CSS files support with customized [configuration] in Kotlin DSL. */
+    inline fun css(noinline configuration: CssOptions.() -> Unit) = configureCss(configuration)
 
-    /** Activates properties files support. */
+    /** Enable properties files support with default configuration. */
     fun configureProperties() {
         var options = propertiesOptions
         if (options == null) {
@@ -114,16 +114,16 @@ open class RTask : DefaultTask() {
         }
     }
 
-    /** Activates properties files support with Groovy closure. */
-    fun configureProperties(action: Action<PropertiesOptions>) {
+    /** Enable properties files support with customized [configuration]. */
+    fun configureProperties(configuration: Action<PropertiesOptions>) {
         configureProperties()
-        action(propertiesOptions!!)
+        configuration(propertiesOptions!!)
     }
 
-    /** Activates properties files support with Kotlin DSL. */
-    inline fun properties(noinline action: PropertiesOptions.() -> Unit) = configureProperties(action)
+    /** Enable properties files support with customized [configuration] in Kotlin DSL. */
+    inline fun properties(noinline configuration: PropertiesOptions.() -> Unit) = configureProperties(configuration)
 
-    /** Activates JSON files support. */
+    /** Enable json files support with default configuration. */
     fun configureJson() {
         var options = jsonOptions
         if (options == null) {
@@ -132,14 +132,14 @@ open class RTask : DefaultTask() {
         }
     }
 
-    /** Activates JSON files support with Groovy closure. */
-    fun configureJson(action: Action<JsonOptions>) {
+    /** Enable json files support with customized [configuration]. */
+    fun configureJson(configuration: Action<JsonOptions>) {
         configureJson()
-        action(jsonOptions!!)
+        configuration(jsonOptions!!)
     }
 
-    /** Activates JSON files support with Kotlin DSL. */
-    inline fun json(noinline action: JsonOptions.() -> Unit) = configureJson(action)
+    /** Enable json files support with customized [configuration] in Kotlin DSL. */
+    inline fun json(noinline configuration: JsonOptions.() -> Unit) = configureJson(configuration)
 
     /** Generate R class given provided options. */
     @TaskAction fun generate() {

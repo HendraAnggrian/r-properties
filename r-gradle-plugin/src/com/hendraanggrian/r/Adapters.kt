@@ -16,7 +16,6 @@ internal sealed class Adapter(
     private val isUppercase: Boolean,
     private val isFix: Boolean
 ) {
-
     abstract fun TypeSpecBuilder.adapt(file: File): Boolean
 
     protected fun TypeSpecBuilder.addStringField(name: String, value: String) {
@@ -46,7 +45,6 @@ internal class DefaultAdapter(
     private val resourcesDir: String,
     private val usePrefix: Boolean = false
 ) : Adapter(isUppercase, isFix) {
-
     override fun TypeSpecBuilder.adapt(file: File): Boolean {
         addStringField(
             when {
@@ -64,7 +62,6 @@ internal class CssAdapter(
     isFix: Boolean,
     private val options: CssOptions
 ) : Adapter(isUppercase, isFix) {
-
     override fun TypeSpecBuilder.adapt(file: File): Boolean {
         if (file.extension == "css") {
             val css = checkNotNull(CSSReader.readFromFile(file, StandardCharsets.UTF_8, ECSSVersion.CSS30)) {
@@ -96,7 +93,6 @@ internal class PropertiesAdapter(
     isFix: Boolean,
     private val options: PropertiesOptions
 ) : Adapter(isUppercase, isFix) {
-
     override fun TypeSpecBuilder.adapt(file: File): Boolean {
         if (file.extension == "properties") {
             when {
@@ -145,7 +141,6 @@ internal class JsonAdapter(
     isFix: Boolean,
     private val options: JsonOptions
 ) : Adapter(isUppercase, isFix) {
-
     private var parserRef = WeakReference<JSONParser>(null)
 
     override fun TypeSpecBuilder.adapt(file: File): Boolean {

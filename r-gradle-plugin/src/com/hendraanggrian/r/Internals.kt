@@ -3,9 +3,8 @@ package com.hendraanggrian.r
 import java.io.File
 import javax.lang.model.SourceVersion
 
-internal fun File.isValid(): Boolean = !isHidden &&
-    nameWithoutExtension.isNotEmpty() &&
-    nameWithoutExtension.first().isJavaIdentifierStart()
+internal fun File.isValid(): Boolean =
+    !isHidden && nameWithoutExtension.let { it.isNotEmpty() && it.first().isJavaIdentifierStart() }
 
 internal fun String.isFieldName(): Boolean = when {
     isEmpty() || this == "_" || !SourceVersion.isName(this) -> false // Java SE 9 no longer supports '_'
