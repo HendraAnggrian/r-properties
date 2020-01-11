@@ -1,11 +1,9 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofPattern
-import javax.lang.model.element.Modifier
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -14,6 +12,10 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter.ofPattern
+import javax.lang.model.element.Modifier
 
 /** R class generation task. */
 open class RTask : DefaultTask() {
@@ -50,7 +52,7 @@ open class RTask : DefaultTask() {
 
     /** Convenient method to set resources directory from file path, relative to project directory. */
     var resourcesDirectory: String
-        @InputDirectory get() = resourcesDir.absolutePath
+        @Input get() = resourcesDir.absolutePath
         set(value) {
             resourcesDir = project.projectDir.resolve(value)
         }
@@ -71,7 +73,7 @@ open class RTask : DefaultTask() {
 
     /** Convenient method to set output directory from file path, relative to project directory. */
     var outputDirectory: String
-        @OutputDirectory get() = outputDir.absolutePath
+        @Input get() = outputDir.absolutePath
         set(value) {
             outputDir = project.projectDir.resolve(value)
         }
@@ -101,8 +103,7 @@ open class RTask : DefaultTask() {
     }
 
     /** Activates CSS files support with Kotlin DSL. */
-    fun css(action: CssOptions.() -> Unit) =
-        configureCss(action)
+    inline fun css(noinline action: CssOptions.() -> Unit) = configureCss(action)
 
     /** Activates properties files support. */
     fun configureProperties() {
@@ -120,8 +121,7 @@ open class RTask : DefaultTask() {
     }
 
     /** Activates properties files support with Kotlin DSL. */
-    fun properties(action: PropertiesOptions.() -> Unit) =
-        configureProperties(action)
+    inline fun properties(noinline action: PropertiesOptions.() -> Unit) = configureProperties(action)
 
     /** Activates JSON files support. */
     fun configureJson() {
@@ -139,12 +139,10 @@ open class RTask : DefaultTask() {
     }
 
     /** Activates JSON files support with Kotlin DSL. */
-    fun json(action: JsonOptions.() -> Unit) =
-        configureJson(action)
+    inline fun json(noinline action: JsonOptions.() -> Unit) = configureJson(action)
 
     /** Generate R class given provided options. */
-    @TaskAction
-    fun generate() {
+    @TaskAction fun generate() {
         logger.info("Checking requirements")
         require(packageName.isNotBlank()) { "Package name cannot be null" }
         require(className.isNotBlank()) { "Class name cannot be null" }
