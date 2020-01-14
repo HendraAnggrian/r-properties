@@ -4,6 +4,11 @@ package com.hendraanggrian.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.r.adapters.BaseAdapter
+import com.hendraanggrian.r.adapters.CssAdapter
+import com.hendraanggrian.r.adapters.JsonAdapter
+import com.hendraanggrian.r.adapters.PathAdapter
+import com.hendraanggrian.r.adapters.PropertiesAdapter
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
@@ -37,12 +42,6 @@ open class RTask : DefaultTask() {
      * Default is false.
      */
     @Input var uppercaseFieldName: Boolean = false
-
-    /**
-     * When activated, it will automatically fix invalid field names. Otherwise, it will skip the field.
-     * Default is false.
-     */
-    @Input var fixFieldName: Boolean = false
 
     /**
      * Main resources directory.
@@ -163,12 +162,12 @@ open class RTask : DefaultTask() {
                 }
                 processDir(
                     listOfNotNull(
-                        cssOptions?.let { CssAdapter(uppercaseFieldName, fixFieldName, it) },
-                        jsonOptions?.let { JsonAdapter(uppercaseFieldName, fixFieldName, it) },
-                        propertiesOptions?.let { PropertiesAdapter(uppercaseFieldName, fixFieldName, it) }
+                        cssOptions?.let { CssAdapter(uppercaseFieldName, it) },
+                        jsonOptions?.let { JsonAdapter(uppercaseFieldName, it) },
+                        propertiesOptions?.let { PropertiesAdapter(uppercaseFieldName, it) }
                     ),
-                    DefaultAdapter(uppercaseFieldName, fixFieldName, resourcesDir.path),
-                    DefaultAdapter(uppercaseFieldName, fixFieldName, resourcesDir.path, true),
+                    PathAdapter(uppercaseFieldName, resourcesDir.path),
+                    PathAdapter(uppercaseFieldName, resourcesDir.path, true),
                     resourcesDir
                 )
             }
@@ -179,9 +178,9 @@ open class RTask : DefaultTask() {
     }
 
     private fun TypeSpecBuilder.processDir(
-        adapters: Iterable<Adapter>,
-        defaultAdapter: Adapter,
-        prefixedAdapter: Adapter,
+        adapters: Iterable<BaseAdapter>,
+        defaultAdapter: BaseAdapter,
+        prefixedAdapter: BaseAdapter,
         resourcesDir: File
     ) {
         val exclusionPaths = exclusions.map { it.path }

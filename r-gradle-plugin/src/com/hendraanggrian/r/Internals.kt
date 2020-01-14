@@ -11,7 +11,7 @@ internal fun String.isFieldName(): Boolean = when {
     else -> first().isJavaIdentifierStart() && drop(1).all { it.isJavaIdentifierPart() }
 }
 
-/** Fixes invalid field name, or null if is is unfixable. */
+/** Fixes invalid field name, or null if it is unfixable. */
 internal fun String.toFieldName(): String? {
     var result = this
     // Return original string if already valid

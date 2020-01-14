@@ -1,22 +1,51 @@
 package com.hendraanggrian.r
 
 data class CssOptions(
-    /** When set to true, will remove `.` prefix in JavaFX CSS style classes. */
-    var isJavaFx: Boolean = false
+    /**
+     * Determine whether adapter should write element type selector (e.g.: `ul { ... }`)
+     * It is disabled by default.
+     */
+    var readElementTypeSelector: Boolean = false,
+
+    /**
+     * Determine whether adapter should write class selector (e.g.: `.box { ... }`)
+     * It is enabled by default.
+     */
+    var readClassSelector: Boolean = true,
+
+    /**
+     * Determine whether adapter should write ID selector (e.g.: `#container { ... }`)
+     * It is enabled by default.
+     */
+    var readIdSelector: Boolean = true
 ) {
 
-    /** Groovy-friendly alias of [isJavaFx]. */
-    fun javaFx(isJavaFx: Boolean) {
-        this.isJavaFx = isJavaFx
+    /** Groovy-friendly alias of [readElementTypeSelector]. */
+    fun readElementTypeSelector(readElementTypeSelector: Boolean) {
+        this.readElementTypeSelector = readElementTypeSelector
+    }
+
+    /** Groovy-friendly alias of [readClassSelector]. */
+    fun readClassSelector(readClassSelector: Boolean) {
+        this.readClassSelector = readClassSelector
+    }
+
+    /** Groovy-friendly alias of [readIdSelector]. */
+    fun readIdSelector(readIdSelector: Boolean) {
+        this.readIdSelector = readIdSelector
     }
 }
 
 data class JsonOptions(
-    /** When set to true, will convert child json and so on. */
-    var isRecursive: Boolean = false,
     /**
-     * When set to true, will also convert json array keys,
-     * has no effect if not recursive.
+     * Determine whether adapter should also write inner json object.
+     * It is disabled by default.
+     */
+    var isRecursive: Boolean = false,
+
+    /**
+     * Determine whether adapter should also write inner json array.
+     * It is enabled by default. However, has no effect if [isRecursive] is disabled.
      */
     var readArray: Boolean = true
 ) {
@@ -34,12 +63,11 @@ data class JsonOptions(
 
 data class PropertiesOptions(
     /**
-     * When set to true, will convert properties files that are resource bundle.
+     * Determine whether adapter should also write resource bundle.
      * Resource bundle files usually have suffix like `_en`, `_id`.
-     *
-     * Default value is true, resembles to what works in JavaFX.
+     * It is disabled by default.
      */
-    var readResourceBundle: Boolean = true
+    var readResourceBundle: Boolean = false
 ) {
 
     /** Groovy-friendly alias of [readResourceBundle]. */
