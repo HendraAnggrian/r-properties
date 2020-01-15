@@ -1,7 +1,7 @@
 package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.r.JsonOptions
+import com.hendraanggrian.r.JsonSettings
 import java.io.File
 import java.lang.ref.WeakReference
 import org.json.simple.JSONArray
@@ -12,10 +12,10 @@ import org.json.simple.parser.JSONParser
  * An adapter that writes [JSONObject] and [JSONArray] keys.
  * The file path itself will be written with underscore prefix.
  */
-internal class JsonAdapter(isUppercase: Boolean, private val options: JsonOptions) : BaseAdapter(isUppercase) {
+internal class JsonAdapter(isUppercase: Boolean, private val settings: JsonSettings) : BaseAdapter(isUppercase) {
     private var parserRef = WeakReference<JSONParser>(null)
 
-    override fun TypeSpecBuilder.adapt(file: File): Boolean {
+    override fun TypeSpecBuilder.process(file: File): Boolean {
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()
@@ -23,28 +23,24 @@ internal class JsonAdapter(isUppercase: Boolean, private val options: JsonOption
                     parser = JSONParser()
                     parserRef = WeakReference(parser)
                 }
-                (parser.parse(reader) as JSONObject).forEachKey { key ->
-                    addStringField(key, key)
-                }
+                (parser.parse(reader) as JSONObject).forEachKey { addStringField(it) }
                 return true
             }
         }
         return false
     }
 
-    private fun JSONObject.forEachKey(action: (String) -> Unit): Unit =
-        forEach { key, value ->
-            action(key.toString())
-            if (value is JSONArray && options.readArray) {
-                value.forEachKey(action)
-            }
+    private fun JSONObject.forEachKey(action: (String) -> Unit): Unit = forEach { key, value ->
+        action(key.toString())
+        if (value is JSONArray && settings.isWriteArray) {
+            value.forEachKey(action)
         }
+    }
 
-    private fun JSONArray.forEachKey(action: (String) -> Unit): Unit =
-        forEach { json ->
-            when {
-                options.isRecursive && json is JSONObject -> json.forEachKey(action)
-                options.readArray && json is JSONArray -> json.forEachKey(action)
-            }
+    private fun JSONArray.forEachKey(action: (String) -> Unit): Unit = forEach { json ->
+        when {
+            settings.isRecursive && json is JSONObject -> json.forEachKey(action)
+            settings.isWriteArray && json is JSONArray -> json.forEachKey(action)
         }
+    }
 }

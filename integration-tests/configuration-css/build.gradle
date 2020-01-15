@@ -23,7 +23,5 @@ dependencies {
 }
 
 tasks.getByName('generateR') {
-    configureCss {
-        javaFx true
-    }
+    configureCss()
 }

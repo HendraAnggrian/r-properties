@@ -2,14 +2,16 @@ package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.r.isFieldName
-import com.hendraanggrian.r.toFieldName
+import com.hendraanggrian.r.toFieldNameOrNull
 import java.io.File
 import javax.lang.model.element.Modifier
 
 /** Where the R fields writing process starts, implementation of each adapter may differ. */
 internal abstract class BaseAdapter(private val isUppercase: Boolean) {
 
-    abstract fun TypeSpecBuilder.adapt(file: File): Boolean
+    abstract fun TypeSpecBuilder.process(file: File): Boolean
+
+    protected fun TypeSpecBuilder.addStringField(name: String) = addStringField(name, name)
 
     protected fun TypeSpecBuilder.addStringField(name: String, value: String) {
         var fieldName: String? = name
@@ -17,7 +19,7 @@ internal abstract class BaseAdapter(private val isUppercase: Boolean) {
             fieldName = fieldName!!.toUpperCase()
         }
         if (!fieldName!!.isFieldName()) {
-            fieldName = fieldName.toFieldName()
+            fieldName = fieldName.toFieldNameOrNull()
         }
         // checks if field name is valid and there's no duplicate
         if (fieldName != null && fieldName !in build().fieldSpecs.map { it.name }) {

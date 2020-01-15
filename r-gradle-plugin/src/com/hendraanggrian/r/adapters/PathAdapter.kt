@@ -13,12 +13,10 @@ internal class PathAdapter(
     private val useUnderscorePrefix: Boolean = false
 ) : BaseAdapter(isUppercase) {
 
-    override fun TypeSpecBuilder.adapt(file: File): Boolean {
+    override fun TypeSpecBuilder.process(file: File): Boolean {
         addStringField(
             buildString {
-                if (useUnderscorePrefix) {
-                    append('_')
-                }
+                if (useUnderscorePrefix) append('_')
                 append(file.nameWithoutExtension)
             },
             file.path.substringAfter(resourcesDir).replace('\\', '/')

@@ -1,8 +1,7 @@
 package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.r.PropertiesOptions
-import com.hendraanggrian.r.isValid
+import com.hendraanggrian.r.PropertiesSettings
 import java.io.File
 import java.util.Properties
 import javax.lang.model.element.Modifier
@@ -11,26 +10,24 @@ import javax.lang.model.element.Modifier
  * An adapter that writes [Properties] keys.
  * The file path itself will be written with underscore prefix.
  */
-internal class PropertiesAdapter(isUppercase: Boolean, private val options: PropertiesOptions) :
+internal class PropertiesAdapter(isUppercase: Boolean, private val settings: PropertiesSettings) :
     BaseAdapter(isUppercase) {
 
-    override fun TypeSpecBuilder.adapt(file: File): Boolean {
+    override fun TypeSpecBuilder.process(file: File): Boolean {
         if (file.extension == "properties") {
             when {
-                options.readResourceBundle && file.isResourceBundle() -> {
+                settings.isWriteResourceBundle && file.isResourceBundle() -> {
                     val className = file.resourceBundleName
                     if (className !in build().typeSpecs.map { it.name }) {
                         types.addClass(className) {
                             addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            methods.addConstructor {
-                                addModifiers(Modifier.PRIVATE)
-                            }
-                            process(file)
+                            methods.addConstructor { addModifiers(Modifier.PRIVATE) }
+                            file.forEachKey { addStringField(it) }
                         }
                     }
                 }
                 else -> {
-                    process(file)
+                    file.forEachKey { addStringField(it) }
                     return true
                 }
             }
@@ -38,21 +35,16 @@ internal class PropertiesAdapter(isUppercase: Boolean, private val options: Prop
         return false
     }
 
-    private fun TypeSpecBuilder.process(file: File) =
-        file.forEachProperties { key, _ -> addStringField(key, key) }
-
-    private fun File.forEachProperties(action: (key: String, value: String) -> Unit) =
-        inputStream().use { stream ->
-            Properties().run {
-                load(stream)
-                keys.map { it as? String ?: it.toString() }.forEach { key -> action(key, getProperty(key)) }
-            }
+    private fun File.forEachKey(action: (String) -> Unit) = inputStream().use { stream ->
+        Properties().run {
+            load(stream)
+            keys.map { it as? String ?: it.toString() }.forEach(action)
         }
+    }
 
-    private inline val File.resourceBundleName: String
-        get() = nameWithoutExtension.substringBeforeLast("_")
+    private val File.resourceBundleName: String get() = nameWithoutExtension.substringBeforeLast("_")
 
-    private fun File.isResourceBundle(): Boolean = isValid() &&
+    private fun File.isResourceBundle(): Boolean = !isHidden &&
         extension == "properties" &&
         nameWithoutExtension.let { name -> '_' in name && name.substringAfterLast("_").length == 2 }
 }

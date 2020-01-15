@@ -1,6 +1,6 @@
 include("r-gradle-plugin")
 include("website")
-// includeDir("integration-tests")
+includeDir("integration-tests")
 
 fun includeDir(dir: String) = file(dir)
     .listFiles()!!

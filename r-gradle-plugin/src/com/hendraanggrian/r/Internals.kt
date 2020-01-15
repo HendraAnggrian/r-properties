@@ -1,18 +1,15 @@
 package com.hendraanggrian.r
 
-import java.io.File
 import javax.lang.model.SourceVersion
 
-internal fun File.isValid(): Boolean =
-    !isHidden && nameWithoutExtension.let { it.isNotEmpty() && it.first().isJavaIdentifierStart() }
-
+/** Check if string is a valid Java field name. */
 internal fun String.isFieldName(): Boolean = when {
     isEmpty() || this == "_" || !SourceVersion.isName(this) -> false // Java SE 9 no longer supports '_'
     else -> first().isJavaIdentifierStart() && drop(1).all { it.isJavaIdentifierPart() }
 }
 
-/** Fixes invalid field name, or null if it is unfixable. */
-internal fun String.toFieldName(): String? {
+/** Fixes invalid field name, or null if it is un-fixable. */
+internal fun String.toFieldNameOrNull(): String? {
     var result = this
     // Return original string if already valid
     if (result.isFieldName()) {

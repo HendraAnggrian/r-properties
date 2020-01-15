@@ -22,18 +22,18 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
 
-/** R class generation task. */
+/** A task that writes `R` class. */
 open class RTask : DefaultTask() {
 
     /**
-     * Package name of which R class will be generated to.
-     * Default is project group, may be modified but cannot be null.
+     * Package name of which `R` class will be generated to, cannot be empty.
+     * If left empty or unmodified, project group will be assigned as value.
      */
     @Input var packageName: String = ""
 
     /**
-     * Class name of R.
-     * Default is `R`, may be modified but cannot be null.
+     * Generated class name, cannot be empty.
+     * Default value is `R`.
      */
     @Input var className: String = "R"
 
@@ -49,7 +49,7 @@ open class RTask : DefaultTask() {
      */
     @InputDirectory lateinit var resourcesDir: File
 
-    /** Convenient method to set resources directory from file path, relative to project directory. */
+    /** Convenient method to set resources directory relative to project directory. */
     var resourcesDirectory: String
         @Input get() = resourcesDir.absolutePath
         set(value) {
@@ -62,24 +62,27 @@ open class RTask : DefaultTask() {
      */
     @InputFiles var exclusions: Iterable<File> = emptyList()
 
-    /** Convenient method to set exclusions from file path, relative to project directory. */
+    /** Convenient method to set exclusions relative to project directory. */
     fun exclude(vararg exclusions: String) {
         this.exclusions = exclusions.map { project.projectDir.resolve(it) }
     }
 
-    /** Path that R class will be generated to. */
+    /**
+     * Directory of which `R` class will be generated to.
+     * Default is `build/generated` relative to project directory.
+     */
     @OutputDirectory lateinit var outputDir: File
 
-    /** Convenient method to set output directory from file path, relative to project directory. */
+    /** Convenient method to set output directory relative to project directory. */
     var outputDirectory: String
         @Input get() = outputDir.absolutePath
         set(value) {
             outputDir = project.projectDir.resolve(value)
         }
 
-    private var cssOptions: CssOptions? = null
-    private var propertiesOptions: PropertiesOptions? = null
-    private var jsonOptions: JsonOptions? = null
+    private var cssSettings: CssSettings? = null
+    private var propertiesSettings: PropertiesSettings? = null
+    private var jsonSettings: JsonSettings? = null
 
     init {
         // always consider this task out of date
@@ -88,57 +91,57 @@ open class RTask : DefaultTask() {
 
     /** Enable CSS files support with default configuration. */
     fun configureCss() {
-        var options = cssOptions
-        if (options == null) {
-            options = CssOptions()
-            cssOptions = options
+        var settings = cssSettings
+        if (settings == null) {
+            settings = CssSettings()
+            cssSettings = settings
         }
     }
 
     /** Enable CSS files support with customized [configuration]. */
-    fun configureCss(configuration: Action<CssOptions>) {
+    fun configureCss(configuration: Action<CssSettings>) {
         configureCss()
-        configuration(cssOptions!!)
+        configuration(cssSettings!!)
     }
 
     /** Enable CSS files support with customized [configuration] in Kotlin DSL. */
-    inline fun css(noinline configuration: CssOptions.() -> Unit) = configureCss(configuration)
+    inline fun css(noinline configuration: CssSettings.() -> Unit) = configureCss(configuration)
 
     /** Enable properties files support with default configuration. */
     fun configureProperties() {
-        var options = propertiesOptions
-        if (options == null) {
-            options = PropertiesOptions()
-            propertiesOptions = options
+        var settings = propertiesSettings
+        if (settings == null) {
+            settings = PropertiesSettings()
+            propertiesSettings = settings
         }
     }
 
     /** Enable properties files support with customized [configuration]. */
-    fun configureProperties(configuration: Action<PropertiesOptions>) {
+    fun configureProperties(configuration: Action<PropertiesSettings>) {
         configureProperties()
-        configuration(propertiesOptions!!)
+        configuration(propertiesSettings!!)
     }
 
     /** Enable properties files support with customized [configuration] in Kotlin DSL. */
-    inline fun properties(noinline configuration: PropertiesOptions.() -> Unit) = configureProperties(configuration)
+    inline fun properties(noinline configuration: PropertiesSettings.() -> Unit) = configureProperties(configuration)
 
     /** Enable json files support with default configuration. */
     fun configureJson() {
-        var options = jsonOptions
-        if (options == null) {
-            options = JsonOptions()
-            jsonOptions = options
+        var settings = jsonSettings
+        if (settings == null) {
+            settings = JsonSettings()
+            jsonSettings = settings
         }
     }
 
     /** Enable json files support with customized [configuration]. */
-    fun configureJson(configuration: Action<JsonOptions>) {
+    fun configureJson(configuration: Action<JsonSettings>) {
         configureJson()
-        configuration(jsonOptions!!)
+        configuration(jsonSettings!!)
     }
 
     /** Enable json files support with customized [configuration] in Kotlin DSL. */
-    inline fun json(noinline configuration: JsonOptions.() -> Unit) = configureJson(configuration)
+    inline fun json(noinline configuration: JsonSettings.() -> Unit) = configureJson(configuration)
 
     /** Generate R class given provided options. */
     @TaskAction fun generate() {
@@ -162,9 +165,9 @@ open class RTask : DefaultTask() {
                 }
                 processDir(
                     listOfNotNull(
-                        cssOptions?.let { CssAdapter(uppercaseFieldName, it) },
-                        jsonOptions?.let { JsonAdapter(uppercaseFieldName, it) },
-                        propertiesOptions?.let { PropertiesAdapter(uppercaseFieldName, it) }
+                        cssSettings?.let { CssAdapter(uppercaseFieldName, it) },
+                        jsonSettings?.let { JsonAdapter(uppercaseFieldName, it) },
+                        propertiesSettings?.let { PropertiesAdapter(uppercaseFieldName, it) }
                     ),
                     PathAdapter(uppercaseFieldName, resourcesDir.path),
                     PathAdapter(uppercaseFieldName, resourcesDir.path, true),
@@ -185,10 +188,10 @@ open class RTask : DefaultTask() {
     ) {
         val exclusionPaths = exclusions.map { it.path }
         resourcesDir.listFiles()!!
-            .filter { file -> file.isValid() && file.path !in exclusionPaths }
+            .filter { file -> !file.isHidden && file.path !in exclusionPaths }
             .forEach { file ->
                 when {
-                    file.isDirectory -> file.name.toFieldName()?.let {
+                    file.isDirectory -> file.name.toFieldNameOrNull()?.let {
                         types.addClass(it) {
                             addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             methods.addConstructor {
@@ -198,11 +201,11 @@ open class RTask : DefaultTask() {
                         }
                     }
                     file.isFile -> {
-                        val prefixes = adapters.map { it.run { adapt(file) } }
+                        val prefixes = adapters.map { it.run { process(file) } }
                         when {
                             prefixes.any { it } -> prefixedAdapter
                             else -> defaultAdapter
-                        }.run { adapt(file) }
+                        }.run { process(file) }
                     }
                 }
             }
