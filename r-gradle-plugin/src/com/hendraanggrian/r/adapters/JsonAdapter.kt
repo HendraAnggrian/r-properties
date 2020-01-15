@@ -12,10 +12,13 @@ import org.json.simple.parser.JSONParser
  * An adapter that writes [JSONObject] and [JSONArray] keys.
  * The file path itself will be written with underscore prefix.
  */
-internal class JsonAdapter(isUppercase: Boolean, private val settings: JsonSettings) : BaseAdapter(isUppercase) {
+internal class JsonAdapter(
+    isUppercaseField: Boolean,
+    private val settings: JsonSettings
+) : BaseAdapter(isUppercaseField) {
     private var parserRef = WeakReference<JSONParser>(null)
 
-    override fun TypeSpecBuilder.process(file: File): Boolean {
+    override fun process(typeBuilder: TypeSpecBuilder, file: File): Boolean {
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()
@@ -23,7 +26,7 @@ internal class JsonAdapter(isUppercase: Boolean, private val settings: JsonSetti
                     parser = JSONParser()
                     parserRef = WeakReference(parser)
                 }
-                (parser.parse(reader) as JSONObject).forEachKey { addStringField(it) }
+                (parser.parse(reader) as JSONObject).forEachKey { typeBuilder.addField(it) }
                 return true
             }
         }

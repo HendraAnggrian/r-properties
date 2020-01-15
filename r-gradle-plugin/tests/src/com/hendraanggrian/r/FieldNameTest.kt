@@ -7,20 +7,20 @@ import kotlin.test.assertNull
 class FieldNameTest {
 
     @Test fun test() {
-        assertEquals("nine", "nine".toFieldNameOrNull())
-        assertEquals("_9nine", "9nine".toFieldNameOrNull())
-        assertEquals("n_ne", "n|ne".toFieldNameOrNull())
-        assertEquals("_nine", ">nine".toFieldNameOrNull())
+        assertEquals("nine", "nine".toJavaNameOrNull())
+        assertEquals("_9nine", "9nine".toJavaNameOrNull())
+        assertEquals("n_ne", "n|ne".toJavaNameOrNull())
+        assertEquals("_nine", ">nine".toJavaNameOrNull())
 
-        assertEquals("string_in_properties", "string_in.properties".toFieldNameOrNull())
+        assertEquals("string_in_properties", "string_in.properties".toJavaNameOrNull())
 
-        assertEquals("_final", "final".toFieldNameOrNull())
-        assertEquals("_int", "int".toFieldNameOrNull())
+        assertEquals("_final", "final".toJavaNameOrNull())
+        assertEquals("_int", "int".toJavaNameOrNull())
 
-        assertNull("*".toFieldNameOrNull())
-        assertNull("**".toFieldNameOrNull())
+        assertNull("*".toJavaNameOrNull())
+        assertNull("**".toJavaNameOrNull())
 
-        assertEquals("text_field", "text-field".toFieldNameOrNull())
-        assertEquals("_text_field", ".text-field".toFieldNameOrNull())
+        assertEquals("text_field", "text-field".toJavaNameOrNull())
+        assertEquals("_text_field", ".text-field".toJavaNameOrNull())
     }
 }

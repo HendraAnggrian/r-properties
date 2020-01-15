@@ -8,15 +8,16 @@ import java.io.File
  * When optional features are activated (CSS, properties, etc.), underscore prefix will be applied to field names.
  */
 internal class PathAdapter(
-    isUppercase: Boolean,
-    private val resourcesDir: String,
-    private val useUnderscorePrefix: Boolean = false
-) : BaseAdapter(isUppercase) {
+    isUppercaseField: Boolean,
+    private val resourcesDir: String
+) : BaseAdapter(isUppercaseField) {
 
-    override fun TypeSpecBuilder.process(file: File): Boolean {
-        addStringField(
+    var isUnderscorePrefix: Boolean = false
+
+    override fun process(typeBuilder: TypeSpecBuilder, file: File): Boolean {
+        typeBuilder.addField(
             buildString {
-                if (useUnderscorePrefix) append('_')
+                if (isUnderscorePrefix) append('_')
                 append(file.nameWithoutExtension)
             },
             file.path.substringAfter(resourcesDir).replace('\\', '/')

@@ -17,7 +17,7 @@ gradlePlugin {
     (plugins) {
         register(RELEASE_ARTIFACT) {
             id = "$RELEASE_GROUP.r"
-            implementationClass = "$RELEASE_GROUP.r.RPlugin"
+            implementationClass = "$id.RPlugin"
         }
     }
 }

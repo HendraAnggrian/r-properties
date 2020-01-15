@@ -3,16 +3,16 @@ package com.hendraanggrian.r
 import javax.lang.model.SourceVersion
 
 /** Check if string is a valid Java field name. */
-internal fun String.isFieldName(): Boolean = when {
+internal fun String.isJavaName(): Boolean = when {
     isEmpty() || this == "_" || !SourceVersion.isName(this) -> false // Java SE 9 no longer supports '_'
     else -> first().isJavaIdentifierStart() && drop(1).all { it.isJavaIdentifierPart() }
 }
 
 /** Fixes invalid field name, or null if it is un-fixable. */
-internal fun String.toFieldNameOrNull(): String? {
+internal fun String.toJavaNameOrNull(): String? {
     var result = this
     // Return original string if already valid
-    if (result.isFieldName()) {
+    if (result.isJavaName()) {
         return result
     }
     // Append underscore if first char is not java identifier start
@@ -31,7 +31,7 @@ internal fun String.toFieldNameOrNull(): String? {
     }
     // Return successfully fixed string, or null if unfixable
     return when {
-        result.isFieldName() -> result
+        result.isJavaName() -> result
         else -> null
     }
 }

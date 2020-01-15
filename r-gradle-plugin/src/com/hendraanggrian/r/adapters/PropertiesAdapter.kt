@@ -10,27 +10,31 @@ import javax.lang.model.element.Modifier
  * An adapter that writes [Properties] keys.
  * The file path itself will be written with underscore prefix.
  */
-internal class PropertiesAdapter(isUppercase: Boolean, private val settings: PropertiesSettings) :
-    BaseAdapter(isUppercase) {
+internal class PropertiesAdapter(
+    isUppercaseField: Boolean,
+    private val isLowercaseClass: Boolean,
+    private val settings: PropertiesSettings
+) : BaseAdapter(isUppercaseField) {
 
-    override fun TypeSpecBuilder.process(file: File): Boolean {
+    override fun process(typeBuilder: TypeSpecBuilder, file: File): Boolean {
         if (file.extension == "properties") {
             when {
                 settings.isWriteResourceBundle && file.isResourceBundle() -> {
-                    val className = file.resourceBundleName
-                    if (className !in build().typeSpecs.map { it.name }) {
-                        types.addClass(className) {
+                    var className = file.resourceBundleName
+                    if (isLowercaseClass) {
+                        className = className.toLowerCase()
+                    }
+                    if (className !in typeBuilder.build().typeSpecs.map { it.name }) {
+                        typeBuilder.types.addClass(className) {
                             addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
                             methods.addConstructor { addModifiers(Modifier.PRIVATE) }
-                            file.forEachKey { addStringField(it) }
+                            file.forEachKey { addField(it) }
                         }
                     }
                 }
-                else -> {
-                    file.forEachKey { addStringField(it) }
-                    return true
-                }
+                else -> file.forEachKey { typeBuilder.addField(it) }
             }
+            return true
         }
         return false
     }

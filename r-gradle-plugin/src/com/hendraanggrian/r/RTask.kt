@@ -39,9 +39,15 @@ open class RTask : DefaultTask() {
 
     /**
      * When activated, automatically make all field names uppercase.
-     * Default is false.
+     * It is disabled by default.
      */
-    @Input var uppercaseFieldName: Boolean = false
+    var isUppercaseField: Boolean = false @Input get
+
+    /**
+     * When activated, automatically make all class names lowercase.
+     * It is enabled by default.
+     */
+    var isLowercaseClass: Boolean = false @Input get
 
     /**
      * Main resources directory.
@@ -146,8 +152,8 @@ open class RTask : DefaultTask() {
     /** Generate R class given provided options. */
     @TaskAction fun generate() {
         logger.info("Checking requirements")
-        require(packageName.isNotBlank()) { "Package name cannot be null" }
-        require(className.isNotBlank()) { "Class name cannot be null" }
+        require(packageName.isNotBlank()) { "Package name cannot be empty" }
+        require(className.isNotBlank()) { "Class name cannot be empty" }
         require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
 
         logger.info("Deleting old $className")
@@ -155,22 +161,19 @@ open class RTask : DefaultTask() {
         outputDir.deleteRecursively()
         outputDir.mkdirs()
 
-        logger.info("Reading resources")
+        logger.info("Preparing new $className")
         val javaFile = buildJavaFile(packageName) {
             comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
             addClass(className) {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                methods.addConstructor {
-                    addModifiers(Modifier.PRIVATE)
-                }
+                methods.addConstructor { addModifiers(Modifier.PRIVATE) }
                 processDir(
                     listOfNotNull(
-                        cssSettings?.let { CssAdapter(uppercaseFieldName, it) },
-                        jsonSettings?.let { JsonAdapter(uppercaseFieldName, it) },
-                        propertiesSettings?.let { PropertiesAdapter(uppercaseFieldName, it) }
+                        cssSettings?.let { CssAdapter(isUppercaseField, it) },
+                        jsonSettings?.let { JsonAdapter(isUppercaseField, it) },
+                        propertiesSettings?.let { PropertiesAdapter(isUppercaseField, isLowercaseClass, it) }
                     ),
-                    PathAdapter(uppercaseFieldName, resourcesDir.path),
-                    PathAdapter(uppercaseFieldName, resourcesDir.path, true),
+                    PathAdapter(isUppercaseField, resourcesDir.path),
                     resourcesDir
                 )
             }
@@ -182,8 +185,7 @@ open class RTask : DefaultTask() {
 
     private fun TypeSpecBuilder.processDir(
         adapters: Iterable<BaseAdapter>,
-        defaultAdapter: BaseAdapter,
-        prefixedAdapter: BaseAdapter,
+        pathAdapter: PathAdapter,
         resourcesDir: File
     ) {
         val exclusionPaths = exclusions.map { it.path }
@@ -191,21 +193,22 @@ open class RTask : DefaultTask() {
             .filter { file -> !file.isHidden && file.path !in exclusionPaths }
             .forEach { file ->
                 when {
-                    file.isDirectory -> file.name.toFieldNameOrNull()?.let {
-                        types.addClass(it) {
-                            addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
-                            methods.addConstructor {
-                                addModifiers(Modifier.PRIVATE)
+                    file.isDirectory -> {
+                        var innerClassName = file.name.toJavaNameOrNull()
+                        if (innerClassName != null) {
+                            if (isLowercaseClass) {
+                                innerClassName = innerClassName.toLowerCase()
                             }
-                            processDir(adapters, defaultAdapter, prefixedAdapter, file)
+                            types.addClass(innerClassName) {
+                                addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+                                methods.addConstructor { addModifiers(Modifier.PRIVATE) }
+                                processDir(adapters, pathAdapter, file)
+                            }
                         }
                     }
                     file.isFile -> {
-                        val prefixes = adapters.map { it.run { process(file) } }
-                        when {
-                            prefixes.any { it } -> prefixedAdapter
-                            else -> defaultAdapter
-                        }.run { process(file) }
+                        pathAdapter.isUnderscorePrefix = adapters.any { it.process(this, file) }
+                        pathAdapter.process(this, file)
                     }
                 }
             }

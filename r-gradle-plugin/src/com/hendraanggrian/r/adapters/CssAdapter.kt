@@ -9,9 +9,12 @@ import java.io.File
  * An adapter that writes CSS classes and identifiers.
  * The file path itself will be written with underscore prefix.
  */
-internal class CssAdapter(isUppercase: Boolean, private val settings: CssSettings) : BaseAdapter(isUppercase) {
+internal class CssAdapter(
+    isUppercaseField: Boolean,
+    private val settings: CssSettings
+) : BaseAdapter(isUppercaseField) {
 
-    override fun TypeSpecBuilder.process(file: File): Boolean {
+    override fun process(typeBuilder: TypeSpecBuilder, file: File): Boolean {
         if (file.extension == "css") {
             val css = checkNotNull(CSSReader.readFromFile(file, settings.charset, settings.cssVersion)) {
                 "Error while reading CSS, please report to github.com/hendraanggrian/r-gradle-plugin/issues"
@@ -21,10 +24,10 @@ internal class CssAdapter(isUppercase: Boolean, private val settings: CssSetting
                     val member = selector.getMemberAtIndex(0)?.asCSSString ?: return false
                     when {
                         member.startsWith('.') -> if (settings.isWriteClassSelector)
-                            addStringField(member.substringAfter('.'))
+                            typeBuilder.addField(member.substringAfter('.'))
                         member.startsWith('#') -> if (settings.isWriteIdSelector)
-                            addStringField(member.substringAfter('#'))
-                        else -> if (settings.isWriteElementTypeSelector) addStringField(member)
+                            typeBuilder.addField(member.substringAfter('#'))
+                        else -> if (settings.isWriteElementTypeSelector) typeBuilder.addField(member)
                     }
                 }
             }
