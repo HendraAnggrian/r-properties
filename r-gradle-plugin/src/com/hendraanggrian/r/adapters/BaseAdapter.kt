@@ -23,8 +23,7 @@ internal abstract class BaseAdapter(private val isUppercaseField: Boolean) {
         }
         // checks if field name is valid and there's no duplicate
         if (fieldName != null && fieldName !in build().fieldSpecs.map { it.name }) {
-            fields.add<String>(fieldName) {
-                addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
+            fields.add<String>(fieldName, Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL) {
                 initializer("%S", value)
             }
         }

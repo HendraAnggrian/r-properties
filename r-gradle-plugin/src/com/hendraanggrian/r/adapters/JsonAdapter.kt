@@ -34,7 +34,7 @@ internal class JsonAdapter(
     }
 
     private fun JSONObject.forEachKey(action: (String) -> Unit): Unit = forEach { key, value ->
-        action(key.toString())
+        action("$key")
         if (value is JSONArray && settings.isWriteArray) {
             value.forEachKey(action)
         }
