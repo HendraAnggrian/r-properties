@@ -111,7 +111,8 @@ open class RTask : DefaultTask() {
     }
 
     /** Enable CSS files support with customized [configuration] in Kotlin DSL. */
-    inline fun css(noinline configuration: CssSettings.() -> Unit) = configureCss(configuration)
+    inline fun css(noinline configuration: CssSettings.() -> Unit): Unit =
+        configureCss(configuration)
 
     /** Enable properties files support with default configuration. */
     fun configureProperties() {
@@ -129,7 +130,8 @@ open class RTask : DefaultTask() {
     }
 
     /** Enable properties files support with customized [configuration] in Kotlin DSL. */
-    inline fun properties(noinline configuration: PropertiesSettings.() -> Unit) = configureProperties(configuration)
+    inline fun properties(noinline configuration: PropertiesSettings.() -> Unit): Unit =
+        configureProperties(configuration)
 
     /** Enable json files support with default configuration. */
     fun configureJson() {
@@ -147,7 +149,8 @@ open class RTask : DefaultTask() {
     }
 
     /** Enable json files support with customized [configuration] in Kotlin DSL. */
-    inline fun json(noinline configuration: JsonSettings.() -> Unit) = configureJson(configuration)
+    inline fun json(noinline configuration: JsonSettings.() -> Unit): Unit =
+        configureJson(configuration)
 
     /** Generate R class given provided options. */
     @TaskAction fun generate() {
