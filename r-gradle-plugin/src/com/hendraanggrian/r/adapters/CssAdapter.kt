@@ -23,10 +23,12 @@ internal class CssAdapter(
                 rule.allSelectors.forEach { selector ->
                     val member = selector.getMemberAtIndex(0)?.asCSSString ?: return false
                     when {
-                        member.startsWith('.') -> if (settings.isWriteClassSelector)
-                            typeBuilder.addField(member.substringAfter('.'))
-                        member.startsWith('#') -> if (settings.isWriteIdSelector)
-                            typeBuilder.addField(member.substringAfter('#'))
+                        member.startsWith('.') ->
+                            if (settings.isWriteClassSelector)
+                                typeBuilder.addField(member.substringAfter('.'))
+                        member.startsWith('#') ->
+                            if (settings.isWriteIdSelector)
+                                typeBuilder.addField(member.substringAfter('#'))
                         else -> if (settings.isWriteElementTypeSelector) typeBuilder.addField(member)
                     }
                 }

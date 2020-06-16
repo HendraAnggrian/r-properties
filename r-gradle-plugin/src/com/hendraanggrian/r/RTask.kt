@@ -9,10 +9,6 @@ import com.hendraanggrian.r.adapters.CssAdapter
 import com.hendraanggrian.r.adapters.JsonAdapter
 import com.hendraanggrian.r.adapters.PathAdapter
 import com.hendraanggrian.r.adapters.PropertiesAdapter
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter.ofPattern
-import javax.lang.model.element.Modifier
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input
@@ -21,6 +17,10 @@ import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter.ofPattern
+import javax.lang.model.element.Modifier
 
 /** A task that writes `R` class. */
 open class RTask : DefaultTask() {

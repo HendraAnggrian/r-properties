@@ -16,7 +16,7 @@ import org.gradle.plugins.ide.idea.model.IdeaModel
 class RPlugin : Plugin<Project> {
 
     companion object {
-        const val GROUP_NAME = "generate"
+        const val GROUP_NAME = "generating"
         private const val GENERATED_DIR = "generated/r"
     }
 

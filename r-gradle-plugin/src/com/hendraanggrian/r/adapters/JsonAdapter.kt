@@ -2,11 +2,11 @@ package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.r.JsonSettings
-import java.io.File
-import java.lang.ref.WeakReference
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
+import java.io.File
+import java.lang.ref.WeakReference
 
 /**
  * An adapter that writes [JSONObject] and [JSONArray] keys.
