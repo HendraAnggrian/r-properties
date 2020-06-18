@@ -31,8 +31,8 @@ class RPlugin : Plugin<Project> {
 
         // project group will return correct name after evaluated
         project.afterEvaluate {
-            if (generateRTask.packageName.isEmpty()) {
-                generateRTask.packageName = project.group.toString()
+            generateR {
+                if (packageName == null) packageName = project.group.toString()
             }
         }
 

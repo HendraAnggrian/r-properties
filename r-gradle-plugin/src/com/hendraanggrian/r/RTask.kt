@@ -27,9 +27,9 @@ open class RTask : DefaultTask() {
 
     /**
      * Package name of which `R` class will be generated to, cannot be empty.
-     * If left empty or unmodified, project group will be assigned as value.
+     * If left null, project group will be assigned as value.
      */
-    @Input var packageName: String = ""
+    @Input var packageName: String? = null
 
     /**
      * Generated class name, cannot be empty.
@@ -91,8 +91,7 @@ open class RTask : DefaultTask() {
     private var jsonSettings: JsonSettings? = null
 
     init {
-        // always consider this task out of date
-        outputs.upToDateWhen { false }
+        outputs.upToDateWhen { false } // always consider this task out of date
     }
 
     /** Enable CSS files support with default configuration. */
@@ -154,36 +153,37 @@ open class RTask : DefaultTask() {
 
     /** Generate R class given provided options. */
     @TaskAction fun generate() {
-        logger.info("Checking requirements")
-        require(packageName.isNotBlank()) { "Package name cannot be empty" }
+        logger.info("Generating R:")
+
+        require(packageName!!.isNotBlank()) { "Package name cannot be empty" }
         require(className.isNotBlank()) { "Class name cannot be empty" }
         require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
 
-        logger.info("Deleting old $className")
-        val outputDir = outputDir
-        outputDir.deleteRecursively()
+        if (outputDir.exists()) {
+            logger.info("  Existing source deleted")
+            outputDir.deleteRecursively()
+        }
         outputDir.mkdirs()
 
-        logger.info("Preparing new $className")
-        val javaFile = buildJavaFile(packageName) {
+        val javaFile = buildJavaFile(packageName!!) {
             comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
             addClass(className) {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.addConstructor { addModifiers(Modifier.PRIVATE) }
                 processDir(
                     listOfNotNull(
-                        cssSettings?.let { CssAdapter(isUppercaseField, it) },
-                        jsonSettings?.let { JsonAdapter(isUppercaseField, it) },
-                        propertiesSettings?.let { PropertiesAdapter(isUppercaseField, isLowercaseClass, it) }
+                        cssSettings?.let { CssAdapter(it, isUppercaseField, logger) },
+                        jsonSettings?.let { JsonAdapter(it, isUppercaseField, logger) },
+                        propertiesSettings?.let { PropertiesAdapter(it, isLowercaseClass, isUppercaseField, logger) }
                     ),
-                    PathAdapter(isUppercaseField, resourcesDir.path),
+                    PathAdapter(resourcesDir.path, isUppercaseField, logger),
                     resourcesDir
                 )
             }
         }
 
-        logger.info("Writing new $className")
         javaFile.writeTo(outputDir)
+        logger.info("  Source generated")
     }
 
     private fun TypeSpecBuilder.processDir(

@@ -2,6 +2,7 @@ package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.r.JsonSettings
+import org.gradle.api.logging.Logger
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
@@ -13,12 +14,14 @@ import java.lang.ref.WeakReference
  * The file path itself will be written with underscore prefix.
  */
 internal class JsonAdapter(
+    private val settings: JsonSettings,
     isUppercaseField: Boolean,
-    private val settings: JsonSettings
-) : BaseAdapter(isUppercaseField) {
+    logger: Logger
+) : BaseAdapter(isUppercaseField, logger) {
     private var parserRef = WeakReference<JSONParser>(null)
 
     override fun process(typeBuilder: TypeSpecBuilder, file: File): Boolean {
+        logger.debug("File '${file.name}' is recognized as JSON.")
         if (file.extension == "json") {
             file.reader().use { reader ->
                 var parser = parserRef.get()

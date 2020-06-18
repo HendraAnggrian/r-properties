@@ -1,6 +1,7 @@
 package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
+import org.gradle.api.logging.Logger
 import java.io.File
 
 /**
@@ -8,9 +9,10 @@ import java.io.File
  * When optional features are activated (CSS, properties, etc.), underscore prefix will be applied to field names.
  */
 internal class PathAdapter(
+    private val resourcesDir: String,
     isUppercaseField: Boolean,
-    private val resourcesDir: String
-) : BaseAdapter(isUppercaseField) {
+    logger: Logger
+) : BaseAdapter(isUppercaseField, logger) {
 
     var isUnderscorePrefix: Boolean = false
 

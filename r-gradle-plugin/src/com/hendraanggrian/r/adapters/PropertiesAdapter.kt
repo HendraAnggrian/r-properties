@@ -2,6 +2,7 @@ package com.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.r.PropertiesSettings
+import org.gradle.api.logging.Logger
 import java.io.File
 import java.util.Properties
 import javax.lang.model.element.Modifier
@@ -11,12 +12,14 @@ import javax.lang.model.element.Modifier
  * The file path itself will be written with underscore prefix.
  */
 internal class PropertiesAdapter(
-    isUppercaseField: Boolean,
+    private val settings: PropertiesSettings,
     private val isLowercaseClass: Boolean,
-    private val settings: PropertiesSettings
-) : BaseAdapter(isUppercaseField) {
+    isUppercaseField: Boolean,
+    logger: Logger
+) : BaseAdapter(isUppercaseField, logger) {
 
     override fun process(typeBuilder: TypeSpecBuilder, file: File): Boolean {
+        logger.debug("File '${file.name}' is recognized as properties.")
         if (file.extension == "properties") {
             when {
                 settings.isWriteResourceBundle && file.isResourceBundle() -> {
