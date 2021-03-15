@@ -16,33 +16,25 @@ import org.gradle.plugins.ide.idea.model.IdeaModel
 class RPlugin : Plugin<Project> {
 
     companion object {
-        const val GROUP_NAME = "generating"
-        private const val GENERATED_DIR = "generated/r"
+        const val GROUP_NAME = "code generation"
     }
 
     override fun apply(project: Project) {
+        require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied" }
+
         val generateR by project.tasks.registering(RTask::class) {
             group = GROUP_NAME
             description = "Generate Android-like R class."
-            resourcesDir = project.projectDir.resolve("src/main/resources")
-            outputDirectory = project.buildDir.resolve("$GENERATED_DIR/src/main").absolutePath
         }
         val generateRTask by generateR
-
-        // project group will return correct name after evaluated
-        project.afterEvaluate {
-            generateR {
-                if (packageName == null) packageName = project.group.toString()
-            }
-        }
 
         val compileR by project.tasks.registering(JavaCompile::class) {
             dependsOn(generateRTask)
             description = "Compiles R source file."
             group = GROUP_NAME
             classpath = project.files()
-            destinationDir = project.buildDir.resolve("$GENERATED_DIR/classes/main")
-            source(generateRTask.outputDirectory)
+            destinationDir = generateRTask.outputClassesDir
+            source(generateRTask.outputSrcDir)
         }
         val compileRTask by compileR
         val compiledClasses = project
@@ -55,8 +47,6 @@ class RPlugin : Plugin<Project> {
                 compiledClasses.forEach { output.dir(it) }
             }
         }
-
-        require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied" }
 
         val providedR by project.configurations.registering {
             dependencies += project.dependencies.create(compiledClasses)

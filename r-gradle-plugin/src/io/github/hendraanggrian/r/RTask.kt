@@ -1,4 +1,4 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:Suppress("NOTHING_TO_INLINE", "UnstableApiUsage")
 
 package io.github.hendraanggrian.r
 
@@ -11,12 +11,17 @@ import io.github.hendraanggrian.r.adapters.PathAdapter
 import io.github.hendraanggrian.r.adapters.PropertiesAdapter
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
+import org.gradle.api.provider.Property
+import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
+import org.gradle.kotlin.dsl.property
+import org.gradle.kotlin.dsl.setProperty
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter.ofPattern
@@ -29,62 +34,62 @@ open class RTask : DefaultTask() {
      * Package name of which `R` class will be generated to, cannot be empty.
      * If left null, project group will be assigned as value.
      */
-    @Input var packageName: String? = null
+    @Input
+    val packageName: Property<String> = project.objects.property<String>()
+        .convention(project.group.toString())
 
     /**
      * Generated class name, cannot be empty.
      * Default value is `R`.
      */
-    @Input var className: String = "R"
+    @Input
+    val className: Property<String> = project.objects.property<String>()
+        .convention("R")
 
     /**
      * When activated, automatically make all field names uppercase.
      * It is disabled by default.
      */
-    var isUppercaseField: Boolean = false @Input get
+    @Input
+    val shouldUppercaseField: Property<Boolean> = project.objects.property<Boolean>()
+        .convention(false)
 
     /**
      * When activated, automatically make all class names lowercase.
-     * It is enabled by default.
+     * It is disabled by default.
      */
-    var isLowercaseClass: Boolean = false @Input get
+    @Input
+    val shouldLowercaseClass: Property<Boolean> = project.objects.property<Boolean>()
+        .convention(false)
 
     /**
      * Main resources directory.
      * Default is resources folder in main module.
      */
-    @InputDirectory lateinit var resourcesDir: File
-
-    /** Convenient method to set resources directory relative to project directory. */
-    var resourcesDirectory: String
-        @Input get() = resourcesDir.absolutePath
-        set(value) {
-            resourcesDir = project.projectDir.resolve(value)
-        }
+    @InputDirectory
+    val resourcesDirectory: Property<File> = project.objects.property<File>()
+        .convention(project.projectDir.resolve("src/main/resources"))
 
     /**
      * Collection of files (or directories) that are ignored from this task.
      * Default is empty.
      */
-    @InputFiles var exclusions: Iterable<File> = emptyList()
+    @InputFiles
+    val exclusions: SetProperty<File> = project.objects.setProperty<File>()
+        .convention(emptySet())
 
     /** Convenient method to set exclusions relative to project directory. */
     fun exclude(vararg exclusions: String) {
-        this.exclusions = exclusions.map { project.projectDir.resolve(it) }
+        this.exclusions.set(exclusions.map { project.projectDir.resolve(it) })
     }
 
     /**
      * Directory of which `R` class will be generated to.
-     * Default is `build/generated` relative to project directory.
+     * Default is `build/generated/r` relative to project directory.
      */
-    @OutputDirectory lateinit var outputDir: File
-
-    /** Convenient method to set output directory relative to project directory. */
-    var outputDirectory: String
-        @Input get() = outputDir.absolutePath
-        set(value) {
-            outputDir = project.projectDir.resolve(value)
-        }
+    @OutputDirectory
+    val outputDirectory: Property<File> = project.objects.property<File>()
+        .convention(project.buildDir.resolve("generated/r"))
 
     private var cssSettings: CssSettings? = null
     private var propertiesSettings: PropertiesSettings? = null
@@ -152,46 +157,55 @@ open class RTask : DefaultTask() {
         configureJson(configuration)
 
     /** Generate R class given provided options. */
-    @TaskAction fun generate() {
+    @TaskAction
+    fun generate() {
         logger.info("Generating R:")
 
-        require(packageName!!.isNotBlank()) { "Package name cannot be empty" }
-        require(className.isNotBlank()) { "Class name cannot be empty" }
-        require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
+        require(packageName.get().isNotBlank()) { "Package name cannot be empty" }
+        require(className.get().isNotBlank()) { "Class name cannot be empty" }
+        require(resourcesDirectory.get().exists() && resourcesDirectory.get().isDirectory) { "Resources folder not found" }
 
-        if (outputDir.exists()) {
+        if (outputDirectory.get().exists()) {
             logger.info("  Existing source deleted")
-            outputDir.deleteRecursively()
+            outputDirectory.get().deleteRecursively()
         }
-        outputDir.mkdirs()
+        outputDirectory.get().mkdirs()
 
-        val javaFile = buildJavaFile(packageName!!) {
+        val javaFile = buildJavaFile(packageName.get()) {
             comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
-            addClass(className) {
+            addClass(className.get()) {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.addConstructor { addModifiers(Modifier.PRIVATE) }
                 processDir(
                     listOfNotNull(
-                        cssSettings?.let { CssAdapter(it, isUppercaseField, logger) },
-                        jsonSettings?.let { JsonAdapter(it, isUppercaseField, logger) },
-                        propertiesSettings?.let { PropertiesAdapter(it, isLowercaseClass, isUppercaseField, logger) }
+                        cssSettings?.let { CssAdapter(it, shouldUppercaseField.get(), logger) },
+                        jsonSettings?.let { JsonAdapter(it, shouldUppercaseField.get(), logger) },
+                        propertiesSettings?.let {
+                            PropertiesAdapter(it, shouldLowercaseClass.get(), shouldUppercaseField.get(), logger)
+                        }
                     ),
-                    PathAdapter(resourcesDir.path, isUppercaseField, logger),
-                    resourcesDir
+                    PathAdapter(resourcesDirectory.get().path, shouldUppercaseField.get(), logger),
+                    resourcesDirectory.get()
                 )
             }
         }
 
-        javaFile.writeTo(outputDir)
+        javaFile.writeTo(outputSrcDir)
         logger.info("  Source generated")
     }
+
+    internal val outputSrcDir: File
+        @Internal get() = outputDirectory.get().resolve("src/main")
+
+    internal val outputClassesDir: File
+        @Internal get() = outputDirectory.get().resolve("classes/main")
 
     private fun TypeSpecBuilder.processDir(
         adapters: Iterable<BaseAdapter>,
         pathAdapter: PathAdapter,
         resourcesDir: File
     ) {
-        val exclusionPaths = exclusions.map { it.path }
+        val exclusionPaths = exclusions.get().map { it.path }
         resourcesDir.listFiles()!!
             .filter { file -> !file.isHidden && file.path !in exclusionPaths }
             .forEach { file ->
@@ -199,7 +213,7 @@ open class RTask : DefaultTask() {
                     file.isDirectory -> {
                         var innerClassName = file.name.toJavaNameOrNull()
                         if (innerClassName != null) {
-                            if (isLowercaseClass) {
+                            if (shouldLowercaseClass.get()) {
                                 innerClassName = innerClassName.toLowerCase()
                             }
                             types.addClass(innerClassName) {
