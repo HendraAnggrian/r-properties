@@ -1,8 +1,8 @@
-package com.hendraanggrian.r.adapters
+package io.github.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.r.isJavaName
-import com.hendraanggrian.r.toJavaNameOrNull
+import io.github.hendraanggrian.r.isJavaName
+import io.github.hendraanggrian.r.toJavaNameOrNull
 import org.gradle.api.logging.Logger
 import java.io.File
 import javax.lang.model.element.Modifier

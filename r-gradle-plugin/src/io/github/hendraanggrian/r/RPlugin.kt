@@ -1,4 +1,4 @@
-package com.hendraanggrian.r
+package io.github.hendraanggrian.r
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

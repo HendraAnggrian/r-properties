@@ -1,14 +1,14 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.hendraanggrian.r
+package io.github.hendraanggrian.r
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.r.adapters.BaseAdapter
-import com.hendraanggrian.r.adapters.CssAdapter
-import com.hendraanggrian.r.adapters.JsonAdapter
-import com.hendraanggrian.r.adapters.PathAdapter
-import com.hendraanggrian.r.adapters.PropertiesAdapter
+import io.github.hendraanggrian.r.adapters.BaseAdapter
+import io.github.hendraanggrian.r.adapters.CssAdapter
+import io.github.hendraanggrian.r.adapters.JsonAdapter
+import io.github.hendraanggrian.r.adapters.PathAdapter
+import io.github.hendraanggrian.r.adapters.PropertiesAdapter
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.Input

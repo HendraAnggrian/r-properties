@@ -1,4 +1,4 @@
-package com.hendraanggrian.r.adapters
+package io.github.hendraanggrian.r.adapters
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import org.gradle.api.logging.Logger
