@@ -11,13 +11,13 @@ import io.github.hendraanggrian.r.adapters.PathAdapter
 import io.github.hendraanggrian.r.adapters.PropertiesAdapter
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
+import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.SetProperty
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.invoke
 import org.gradle.kotlin.dsl.property
@@ -67,8 +67,8 @@ open class RTask : DefaultTask() {
      * Default is resources folder in main module.
      */
     @InputDirectory
-    val resourcesDirectory: Property<File> = project.objects.property<File>()
-        .convention(project.projectDir.resolve("src/main/resources"))
+    val resourcesDirectory: DirectoryProperty = project.objects.directoryProperty()
+        .convention(project.layout.projectDirectory.dir("src/main/resources"))
 
     /**
      * Collection of files (or directories) that are ignored from this task.
@@ -83,17 +83,10 @@ open class RTask : DefaultTask() {
         this.exclusions.set(exclusions.map { project.projectDir.resolve(it) })
     }
 
-    /**
-     * Directory of which `R` class will be generated to.
-     * Default is `build/generated/r` relative to project directory.
-     */
-    @OutputDirectory
-    val outputDirectory: Property<File> = project.objects.property<File>()
-        .convention(project.buildDir.resolve("generated/r"))
-
     private var cssSettings: CssSettings? = null
     private var propertiesSettings: PropertiesSettings? = null
     private var jsonSettings: JsonSettings? = null
+    private val outputDir: File = project.buildDir.resolve("generated/r")
 
     init {
         outputs.upToDateWhen { false } // always consider this task out of date
@@ -161,15 +154,16 @@ open class RTask : DefaultTask() {
     fun generate() {
         logger.info("Generating R:")
 
+        val resourcesDir = resourcesDirectory.get().asFile
         require(packageName.get().isNotBlank()) { "Package name cannot be empty" }
         require(className.get().isNotBlank()) { "Class name cannot be empty" }
-        require(resourcesDirectory.get().exists() && resourcesDirectory.get().isDirectory) { "Resources folder not found" }
+        require(resourcesDir.exists() && resourcesDir.isDirectory) { "Resources folder not found" }
 
-        if (outputDirectory.get().exists()) {
+        if (outputDir.exists()) {
             logger.info("  Existing source deleted")
-            outputDirectory.get().deleteRecursively()
+            outputDir.deleteRecursively()
         }
-        outputDirectory.get().mkdirs()
+        outputDir.mkdirs()
 
         val javaFile = buildJavaFile(packageName.get()) {
             comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
@@ -184,8 +178,8 @@ open class RTask : DefaultTask() {
                             PropertiesAdapter(it, shouldLowercaseClass.get(), shouldUppercaseField.get(), logger)
                         }
                     ),
-                    PathAdapter(resourcesDirectory.get().path, shouldUppercaseField.get(), logger),
-                    resourcesDirectory.get()
+                    PathAdapter(outputDir.path, shouldUppercaseField.get(), logger),
+                    resourcesDir
                 )
             }
         }
@@ -194,11 +188,8 @@ open class RTask : DefaultTask() {
         logger.info("  Source generated")
     }
 
-    internal val outputSrcDir: File
-        @Internal get() = outputDirectory.get().resolve("src/main")
-
-    internal val outputClassesDir: File
-        @Internal get() = outputDirectory.get().resolve("classes/main")
+    internal val outputSrcDir: File @Internal get() = outputDir.resolve("src/main")
+    internal val outputClassesDir: File @Internal get() = outputDir.resolve("classes/main")
 
     private fun TypeSpecBuilder.processDir(
         adapters: Iterable<BaseAdapter>,
