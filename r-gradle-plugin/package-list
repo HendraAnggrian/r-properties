@@ -1,5 +1,5 @@
-$dokka.format:html
+$dokka.format:html-v1
 $dokka.linkExtension:html
 
-com.hendraanggrian.r
-com.hendraanggrian.r.adapters
+io.github.hendraanggrian.r
+
