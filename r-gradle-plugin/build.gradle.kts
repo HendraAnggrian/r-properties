@@ -16,6 +16,11 @@ sourceSets {
     getByName("test") {
         java.srcDir("tests/src")
     }
+    create("functionalTest") {
+        java.srcDir("functional-tests/src")
+        compileClasspath += sourceSets.main.get().output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
 }
 
 gradlePlugin {
@@ -25,6 +30,7 @@ gradlePlugin {
             implementationClass = "$id.RPlugin"
         }
     }
+    testSourceSets(sourceSets["functionalTest"])
 }
 
 dependencies {
@@ -33,6 +39,8 @@ dependencies {
     implementation(phCss())
     implementation(jsonSimple())
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
+    "functionalTestImplementation"(gradleTestKit())
+    "functionalTestImplementation"(kotlin("test-junit", VERSION_KOTLIN))
 }
 
 ktlint()
@@ -44,6 +52,16 @@ tasks {
             it.renameTo(File(rootDir.resolve("integration-tests"), it.name))
         }
     }
+
+    val functionalTest by registering(Test::class) {
+        description = "Runs the functional tests."
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+        testClassesDirs = sourceSets["functionalTest"].output.classesDirs
+        classpath = sourceSets["functionalTest"].runtimeClasspath
+        mustRunAfter(test)
+    }
+    check { dependsOn(functionalTest) }
+
     dokkaJavadoc {
         dokkaSourceSets {
             "main" {

@@ -6,7 +6,8 @@ import kotlin.test.assertNull
 
 class FieldNameTest {
 
-    @Test fun test() {
+    @Test
+    fun test() {
         assertEquals("nine", "nine".toJavaNameOrNull())
         assertEquals("_9nine", "9nine".toJavaNameOrNull())
         assertEquals("n_ne", "n|ne".toJavaNameOrNull())

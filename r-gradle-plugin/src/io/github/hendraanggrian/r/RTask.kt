@@ -86,7 +86,7 @@ open class RTask : DefaultTask() {
     private var cssSettings: CssSettings? = null
     private var propertiesSettings: PropertiesSettings? = null
     private var jsonSettings: JsonSettings? = null
-    private val outputDir: File = project.buildDir.resolve("generated/r")
+    private val outputDir: File = project.buildDir.resolve("generated${File.separator}r")
 
     init {
         outputs.upToDateWhen { false } // always consider this task out of date
@@ -167,7 +167,11 @@ open class RTask : DefaultTask() {
 
         val javaFile = buildJavaFile(packageName.get()) {
             comment = "Generated at ${LocalDateTime.now().format(ofPattern("MM-dd-yyyy 'at' h.mm.ss a"))}"
-            addClass(className.get()) {
+            var fileName = className.get()
+            if (shouldLowercaseClass.get()) {
+                fileName = fileName.toLowerCase()
+            }
+            addClass(fileName) {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.addConstructor { addModifiers(Modifier.PRIVATE) }
                 processDir(
@@ -178,7 +182,7 @@ open class RTask : DefaultTask() {
                             PropertiesAdapter(it, shouldLowercaseClass.get(), shouldUppercaseField.get(), logger)
                         }
                     ),
-                    PathAdapter(outputDir.path, shouldUppercaseField.get(), logger),
+                    PathAdapter(resourcesDir.path, shouldUppercaseField.get(), logger),
                     resourcesDir
                 )
             }
