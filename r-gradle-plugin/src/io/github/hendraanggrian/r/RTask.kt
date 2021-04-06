@@ -2,8 +2,8 @@
 
 package io.github.hendraanggrian.r
 
-import com.hendraanggrian.javapoet.TypeSpecBuilder
-import com.hendraanggrian.javapoet.buildJavaFile
+import io.github.hendraanggrian.javapoet.TypeSpecBuilder
+import io.github.hendraanggrian.javapoet.buildJavaFile
 import io.github.hendraanggrian.r.adapters.BaseAdapter
 import io.github.hendraanggrian.r.adapters.CssAdapter
 import io.github.hendraanggrian.r.adapters.JsonAdapter

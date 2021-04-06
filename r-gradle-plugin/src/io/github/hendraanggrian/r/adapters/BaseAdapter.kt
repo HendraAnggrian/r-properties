@@ -1,6 +1,6 @@
 package io.github.hendraanggrian.r.adapters
 
-import com.hendraanggrian.javapoet.TypeSpecBuilder
+import io.github.hendraanggrian.javapoet.TypeSpecBuilder
 import io.github.hendraanggrian.r.isJavaName
 import io.github.hendraanggrian.r.toJavaNameOrNull
 import org.gradle.api.logging.Logger

@@ -6,7 +6,6 @@ import java.nio.charset.StandardCharsets
 
 /**
  * Settings for customizing the field generation of CSS file.
- *
  * @param charset charset to be used in case neither a charset rule nor a BOM is present, default is [StandardCharsets.UTF_8].
  * @param cssVersion version to use when parsing CSS file, default is [ECSSVersion.CSS30].
  * @param isWriteElementTypeSelector determine whether adapter should write element type selector, default is false.
@@ -50,7 +49,6 @@ data class CssSettings(
 
 /**
  * Settings for customizing the field generation of json file.
- *
  * @param isRecursive determine whether adapter should also write inner json object, default is false.
  * @param isWriteArray extended property of [isRecursive] that will also write inner json array, default is true.
  * @see RTask.configureJson
@@ -73,7 +71,6 @@ data class JsonSettings(
 
 /**
  * Settings for customizing the field generation of properties file.
- *
  * @param isWriteResourceBundle determine whether adapter should also write resource bundle, default is false.
  * @see RTask.configureProperties
  */
