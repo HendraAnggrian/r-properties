@@ -7,7 +7,7 @@ buildscript {
     }
     dependencies {
         classpath files('../r-gradle-plugin-0.1-SNAPSHOT.jar')
-        classpath 'io.github.hendraanggrian:javapoet-ktx:0.1-SNAPSHOT'
+        classpath 'com.hendraanggrian:javapoet-ktx:0.1-SNAPSHOT'
         classpath 'org.jetbrains.kotlin:kotlin-stdlib:1.4.30'
         classpath 'com.helger:ph-css:6.2.2'
         classpath 'com.googlecode.json-simple:json-simple:1.1.1'
@@ -19,7 +19,7 @@ version '1.0'
 
 apply plugin: 'java'
 apply plugin: 'idea'
-apply plugin: 'io.github.hendraanggrian.r'
+apply plugin: 'com.hendraanggrian.r'
 
 sourceSets {
     main.resources.srcDir 'res'

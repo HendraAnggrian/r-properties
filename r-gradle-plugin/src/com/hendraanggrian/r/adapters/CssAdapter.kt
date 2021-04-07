@@ -1,8 +1,8 @@
-package io.github.hendraanggrian.r.adapters
+package com.hendraanggrian.r.adapters
 
 import com.helger.css.reader.CSSReader
+import com.hendraanggrian.r.CssSettings
 import io.github.hendraanggrian.javapoet.TypeSpecBuilder
-import io.github.hendraanggrian.r.CssSettings
 import org.gradle.api.logging.Logger
 import java.io.File
 

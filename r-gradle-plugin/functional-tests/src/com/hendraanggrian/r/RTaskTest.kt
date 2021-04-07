@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.r
+package com.hendraanggrian.r
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -51,9 +51,9 @@ class RTaskTest {
             plugins {
                 java
                 idea
-                id("io.github.hendraanggrian.r")
+                id("com.hendraanggrian.r")
             }
-            tasks.getByName<io.github.hendraanggrian.r.RTask>("generateR") {
+            tasks.getByName<com.hendraanggrian.r.RTask>("generateR") {
                 configureProperties()
                 packageName.set("com.example")
             }
@@ -81,9 +81,9 @@ class RTaskTest {
             plugins {
                 java
                 idea
-                id("io.github.hendraanggrian.r")
+                id("com.hendraanggrian.r")
             }
-            tasks.getByName<io.github.hendraanggrian.r.RTask>("generateR") {
+            tasks.getByName<com.hendraanggrian.r.RTask>("generateR") {
                 configureProperties()
                 packageName.set("mypackage")
                 className.set("R2")

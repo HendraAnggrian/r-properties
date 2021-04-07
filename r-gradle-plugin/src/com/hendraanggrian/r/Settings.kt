@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.r
+package com.hendraanggrian.r
 
 import com.helger.css.ECSSVersion
 import java.nio.charset.Charset

@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.r
+package com.hendraanggrian.r
 
 import javax.lang.model.SourceVersion
 

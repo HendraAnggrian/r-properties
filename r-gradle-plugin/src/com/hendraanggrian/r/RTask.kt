@@ -1,14 +1,14 @@
 @file:Suppress("NOTHING_TO_INLINE", "UnstableApiUsage")
 
-package io.github.hendraanggrian.r
+package com.hendraanggrian.r
 
-import io.github.hendraanggrian.javapoet.TypeSpecBuilder
-import io.github.hendraanggrian.javapoet.buildJavaFile
-import io.github.hendraanggrian.r.adapters.BaseAdapter
-import io.github.hendraanggrian.r.adapters.CssAdapter
-import io.github.hendraanggrian.r.adapters.JsonAdapter
-import io.github.hendraanggrian.r.adapters.PathAdapter
-import io.github.hendraanggrian.r.adapters.PropertiesAdapter
+import com.hendraanggrian.r.adapters.BaseAdapter
+import com.hendraanggrian.r.adapters.CssAdapter
+import com.hendraanggrian.r.adapters.JsonAdapter
+import com.hendraanggrian.r.adapters.PathAdapter
+import com.hendraanggrian.r.adapters.PropertiesAdapter
+import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.buildJavaFile
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
