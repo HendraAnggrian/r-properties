@@ -1,4 +1,4 @@
-package com.hendraanggrian.r
+package com.hendraanggrian.respath
 
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -12,7 +12,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-class RTaskTest {
+class ResPathTaskTest {
 
     @Rule @JvmField val testProjectDir = TemporaryFolder()
     private lateinit var settingsFile: File
@@ -51,9 +51,9 @@ class RTaskTest {
             plugins {
                 java
                 idea
-                id("com.hendraanggrian.r")
+                id("com.hendraanggrian.respath")
             }
-            tasks.getByName<com.hendraanggrian.r.RTask>("generateR") {
+            tasks.getByName<com.hendraanggrian.respath.ResPathTask>("generateR") {
                 configureProperties()
                 packageName.set("com.example")
             }
@@ -81,9 +81,9 @@ class RTaskTest {
             plugins {
                 java
                 idea
-                id("com.hendraanggrian.r")
+                id("com.hendraanggrian.respath")
             }
-            tasks.getByName<com.hendraanggrian.r.RTask>("generateR") {
+            tasks.getByName<com.hendraanggrian.respath.ResPathTask>("generateR") {
                 configureProperties()
                 packageName.set("mypackage")
                 className.set("R2")

@@ -1,4 +1,4 @@
-package com.hendraanggrian.r
+package com.hendraanggrian.respath
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

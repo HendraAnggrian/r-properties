@@ -3,8 +3,8 @@
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 [![license](https://img.shields.io/github/license/hendraanggrian/r-gradle-plugin)](http://www.apache.org/licenses/LICENSE-2.0)
 
-R Gradle Plugin
-===============
+ResPath Gradle Plugin
+=====================
 Generate Android-like `R` class on any JVM projects.
 Currently only supported with **IntelliJ IDEA**.
 
@@ -47,7 +47,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "io.github.hendraanggrian:r-gradle-plugin:$version"
+        classpath "com.hendraanggrian:respath-gradle-plugin:$version"
     }
 }
 ```
@@ -58,7 +58,7 @@ Apply the plugin in your module, along with idea plugin:
 
 ```gradle
 apply plugin: 'idea'
-apply plugin: 'com.hendraanggrian.r'
+apply plugin: 'com.hendraanggrian.respath'
 ```
 
 That's it, `R` are now automatically generated after compilation with default behavior.

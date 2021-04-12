@@ -1,4 +1,4 @@
-package com.hendraanggrian.r
+package com.hendraanggrian.respath
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -13,7 +13,7 @@ import org.gradle.kotlin.dsl.registering
 import org.gradle.plugins.ide.idea.model.IdeaModel
 
 /** Generate Android-like `R` class with this plugin. */
-class RPlugin : Plugin<Project> {
+class ResPathPlugin : Plugin<Project> {
 
     companion object {
         const val GROUP_NAME = "code generation"
@@ -22,7 +22,7 @@ class RPlugin : Plugin<Project> {
     override fun apply(project: Project) {
         require(project.plugins.hasPlugin("org.gradle.idea")) { "Plugin 'idea' must be applied" }
 
-        val generateR by project.tasks.registering(RTask::class) {
+        val generateR by project.tasks.registering(ResPathTask::class) {
             group = GROUP_NAME
             description = "Generate Android-like R class."
         }

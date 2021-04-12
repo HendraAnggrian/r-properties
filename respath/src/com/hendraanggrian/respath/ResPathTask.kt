@@ -1,14 +1,14 @@
 @file:Suppress("NOTHING_TO_INLINE", "UnstableApiUsage")
 
-package com.hendraanggrian.r
+package com.hendraanggrian.respath
 
-import com.hendraanggrian.r.adapters.BaseAdapter
-import com.hendraanggrian.r.adapters.CssAdapter
-import com.hendraanggrian.r.adapters.JsonAdapter
-import com.hendraanggrian.r.adapters.PathAdapter
-import com.hendraanggrian.r.adapters.PropertiesAdapter
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.respath.adapters.BaseAdapter
+import com.hendraanggrian.respath.adapters.CssAdapter
+import com.hendraanggrian.respath.adapters.JsonAdapter
+import com.hendraanggrian.respath.adapters.PathAdapter
+import com.hendraanggrian.respath.adapters.PropertiesAdapter
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter.ofPattern
 import javax.lang.model.element.Modifier
 
 /** A task that writes `R` class. */
-open class RTask : DefaultTask() {
+open class ResPathTask : DefaultTask() {
 
     /**
      * Package name of which `R` class will be generated to, cannot be empty.

@@ -1,6 +1,6 @@
-package com.hendraanggrian.r.adapters
+package com.hendraanggrian.respath.adapters
 
-import io.github.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import org.gradle.api.logging.Logger
 import java.io.File
 

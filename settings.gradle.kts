@@ -1,4 +1,4 @@
-include("r-gradle-plugin")
+include("respath")
 include("website")
 //includeDir("example")
 

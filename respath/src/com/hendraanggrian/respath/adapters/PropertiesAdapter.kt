@@ -1,7 +1,7 @@
-package com.hendraanggrian.r.adapters
+package com.hendraanggrian.respath.adapters
 
-import com.hendraanggrian.r.PropertiesSettings
-import io.github.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.respath.PropertiesSettings
 import org.gradle.api.logging.Logger
 import java.io.File
 import java.util.Properties

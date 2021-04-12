@@ -1,7 +1,7 @@
-package com.hendraanggrian.r.adapters
+package com.hendraanggrian.respath.adapters
 
-import com.hendraanggrian.r.JsonSettings
-import io.github.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.respath.JsonSettings
 import org.gradle.api.logging.Logger
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
