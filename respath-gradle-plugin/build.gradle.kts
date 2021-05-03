@@ -24,9 +24,9 @@ sourceSets {
 
 gradlePlugin {
     plugins {
-        register(RELEASE_ARTIFACT) {
-            id = "$RELEASE_GROUP.$RELEASE_ARTIFACT"
-            implementationClass = "$id.ResPathPlugin"
+        val resPathPlugin by plugins.registering {
+            id = "$RELEASE_GROUP.respath"
+            implementationClass = "$RELEASE_GROUP.respath.ResPathPlugin"
             displayName = "ResPath Gradle Plugin"
             description = RELEASE_DESCRIPTION
         }
@@ -34,9 +34,11 @@ gradlePlugin {
     testSourceSets(sourceSets["functionalTest"])
 }
 
+ktlint()
+
 dependencies {
     implementation(kotlin("stdlib", VERSION_KOTLIN))
-    implementation(hendraanggrian("javapoet-ktx", VERSION_JAVAPOETKTX))
+    implementation(hendraanggrian("javapoet-ktx", VERSION_JAVAPOET_KTX))
     implementation(phCss())
     implementation(jsonSimple())
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
@@ -44,16 +46,7 @@ dependencies {
     "functionalTestImplementation"(kotlin("test-junit", VERSION_KOTLIN))
 }
 
-ktlint()
-
 tasks {
-    register("deploy") {
-        dependsOn("build")
-        projectDir.resolve("build/libs").listFiles()?.forEach {
-            it.renameTo(File(rootDir.resolve("example"), it.name))
-        }
-    }
-
     val functionalTest by registering(Test::class) {
         description = "Runs the functional tests."
         group = LifecycleBasePlugin.VERIFICATION_GROUP
@@ -64,4 +57,9 @@ tasks {
     check { dependsOn(functionalTest) }
 }
 
-publishPlugin()
+pluginBundle {
+    website = RELEASE_GITHUB
+    vcsUrl = RELEASE_GITHUB
+    description = RELEASE_DESCRIPTION
+    tags = listOf("resources")
+}
